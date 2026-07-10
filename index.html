@@ -262,7 +262,7 @@
     background:linear-gradient(90deg,var(--gold-deep),var(--gold-soft));
     transition:width 1.4s cubic-bezier(.22,1,.36,1) .3s;
   }
-  .overview.in .bar span{width:var(--p)}
+  .in .bar span{width:var(--p)}
   .ov-quote{
     margin-top:2.1rem;padding-top:1.9rem;text-align:center;position:relative;
     font-family:var(--font-display);font-size:clamp(1.15rem,2.4vw,1.5rem);
@@ -291,9 +291,11 @@
 
   /* ————— فصول الرحلة ————— */
   .chapters-grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+    display:grid;grid-template-columns:repeat(6,1fr);
     gap:1.5rem;margin-top:4rem;
   }
+  .span3{grid-column:span 3}
+  .span2{grid-column:span 2}
   .chapter{
     position:relative;display:block;text-decoration:none;
     background:var(--glass);
@@ -325,6 +327,50 @@
     color:var(--ivory);margin-bottom:.35rem;
   }
   .chapter p{font-weight:300;font-size:.95rem;line-height:1.9;color:rgba(248,244,236,.7)}
+
+  /* عناصر البيانات الحيّة داخل البطاقات */
+  .live{
+    margin-top:.9rem;padding-top:1rem;border-top:1px solid rgba(201,178,140,.14);
+    display:flex;flex-direction:column;gap:.75rem;
+  }
+  .chip{
+    display:inline-flex;align-self:flex-start;align-items:center;gap:.4rem;
+    padding:.26rem .9rem;border-radius:99px;font-size:.78rem;font-weight:400;
+    border:1px solid rgba(201,178,140,.35);color:var(--gold-soft);
+    background:rgba(201,178,140,.08);
+  }
+  .chip.done{border-color:rgba(163,196,160,.45);color:#d3e6cc;background:rgba(163,196,160,.1)}
+  .snippet{
+    font-family:var(--font-display);font-size:1.06rem;line-height:1.95;
+    color:rgba(248,244,236,.86);
+  }
+  .meta{font-size:.78rem;font-weight:300;color:rgba(248,244,236,.55)}
+  .statline{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+  .statline .lbl{font-size:.82rem;font-weight:300;color:rgba(248,244,236,.65)}
+  .statnum{font-family:var(--font-display);font-weight:700;font-size:1.6rem;color:var(--ivory);line-height:1.4}
+  .statnum small{font-size:.85rem;font-weight:400;color:rgba(248,244,236,.6);margin-right:.3rem}
+  .chapter .bar{max-width:none;margin-top:0}
+  .dots{display:flex;justify-content:space-between;gap:.3rem}
+  .dot{
+    width:27px;height:27px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.66rem;font-weight:400;color:rgba(248,244,236,.55);
+    border:1px solid rgba(248,244,236,.18);
+  }
+  .dot.done{background:rgba(201,178,140,.22);border-color:rgba(201,178,140,.5);color:var(--gold-soft)}
+  .dot.today{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,178,140,.14);color:var(--ivory)}
+  .word-en{
+    font-family:var(--font-display);font-style:italic;font-weight:400;
+    font-size:1.75rem;color:var(--ivory);line-height:1.3;
+  }
+  .thumb{
+    width:100%;height:118px;object-fit:cover;border-radius:18px;display:block;
+    border:1px solid rgba(201,178,140,.25);
+  }
+  .kv{display:flex;justify-content:space-between;align-items:baseline;font-size:.9rem}
+  .kv .k{color:rgba(248,244,236,.6);font-weight:300}
+  .kv .v{color:var(--gold-soft);font-weight:400}
+
   .chapter .enter{
     display:inline-flex;align-items:center;gap:.45rem;margin-top:1.15rem;
     color:var(--gold);font-size:.86rem;font-weight:400;
@@ -398,6 +444,12 @@
     html{scroll-behavior:auto}
   }
 
+  /* ————— شاشات متوسطة ————— */
+  @media (max-width:1020px) and (min-width:861px){
+    .chapters-grid{grid-template-columns:repeat(2,1fr)}
+    .span3,.span2{grid-column:auto}
+  }
+
   /* ————— الجوال ————— */
   @media (max-width:860px){
     .nav-links{display:none}
@@ -430,7 +482,8 @@
     }
     .ov-quote{margin-top:1.9rem;padding-top:1.7rem}
 
-    .chapters-grid{gap:1.15rem;margin-top:3rem}
+    .chapters-grid{grid-template-columns:1fr;gap:1.15rem;margin-top:3rem}
+    .span3,.span2{grid-column:auto}
     .chapter{padding:1.7rem 1.55rem 1.6rem;border-radius:26px}
 
     .rituals{grid-template-columns:1fr;border-top:none;margin-top:2.8rem}
@@ -546,73 +599,108 @@
       <h2 class="section-title reveal">فصولُ رحلتي</h2>
 
       <div class="chapters-grid">
-        <a class="chapter reveal" id="journal" href="#journal">
+        <a class="chapter reveal span3" id="journal" href="#journal">
           <div class="chapter-top">
             <span class="chapter-num">٠١</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17.5a2.5 2.5 0 0 1-2.5 2.5H6.5A2.5 2.5 0 0 1 4 19.5v-15Z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
           </div>
           <h3>دفتري اليومي</h3>
-          <p>صفحةٌ بيضاء كلَّ صباح.</p>
-          <span class="enter">ادخلي <span>←</span></span>
+          <div class="live">
+            <span class="chip" id="journalChip">لم تُكتب بعد اليوم</span>
+            <p class="snippet" id="journalSnippet"></p>
+            <span class="meta" id="journalMeta"></span>
+          </div>
+          <span class="enter" id="journalCta">اكتبي الآن <span>←</span></span>
         </a>
 
-        <a class="chapter reveal" id="week" href="#week" style="transition-delay:.08s">
+        <a class="chapter reveal span3" id="week" href="#week" style="transition-delay:.08s">
           <div class="chapter-top">
             <span class="chapter-num">٠٢</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9.5h18M8 2v4M16 2v4M7.5 14h3M13.5 14h3M7.5 17.5h3"/></svg>
           </div>
           <h3>تخطيطي الأسبوعي</h3>
-          <p>لكلِّ يومٍ نيّة، ولكلِّ ساعةٍ معنى.</p>
+          <div class="live">
+            <div class="statline">
+              <span class="lbl">تقدّم الأسبوع</span>
+              <span class="statnum" id="weekPct">…</span>
+            </div>
+            <div class="bar"><span id="weekBar" style="--p:0%"></span></div>
+            <div class="dots" id="weekDots"></div>
+            <span class="meta" id="weekMeta"></span>
+          </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal" id="goals" href="#goals" style="transition-delay:.16s">
+        <a class="chapter reveal span2" id="goals" href="#goals" style="transition-delay:.16s">
           <div class="chapter-top">
             <span class="chapter-num">٠٣</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>
           </div>
           <h3>أهدافي</h3>
-          <p>أحلامٌ كبيرة… بخطواتٍ صغيرة.</p>
+          <div class="live">
+            <div class="statline">
+              <span class="statnum" id="goalsActive">…<small>نشطة</small></span>
+              <span class="statnum" id="goalsDone">…<small>مكتملة</small></span>
+            </div>
+            <div class="kv"><span class="k" id="goalNearName">…</span><span class="v" id="goalNearPct"></span></div>
+            <div class="bar"><span id="goalNearBar" style="--p:0%"></span></div>
+          </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal" id="english" href="#english" style="transition-delay:.24s">
+        <a class="chapter reveal span2" id="english" href="#english" style="transition-delay:.24s">
           <div class="chapter-top">
             <span class="chapter-num">٠٤</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.6 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.6-3.9-9S9.4 5.5 12 3Z"/></svg>
           </div>
           <h3>رحلتي مع الإنجليزية</h3>
-          <p>كلمةٌ جديدة كلَّ يوم.</p>
+          <div class="live">
+            <span class="meta">كلمة اليوم</span>
+            <div class="word-en" id="wordEn">…</div>
+            <span class="snippet" id="wordAr"></span>
+            <span class="chip" id="englishStreak">✦</span>
+          </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal" id="achievements" href="#achievements" style="transition-delay:.32s">
+        <a class="chapter reveal span2" id="achievements" href="#achievements" style="transition-delay:.32s">
           <div class="chapter-top">
             <span class="chapter-num">٠٥</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M12 6.2l.9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2L9.1 8.3l2-.3.9-1.8ZM8.5 14.5 7 21l5-2.5L17 21l-1.5-6.5"/></svg>
           </div>
           <h3>إنجازاتي</h3>
-          <p>أحتفي بكلِّ خطوة.</p>
+          <div class="live">
+            <span class="meta">أحدث وسام</span>
+            <p class="snippet" id="achLatest">…</p>
+            <span class="chip" id="achCount"></span>
+          </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal" id="memories" href="#memories" style="transition-delay:.4s">
+        <a class="chapter reveal span3" id="memories" href="#memories" style="transition-delay:.4s">
           <div class="chapter-top">
             <span class="chapter-num">٠٦</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2.5"/><path d="M3 16l4.5-4.5a1.6 1.6 0 0 1 2.3 0L14 15.7M12.5 14.2l2.2-2.2a1.6 1.6 0 0 1 2.3 0L21 16"/><circle cx="9" cy="9.2" r="1.3"/></svg>
           </div>
           <h3>ذكرياتي</h3>
-          <p>لحظاتٌ لا يمحوها الزمن.</p>
+          <div class="live">
+            <img class="thumb" id="memThumb" src="assets/memory-sample.jpg" alt="أحدث ذكرى">
+            <div class="kv"><span class="k" id="memCaption">…</span><span class="v" id="memCount"></span></div>
+          </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal" id="settings" href="#settings" style="transition-delay:.48s">
+        <a class="chapter reveal span3" id="settings" href="#settings" style="transition-delay:.48s">
           <div class="chapter-top">
             <span class="chapter-num">٠٧</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7"/></svg>
           </div>
           <h3>الإعدادات</h3>
-          <p>مساحتي… على طريقتي.</p>
+          <div class="live">
+            <div class="kv"><span class="k">النمط</span><span class="v">ليليّ هادئ</span></div>
+            <div class="kv"><span class="k">تذكير المساء</span><span class="v">٩:٠٠ مساءً</span></div>
+            <div class="kv"><span class="k">اللغة</span><span class="v">العربية</span></div>
+          </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
       </div>
@@ -685,6 +773,10 @@
   })();
 
   // اقتباس اليوم — يتغيّر كل يوم
+  const dayOfYear = (function(){
+    const start = new Date(new Date().getFullYear(), 0, 0);
+    return Math.floor((Date.now() - start) / 86400000);
+  })();
   (function(){
     const quotes = [
       "«كلُّ يومٍ هو بدايةٌ جديدة»",
@@ -695,9 +787,134 @@
       "«كوني النسخةَ التي تحلمين بها»",
       "«الرحلةُ أجملُ من الوصول»"
     ];
-    const start = new Date(new Date().getFullYear(), 0, 0);
-    const day = Math.floor((Date.now() - start) / 86400000);
-    document.getElementById("dailyQuote").textContent = quotes[day % quotes.length];
+    document.getElementById("dailyQuote").textContent = quotes[dayOfYear % quotes.length];
+  })();
+
+  /* ————————————————————————————————
+     طبقة البيانات — تُقرأ من localStorage
+     وتُملأ ببيانات تجريبية أول مرة، وستتصل
+     بالفصول الحقيقية عند بنائها.
+  ———————————————————————————————— */
+  const arabicNum = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+  const todayKey = new Date().toISOString().slice(0,10);
+
+  function loadStore(){
+    try{
+      const saved = JSON.parse(localStorage.getItem("rahlati:v1"));
+      if (saved && saved.journal) return saved;
+    }catch(e){}
+    const y = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    const demo = {
+      journal: [
+        {date:y, text:"يومٌ هادئ… مشيتُ عند الغروب، وقرأتُ فصلًا من كتابي المفضّل."}
+      ],
+      week: {done:11, total:17, days:[true,true,false,true,true,false,false]},
+      todayTasks: {done:2, total:5},
+      goals: [
+        {name:"قراءة ١٢ كتابًا هذا العام", progress:42, active:true},
+        {name:"المشي ٨٠ كم شهريًا", progress:65, active:true},
+        {name:"إتقان ٥٠٠ كلمة إنجليزية", progress:28, active:true},
+        {name:"تعلّم أساسيات التصوير", progress:100, active:false}
+      ],
+      english: {streak:5},
+      achievements: [
+        {name:"٧ أيامٍ من التدوين المتواصل", when:"منذ يومين"},
+        {name:"أول هدفٍ مكتمل", when:"الأسبوع الماضي"},
+        {name:"١٠٠ كلمة إنجليزية", when:"قبل شهر"},
+        {name:"أول ذكرى محفوظة", when:"قبل شهرين"}
+      ],
+      memories: {count:23, latestCaption:"غروبُ يوم الجمعة"}
+    };
+    localStorage.setItem("rahlati:v1", JSON.stringify(demo));
+    return demo;
+  }
+
+  (function renderLive(){
+    const s = loadStore();
+
+    // ٠١ — دفتري اليومي
+    const latest = s.journal[s.journal.length - 1];
+    const wroteToday = latest && latest.date === todayKey;
+    const chip = document.getElementById("journalChip");
+    if (wroteToday){
+      chip.textContent = "كُتبت اليوم ✓";
+      chip.classList.add("done");
+      document.getElementById("journalCta").firstChild.textContent = "أكملي ";
+    }
+    if (latest){
+      const t = latest.text.length > 90 ? latest.text.slice(0,90) + "…" : latest.text;
+      document.getElementById("journalSnippet").textContent = "«" + t + "»";
+      document.getElementById("journalMeta").textContent =
+        "آخر تدوينة — " + (wroteToday ? "اليوم" : latest.date === new Date(Date.now()-86400000).toISOString().slice(0,10) ? "أمس" : latest.date);
+    } else {
+      document.getElementById("journalSnippet").textContent = "«صفحتُكِ الأولى بانتظارك»";
+    }
+
+    // ٠٢ — تخطيطي الأسبوعي
+    const pct = Math.round(100 * s.week.done / s.week.total);
+    document.getElementById("weekPct").textContent = "٪" + arabicNum(pct);
+    document.getElementById("weekBar").style.setProperty("--p", pct + "%");
+    document.getElementById("weekMeta").textContent =
+      arabicNum(s.week.done) + " من " + arabicNum(s.week.total) + " مهمة هذا الأسبوع";
+    const names = ["ح","ن","ث","ر","خ","ج","س"];
+    const todayIdx = new Date().getDay(); // 0 = الأحد
+    document.getElementById("weekDots").innerHTML = names.map((n,i)=>
+      `<span class="dot${s.week.days[i] ? " done" : ""}${i === todayIdx ? " today" : ""}">${n}</span>`
+    ).join("");
+
+    // ٠٣ — أهدافي
+    const active = s.goals.filter(g=>g.active);
+    document.getElementById("goalsActive").innerHTML = arabicNum(active.length) + "<small>نشطة</small>";
+    document.getElementById("goalsDone").innerHTML = arabicNum(s.goals.length - active.length) + "<small>مكتملة</small>";
+    const near = active.slice().sort((a,b)=>b.progress-a.progress)[0];
+    if (near){
+      document.getElementById("goalNearName").textContent = near.name;
+      document.getElementById("goalNearPct").textContent = "٪" + arabicNum(near.progress);
+      document.getElementById("goalNearBar").style.setProperty("--p", near.progress + "%");
+    }
+
+    // ٠٤ — الإنجليزية: كلمة اليوم + السلسلة
+    const words = [
+      ["Serenity","صفاء، سكينة"],
+      ["Journey","رحلة"],
+      ["Bloom","تفتُّح، ازدهار"],
+      ["Gratitude","امتنان"],
+      ["Dawn","فجر"],
+      ["Resilience","صلابة، قدرة على النهوض"],
+      ["Wander","تجوّل بلا وجهة"],
+      ["Glow","توهُّج"],
+      ["Cherish","اعتزاز ورعاية"],
+      ["Horizon","أفق"],
+      ["Solace","سلوى، مواساة"],
+      ["Flourish","ازدهار ونماء"],
+      ["Tranquil","هادئ"],
+      ["Radiant","مشرق، متلألئ"]
+    ];
+    const w = words[dayOfYear % words.length];
+    document.getElementById("wordEn").textContent = w[0];
+    document.getElementById("wordAr").textContent = w[1];
+    document.getElementById("englishStreak").textContent = "✦ سلسلة " + arabicNum(s.english.streak) + " أيام";
+
+    // ٠٥ — إنجازاتي
+    const ach = s.achievements[0];
+    if (ach){
+      document.getElementById("achLatest").textContent = ach.name;
+      document.getElementById("achCount").textContent = "✦ " + arabicNum(s.achievements.length) + " أوسمة — " + ach.when;
+    }
+
+    // ٠٦ — ذكرياتي
+    document.getElementById("memCaption").textContent = s.memories.latestCaption;
+    document.getElementById("memCount").textContent = arabicNum(s.memories.count) + " ذكرى";
+
+    // لمحة اليوم في الأعلى
+    const ovItems = document.querySelectorAll(".ov-item");
+    if (ovItems.length >= 4){
+      ovItems[2].querySelector(".ov-value").textContent =
+        arabicNum(s.todayTasks.done) + " من " + arabicNum(s.todayTasks.total);
+      ovItems[2].querySelector(".bar span").style.setProperty("--p", Math.round(100*s.todayTasks.done/s.todayTasks.total) + "%");
+      ovItems[3].querySelector(".ov-value").textContent = "٪" + arabicNum(pct);
+      ovItems[3].querySelector(".bar span").style.setProperty("--p", pct + "%");
+    }
   })();
 
   // شريط التنقل + تعتيم الخلفية أثناء التمرير
