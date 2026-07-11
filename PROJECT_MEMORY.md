@@ -17,7 +17,7 @@
 - **معاينة الرئيسية:** https://claude.ai/code/artifact/0e3e6e3d-2c19-49d3-a7af-616711b64d1a
 - **معاينة دفتري اليومي:** https://claude.ai/code/artifact/edbd3235-2739-42dd-b98b-23a32c3ad998
 - **معاينة التخطيط الأسبوعي:** https://claude.ai/code/artifact/e5a54748-61f2-41ae-8bb0-de5f3c3a141c
-- **معاينة الأهداف:** تُنشر عند إتمام هذه الجولة (انظر آخر رسالة)
+- **معاينة الأهداف:** https://claude.ai/code/artifact/9f9a274f-6a55-4c2d-8fe9-47b602a91bb7
 
 ---
 
