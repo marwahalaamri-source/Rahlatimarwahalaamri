@@ -2,6 +2,9 @@
    طبقة البيانات المشتركة لموقع «رحلتي» — rahlati:v2
    المخطط الكامل موثّق في docs/STRUCTURE.md
    تُستخدم من الرئيسية وكل صفحات sections/*.html
+
+   لا محتوى تجريبي أو أمثلة عامة: المخزن يبدأ فارغًا وينتظر
+   بيانات مروه الحقيقية — عاداتها وأهدافها وأحلامها ويومياتها.
 ———————————————————————————————————————— */
 (function(){
   const KEY = "rahlati:v2";
@@ -9,129 +12,107 @@
   const arabicNum = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
   const iso = d => d.toISOString().slice(0,10);
   const daysAgo = n => iso(new Date(Date.now() - n*86400000));
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 
-  function buildDemoStore(){
-    const y = daysAgo(1);
-    const satOffset = (new Date().getDay() + 1) % 7; // بداية الأسبوع الحالي = السبت
-    const weekStart = new Date(Date.now() - satOffset*86400000);
-    const wDate = n => iso(new Date(weekStart.getTime() + n*86400000));
+  const DAY_NAMES = ["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة"];
+
+  /* تاريخ السبت الذي يبدأ به الأسبوع الحالي */
+  function currentWeekStart(){
+    const satOffset = (new Date().getDay() + 1) % 7;
+    return iso(new Date(Date.now() - satOffset*86400000));
+  }
+  /* الأيام السبعة (السبت→الجمعة) لأسبوعٍ يبدأ بتاريخ weekStartISO */
+  function weekDates(weekStartISO){
+    const start = new Date(weekStartISO + "T12:00:00");
+    return Array.from({length:7}, (_,i)=> iso(new Date(start.getTime() + i*86400000)));
+  }
+
+  function buildEmptyStore(){
+    const weekStart = currentWeekStart();
+    const dates = weekDates(weekStart);
 
     return {
-      journal: [
-        {date:y, text:"يومٌ هادئ… مشيتُ عند الغروب، وقرأتُ فصلًا من كتابي المفضّل.", mood:"هادئة", gratitude:"فنجان قهوةٍ في الشرفة"}
-      ],
+      journal: [],   // { date, mood, intent, priorities:["","",""], tasks:[{t,done}],
+                     //   plan, diary, gratitude:["","",""], proud, photo, rating, note, linkedGoalId }
+
       week: {
-        goal:"أسبوعٌ متوازن… عبادة، وحركة، وتعلّم",
-        quote:"«الأسبوعُ الجميل يُبنى يومًا بيوم»",
-        days:[
-          {name:"السبت", date:wDate(0), tasks:[{t:"رياضة الصباح",done:true},{t:"قراءة ٣٠ صفحة",done:true},{t:"ترتيب المكتب",done:false}],
-           appointments:[{time:"٩:٠٠ ص",text:"موعد أسناني"}], habits:[{name:"شرب الماء",done:true},{name:"ورد قرآني",done:true}], notes:"يوم هادئ ومنظم"},
-          {name:"الأحد", date:wDate(1), tasks:[{t:"مراجعة الإنجليزية",done:true},{t:"مشي المساء",done:true}],
-           appointments:[], habits:[{name:"شرب الماء",done:true},{name:"ورد قرآني",done:true}], notes:""},
-          {name:"الاثنين", date:wDate(2), tasks:[{t:"كتابة اليوميات",done:true},{t:"مكالمة العائلة",done:false}],
-           appointments:[{time:"٤:٠٠ م",text:"اجتماع عمل"}], habits:[{name:"شرب الماء",done:true},{name:"ورد قرآني",done:false}], notes:""},
-          {name:"الثلاثاء", date:wDate(3), tasks:[{t:"درس إنجليزية",done:true},{t:"تحضير وجبات صحية",done:true},{t:"قراءة",done:true}],
-           appointments:[], habits:[{name:"شرب الماء",done:true},{name:"ورد قرآني",done:true}], notes:"يوم منتج جدًا"},
-          {name:"الأربعاء", date:wDate(4), tasks:[{t:"رياضة",done:true},{t:"مراجعة الأهداف",done:false}],
-           appointments:[], habits:[{name:"شرب الماء",done:false},{name:"ورد قرآني",done:true}], notes:""},
-          {name:"الخميس", date:wDate(5), tasks:[{t:"تدوين الامتنان",done:true},{t:"تجهيز المقاضي",done:false}],
-           appointments:[{time:"٨:٠٠ م",text:"ليلة القراءة"}], habits:[{name:"شرب الماء",done:false},{name:"ورد قرآني",done:false}], notes:""},
-          {name:"الجمعة", date:wDate(6), tasks:[{t:"روتين الجمعة",done:false},{t:"وقت العائلة",done:false}],
-           appointments:[], habits:[{name:"شرب الماء",done:false},{name:"ورد قرآني",done:false}], notes:""}
+        goal: "",
+        quote: "",
+        days: DAY_NAMES.map((name,i) => ({
+          name, date: dates[i],
+          tasks: [], appointments: [], habits: [], notes: ""
+        })),
+        shopping: [],
+        priorities: ["","",""],
+        weeklyGoals: [
+          {category:"شخصية", name:"", progress:0},
+          {category:"عملية", name:"", progress:0},
+          {category:"صحية", name:"", progress:0},
+          {category:"دينية", name:"", progress:0},
+          {category:"تعلم", name:"", progress:0}
         ],
-        shopping:[{item:"فواكه وخضار",done:true},{item:"قهوة مختصة",done:false},{item:"دفتر جديد",done:false}],
-        priorities:["إنهاء الفصل الثالث من الكتاب","المواظبة على المشي","حفظ ٢٠ كلمة جديدة"],
-        weeklyGoals:[
-          {category:"شخصية", name:"وقتٌ يومي للقراءة", progress:60},
-          {category:"عملية", name:"إنهاء مشروع التقرير", progress:40},
-          {category:"صحية", name:"المشي ٥ أيام", progress:70},
-          {category:"دينية", name:"ختم جزء من القرآن", progress:50},
-          {category:"تعلم", name:"حفظ ٢٠ كلمة إنجليزية", progress:35}
-        ],
-        habitTracker:{name:"شرب ٨ أكواب ماء", streak:4},
-        review:{worked:"", improve:"", learned:"", goalAchieved:null, rating:0}
+        review: {worked:"", improve:"", learned:"", goalAchieved:null, focusConsistencyPct:0, rating:0}
       },
+
+      // تركيز الأسبوع — يُختار كل جمعة، بؤرة أو بؤرتان كحد أقصى
+      weeklyFocus: {
+        weekStart,
+        items: [],   // { id, text, linkedHabitId, checkedDates:[] }
+        history: []  // { weekStart, items:[{text, consistencyPct}] }
+      },
+
       friday: {
-        checklist:[
-          {name:"قراءة سورة الكهف", done:true},
-          {name:"التخطيط للأسبوع القادم", done:true},
+        checklist: [
+          {name:"قراءة سورة الكهف", done:false},
+          {name:"اختيار تركيز الأسبوع القادم", done:false},
+          {name:"التخطيط للأسبوع القادم", done:false},
           {name:"تنظيف الغرفة", done:false},
           {name:"مراجعة الأهداف", done:false},
           {name:"تأمل وامتنان", done:false}
         ],
-        reflection:""
+        reflection: ""
       },
-      goals: [
-        {name:"ختم القرآن الكريم", category:"دينية", status:"جارٍ التنفيذ", progress:35,
-         startDate:"2026-01-01", targetDate:"2026-12-31",
-         why:"لأشعر بقربٍ دائم من ربي، وسكينةٍ تملأ قلبي في كل حين.", notes:"",
-         milestones:[{name:"١٠ أجزاء",done:true},{name:"٢٠ جزءًا",done:false},{name:"ختمة كاملة",done:false}],
-         tasks:[{t:"ورد يومي بعد الفجر",done:true},{t:"مراجعة أسبوعية",done:false}], photos:[]},
-        {name:"المشي ٨٠ كم شهريًا", category:"صحية", status:"جارٍ التنفيذ", progress:65,
-         startDate:"2026-06-01", targetDate:"2026-08-31",
-         why:"لأمنح جسدي طاقةً وصحةً تدوم، وأرى نفسي أخفّ وأقوى.", notes:"",
-         milestones:[{name:"٢٠ كم",done:true},{name:"٥٠ كم",done:true},{name:"٨٠ كم",done:false}],
-         tasks:[{t:"جدولة المشي في التقويم",done:true},{t:"حذاء رياضي جديد",done:false}], photos:[]},
-        {name:"إتقان ٥٠٠ كلمة إنجليزية", category:"تعلم", status:"جارٍ التنفيذ", progress:28,
-         startDate:"2026-03-01", targetDate:"2026-11-30",
-         why:"لأفتح لنفسي أبوابًا جديدة في العمل والسفر والمعرفة.", notes:"",
-         milestones:[{name:"١٠٠ كلمة",done:true},{name:"٣٠٠ كلمة",done:false},{name:"٥٠٠ كلمة",done:false}],
-         tasks:[{t:"درس يومي ١٥ دقيقة",done:true}], photos:[]},
-        {name:"صندوق الادخار الشهري", category:"مالية", status:"جارٍ التنفيذ", progress:50,
-         startDate:"2026-01-01", targetDate:"2026-12-31",
-         why:"لأشعر بالأمان المالي، وأقدر على تحقيق أحلامي دون قلق.", notes:"",
-         milestones:[{name:"الشهر الأول",done:true},{name:"ستة أشهر",done:false}],
-         tasks:[{t:"تحويل تلقائي أول كل شهر",done:true}], photos:[]},
-        {name:"زيارة اليابان", category:"أحلام", status:"جارٍ التنفيذ", progress:10,
-         startDate:"2026-01-01", targetDate:"2027-04-01",
-         why:"حلمٌ قديم برؤية جمال ثقافةٍ مختلفة، وعيش لحظةٍ استثنائية.", notes:"ادخار + تخطيط الرحلة",
-         milestones:[{name:"جواز السفر",done:true},{name:"خطة الرحلة",done:false},{name:"الحجز",done:false}],
-         tasks:[{t:"فتح حساب ادخار السفر",done:true}], photos:[]},
-        {name:"تعلّم أساسيات التصوير", category:"شخصية", status:"مكتمل", progress:100,
-         startDate:"2025-11-01", targetDate:"2026-05-01",
-         why:"لأوثّق اللحظات الجميلة بعيني الخاصة، لا بعين أحد.", notes:"",
-         milestones:[{name:"دورة أساسيات",done:true},{name:"١٠٠ صورة",done:true}],
-         tasks:[], photos:[]},
-        {name:"الحصول على شهادة مهنية", category:"عملية", status:"لم يبدأ", progress:0,
-         startDate:"", targetDate:"2026-12-31",
-         why:"لأتطور في مساري المهني، وأفتح لنفسي فرصًا جديدة.", notes:"",
-         milestones:[], tasks:[], photos:[]},
-        {name:"توطيد علاقتي بصديقاتي", category:"اجتماعية", status:"متوقف", progress:45,
-         startDate:"2026-02-01", targetDate:"",
-         why:"لأن الصداقات الحقيقية كنزٌ يستحق الرعاية والوقت.", notes:"سأعاود الاهتمام به بعد انتهاء المشروع الحالي",
-         milestones:[{name:"لقاء شهري",done:true}],
-         tasks:[{t:"اتصال أسبوعي",done:true},{t:"تخطيط لقاء",done:false}], photos:[]}
-      ],
       thursday: {
-        book: {title:"كتاب الأسبوع", image:""},
-        checklist:[
+        book: {title:"", image:""},
+        checklist: [
           {name:"قراءة فصلٍ من كتابي", done:false},
           {name:"تجهيز قائمة الجمعة", done:false},
           {name:"تدوين خاطرة المساء", done:false}
         ]
       },
-      english: {streak:5, todayTask:"راجعي كلمات هذا الأسبوع"},
-      achievements: [
-        {name:"٧ أيامٍ من التدوين المتواصل", when:"منذ يومين"},
-        {name:"أول هدفٍ مكتمل", when:"الأسبوع الماضي"},
-        {name:"١٠٠ كلمة إنجليزية", when:"قبل شهر"},
-        {name:"أول ذكرى محفوظة", when:"قبل شهرين"}
-      ],
-      memories: [
-        {caption:"غروبُ يوم الجمعة", date:y, image:"assets/memory-sample.jpg"},
-        {caption:"قهوة الصباح مع كتاب", date:y, image:""},
-        {caption:"نزهة الجبل", date:y, image:""}
-      ],
+
+      // ————— هرم الطموح الثلاثي —————
+      habits: [],   // { id, name, category, active, streak, longestStreak, checkedDates:[], linkedDreamId }
+      goals:  [],   // { id, name, category, status, progress, startDate, targetDate, why, notes, milestones:[], tasks:[], photos:[], linkedDreamId }
+      dreams: [],   // { id, name, category, why, vision, timeframe, status, relatedGoalIds:[], photos:[] }
+
+      english: {streak:0, todayTask:""},
+      achievements: [],   // { name, when } — ستُولَّد تلقائيًا من عادات/أهداف حقيقية مكتملة
+      memories: [],       // { caption, date, image }
       settings: {name:"مروه العامري", theme:"ليليّ هادئ", reminder:"٩:٠٠ مساءً", lang:"العربية"},
-      activity: {
-        journal:daysAgo(1), week:daysAgo(0), friday:daysAgo(1), goals:daysAgo(2),
-        english:daysAgo(0), achievements:daysAgo(2), memories:daysAgo(1), settings:daysAgo(7)
-      }
+      activity: {}
     };
   }
 
   /* ترقية آمنة: تعبئة أي حقول أُضيفت لاحقًا للمخطط دون فقدان بيانات قديمة */
   function migrate(store){
+    // اليوميات: توحيد الشكل القديم {text, gratitude:string} مع الشكل الغني الحالي
+    store.journal = (store.journal || []).map(e => ({
+      date: e.date,
+      mood: e.mood || "",
+      intent: e.intent || "",
+      priorities: (e.priorities && e.priorities.length) ? e.priorities : ["","",""],
+      tasks: e.tasks || [],
+      plan: e.plan || "",
+      diary: e.diary || e.text || "",
+      gratitude: Array.isArray(e.gratitude) ? e.gratitude : (e.gratitude ? [e.gratitude,"",""] : ["","",""]),
+      proud: e.proud || "",
+      photo: e.photo || "",
+      rating: e.rating || 0,
+      note: e.note || "",
+      linkedGoalId: e.linkedGoalId || null
+    }));
+
     const w = store.week = store.week || {};
     w.goal = w.goal || "";
     w.quote = w.quote || "";
@@ -152,27 +133,54 @@
       {category:"دينية", name:"", progress:0},
       {category:"تعلم", name:"", progress:0}
     ];
-    w.habitTracker = w.habitTracker || {name:"", streak:0};
     if (typeof w.review !== "object" || w.review === null){
-      w.review = {worked:"", improve:"", learned:"", goalAchieved:null, rating:0};
+      w.review = {worked:"", improve:"", learned:"", goalAchieved:null, focusConsistencyPct:0, rating:0};
     }
-    // ترقية تصنيفات وحالات «أهدافي» إلى النسخة الحالية (٨ تصنيفات، ٤ حالات)
+    w.review.focusConsistencyPct = w.review.focusConsistencyPct || 0;
+
+    // تركيز الأسبوع — يحلّ محل week.habitTracker السابق (يُنقل تلقائيًا إن وُجد)
+    if (!store.weeklyFocus){
+      store.weeklyFocus = {weekStart: currentWeekStart(), items:[], history:[]};
+      if (w.habitTracker && w.habitTracker.name){
+        store.weeklyFocus.items.push({id:uid(), text:w.habitTracker.name, linkedHabitId:null, checkedDates:[]});
+      }
+    }
+    delete w.habitTracker;
+
+    // هرم الطموح: تعبئة المصفوفات الناقصة + فصل «أحلام» عن الأهداف
+    store.habits = store.habits || [];
+    store.dreams = store.dreams || [];
     const catMap = {"روحانية":"دينية", "صحة":"صحية"};
     const statusMap = {"نشط":"جارٍ التنفيذ"};
-    store.goals = (store.goals || []).map(g => ({
-      name: g.name,
-      category: catMap[g.category] || g.category,
-      status: statusMap[g.status] || g.status || "لم يبدأ",
-      progress: g.progress || 0,
-      startDate: g.startDate || "",
-      targetDate: g.targetDate || "",
-      why: g.why || "",
-      notes: g.notes || "",
-      milestones: g.milestones || [],
-      tasks: g.tasks || [],
-      photos: g.photos || []
-    }));
+    const rawGoals = store.goals || [];
+    store.goals = [];
+    rawGoals.forEach(g => {
+      const category = catMap[g.category] || g.category;
+      if (category === "أحلام"){
+        // هذا "هدف" كان في الحقيقة حلمًا — يُنقل إلى dreams[] بدل حذفه
+        store.dreams.push({
+          id: g.id || uid(), name: g.name, category: "شخصية",
+          why: g.why || "", vision: g.notes || "",
+          timeframe: g.targetDate || "", status: g.status === "مكتمل" ? "تحقّق" : "حيّ",
+          relatedGoalIds: [], photos: g.photos || []
+        });
+        return;
+      }
+      store.goals.push({
+        id: g.id || uid(), name: g.name, category,
+        status: statusMap[g.status] || g.status || "لم يبدأ",
+        progress: g.progress || 0,
+        startDate: g.startDate || "", targetDate: g.targetDate || "",
+        why: g.why || "", notes: g.notes || "",
+        milestones: g.milestones || [], tasks: g.tasks || [], photos: g.photos || [],
+        linkedDreamId: g.linkedDreamId || null
+      });
+    });
 
+    store.english = store.english || {streak:0, todayTask:""};
+    store.achievements = store.achievements || [];
+    store.memories = store.memories || [];
+    store.settings = store.settings || {name:"مروه العامري", theme:"ليليّ هادئ", reminder:"٩:٠٠ مساءً", lang:"العربية"};
     store.activity = store.activity || {};
     return store;
   }
@@ -182,9 +190,9 @@
       const saved = JSON.parse(localStorage.getItem(KEY));
       if (saved && saved.journal && saved.friday && saved.activity) return migrate(saved);
     }catch(e){}
-    const demo = buildDemoStore();
-    saveStore(demo);
-    return demo;
+    const empty = buildEmptyStore();
+    saveStore(empty);
+    return empty;
   }
 
   function saveStore(store){
@@ -196,5 +204,8 @@
     store.activity[sectionId] = iso(new Date());
   }
 
-  window.RahlatiStore = { load: loadStore, save: saveStore, touch, arabicNum, KEY };
+  window.RahlatiStore = {
+    load: loadStore, save: saveStore, touch, arabicNum, KEY,
+    uid, currentWeekStart, weekDates
+  };
 })();

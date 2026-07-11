@@ -274,18 +274,36 @@
   }
   .stepper button:hover{background:rgba(201,178,140,.2)}
 
-  /* ————— المتابعة ————— */
-  .track-grid{display:grid;grid-template-columns:1fr auto auto;gap:1.6rem;align-items:center}
-  .track-name input{
-    width:100%;background:none;border:none;outline:none;color:var(--ivory);
-    font-family:var(--font-display);font-weight:700;font-size:1.15rem;
+  /* ————— تركيز الأسبوع ————— */
+  .focus-sub{font-size:.85rem;font-weight:300;color:rgba(248,244,236,.6);margin-bottom:1.3rem;line-height:1.9}
+  .focus-item{
+    border:1px solid rgba(201,178,140,.25);border-radius:18px;padding:1.1rem 1.3rem;
+    margin-bottom:1rem;background:rgba(13,20,38,.28);
+  }
+  .focus-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.9rem}
+  .focus-text{
+    flex:1;background:none;border:none;outline:none;color:var(--ivory);
+    font-family:var(--font-display);font-weight:700;font-size:1.1rem;
     border-bottom:1px solid rgba(201,178,140,.25);padding:.3rem 0;
   }
-  .streak-box{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:0 1rem}
-  .streak-box .flame{font-size:1.6rem;line-height:1}
-  .streak-box .num{font-family:var(--font-display);font-weight:700;font-size:1.6rem;color:var(--gold-soft)}
-  .streak-box .cap{font-size:.72rem;font-weight:300;color:rgba(248,244,236,.6)}
-  .track-meta{font-size:.82rem;font-weight:300;color:rgba(248,244,236,.55);text-align:left}
+  .focus-pct{
+    font-family:var(--font-display);font-weight:700;font-size:1.2rem;color:var(--gold-soft);
+    flex-shrink:0;min-width:3.6em;text-align:left;
+  }
+  .focus-del{background:none;border:none;cursor:pointer;color:rgba(248,244,236,.4);font-size:1rem;flex-shrink:0}
+  .focus-del:hover{color:#d99}
+  .focus-days{display:flex;gap:.5rem;justify-content:space-between}
+  .focus-day{
+    flex:1;height:34px;border-radius:10px;cursor:pointer;
+    border:1px solid rgba(201,178,140,.28);background:none;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.78rem;color:rgba(248,244,236,.6);transition:background .25s, border-color .25s, color .25s;
+  }
+  .focus-day.today{border-color:var(--gold)}
+  .focus-day.done{background:linear-gradient(135deg,#e3cfa5,#b3986e);border-color:transparent;color:#221d12;font-weight:700}
+  .focus-day.future{opacity:.35;pointer-events:none}
+  .track-meta{font-size:.82rem;font-weight:300;color:rgba(248,244,236,.55);text-align:left;margin-top:1rem}
+  .focus-empty{font-size:.9rem;font-weight:300;color:rgba(248,244,236,.5);padding:.6rem 0 1.2rem}
 
   /* ————— مراجعة نهاية الأسبوع (الجمعة) ————— */
   .review-panel{
@@ -338,8 +356,8 @@
     .day-strip{grid-template-columns:repeat(4,1fr)}
     .dd-grid{grid-template-columns:1fr}
     .two-col{grid-template-columns:1fr}
-    .track-grid{grid-template-columns:1fr;text-align:center}
     .track-meta{text-align:center}
+    .focus-days{flex-wrap:wrap}
     .review-grid{grid-template-columns:1fr}
     .goal-row{flex-wrap:wrap}
     .goal-prog{width:100%}
@@ -500,23 +518,19 @@
     <div id="goalsList"></div>
   </section>
 
-  <!-- المتابعة -->
-  <section class="panel section-gap reveal in" style="padding:1.8rem" aria-label="متابعة عادة الأسبوع">
+  <!-- تركيز الأسبوع -->
+  <section class="panel section-gap reveal in" style="padding:1.8rem" aria-label="تركيز الأسبوع">
     <div class="block-label">
       <svg class="icon" viewBox="0 0 24 24"><path d="M12 3c1 4 4 6 7 7-3 1-6 3-7 7-1-4-4-6-7-7 3-1 6-3 7-7Z"/></svg>
-      المتابعة
+      🎯 تركيز الأسبوع
     </div>
-    <div class="track-grid">
-      <div class="track-name">
-        <input id="habitName" placeholder="عادة الأسبوع… (مثال: شرب الماء)">
-      </div>
-      <div class="streak-box">
-        <span class="flame">🔥</span>
-        <span class="num" id="streakNum">٠</span>
-        <span class="cap">أيام متتالية</span>
-      </div>
-      <div class="track-meta" id="lastActivity">آخر نشاط — اليوم</div>
+    <div class="focus-sub">بؤرة أو بؤرتان كحد أقصى تختارينهما كل جمعة، تُتابَعان طوال الأسبوع دون إعادة كتابة</div>
+    <div id="focusList"></div>
+    <div class="add-row" id="addFocusRow">
+      <button class="plus" id="addFocusBtn" aria-label="إضافة تركيز">+</button>
+      <input id="newFocus" placeholder="بؤرة الأسبوع… مثال: تحسين إنجليزيتي">
     </div>
+    <div class="track-meta" id="lastActivity">آخر نشاط — الآن</div>
   </section>
 
   <!-- مراجعة نهاية الأسبوع — الجمعة فقط -->
@@ -553,6 +567,10 @@
         <button class="ach-btn" id="achYes">نعم ✓</button>
         <button class="ach-btn" id="achNo">ليس بعد</button>
       </div>
+    </div>
+    <div class="achieved-row" style="margin-bottom:0">
+      <div class="review-q" style="margin:0">نسبة الالتزام بتركيز الأسبوع</div>
+      <span class="focus-pct" id="revFocusPct" style="font-size:1.3rem">٪٠</span>
     </div>
   </section>
 
@@ -677,8 +695,7 @@
         <span class="t-text" contenteditable="true">${task.t}</span>
         <button class="del" aria-label="حذف">✕</button>`;
       row.querySelector(".tick").addEventListener("click", ()=>{
-        task.done = !task.done; renderStrip(); renderDetail(); renderSummary();
-        recomputeStreak(); persistSoon();
+        task.done = !task.done; renderStrip(); renderDetail(); renderSummary(); persistSoon();
       });
       row.querySelector(".del").addEventListener("click", ()=>{
         d.tasks.splice(i,1); renderStrip(); renderDetail(); renderSummary(); persistSoon();
@@ -716,7 +733,7 @@
       chip.className = "habit-chip" + (h.done ? " on" : "");
       chip.innerHTML = `<span class="hc-dot"></span>${h.name}`;
       chip.addEventListener("click", ()=>{
-        h.done = !h.done; renderDetail(); recomputeStreak(); persistSoon();
+        h.done = !h.done; renderDetail(); persistSoon();
       });
       hbox.appendChild(chip);
     });
@@ -812,24 +829,76 @@
     });
   }
 
-  /* ————— المتابعة ————— */
-  function recomputeStreak(){
+  /* ————— تركيز الأسبوع ————— */
+  const MAX_FOCUS_ITEMS = 2;
+  const weekDatesArr = week.days.map(d=>d.date);
+
+  function focusConsistency(item){
     const todayISO = iso(new Date());
-    const name = week.habitTracker.name.trim();
-    if(!name){ week.habitTracker.streak = 0; return; }
-    const sorted = week.days
-      .filter(d => d.date && d.date <= todayISO)
-      .sort((a,b)=> b.date.localeCompare(a.date));
-    let streak = 0;
-    for(const d of sorted){
-      const h = d.habits.find(h => h.name === name);
-      if(h && h.done) streak++; else break;
-    }
-    week.habitTracker.streak = streak;
+    const elapsed = weekDatesArr.filter(d => d <= todayISO).length || 1;
+    const done = (item.checkedDates||[]).length;
+    return Math.round(100 * done / elapsed);
   }
-  function renderTracker(){
-    document.getElementById("habitName").value = week.habitTracker.name;
-    document.getElementById("streakNum").textContent = arabicNum(week.habitTracker.streak);
+  function overallFocusConsistency(){
+    const items = store.weeklyFocus.items;
+    if (!items.length) return 0;
+    const avg = items.reduce((s,it)=> s + focusConsistency(it), 0) / items.length;
+    return Math.round(avg);
+  }
+  function renderFocus(){
+    const box = document.getElementById("focusList");
+    const items = store.weeklyFocus.items;
+    const todayISO = iso(new Date());
+    box.innerHTML = items.map((it,i)=>{
+      const pct = focusConsistency(it);
+      const days = week.days.map(d=>{
+        const cls = ["focus-day"];
+        if (d.date === todayISO) cls.push("today");
+        if (d.date > todayISO) cls.push("future");
+        if ((it.checkedDates||[]).includes(d.date)) cls.push("done");
+        return `<button class="${cls.join(" ")}" data-i="${i}" data-d="${d.date}">${d.name.replace(/^ال/,"")[0]}</button>`;
+      }).join("");
+      return `<div class="focus-item">
+        <div class="focus-top">
+          <input class="focus-text" data-i="${i}" value="${it.text.replace(/"/g,'&quot;')}" placeholder="بؤرة الأسبوع…">
+          <span class="focus-pct">٪${arabicNum(pct)}</span>
+          <button class="focus-del" data-i="${i}" aria-label="حذف">✕</button>
+        </div>
+        <div class="focus-days">${days}</div>
+      </div>`;
+    }).join("") || `<div class="focus-empty">لم تختاري تركيز الأسبوع بعد — أضيفي بؤرة أو بؤرتين لتوجّه أسبوعكِ (تُختار عادة كل جمعة)</div>`;
+
+    box.querySelectorAll(".focus-text").forEach(el=>{
+      el.addEventListener("input", e=>{ items[+e.target.dataset.i].text = e.target.value; persistSoon(); });
+    });
+    box.querySelectorAll(".focus-del").forEach(b=>{
+      b.addEventListener("click", ()=>{ items.splice(+b.dataset.i,1); renderFocus(); document.getElementById("addFocusRow").hidden = items.length >= MAX_FOCUS_ITEMS; persist(); });
+    });
+    box.querySelectorAll(".focus-day").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const it = items[+b.dataset.i];
+        const d = b.dataset.d;
+        it.checkedDates = it.checkedDates || [];
+        const idx = it.checkedDates.indexOf(d);
+        if (idx > -1) it.checkedDates.splice(idx,1); else it.checkedDates.push(d);
+        renderFocus(); persist();
+      });
+    });
+    document.getElementById("addFocusRow").hidden = items.length >= MAX_FOCUS_ITEMS;
+    renderLastActivity();
+  }
+  document.getElementById("addFocusBtn").addEventListener("click", ()=>{
+    const inp = document.getElementById("newFocus");
+    const v = inp.value.trim();
+    if(!v || store.weeklyFocus.items.length >= MAX_FOCUS_ITEMS) return;
+    store.weeklyFocus.items.push({id:(window.RahlatiStore.uid?window.RahlatiStore.uid():String(Date.now())), text:v, linkedHabitId:null, checkedDates:[]});
+    inp.value = "";
+    renderFocus(); persist();
+  });
+  document.getElementById("newFocus").addEventListener("keydown", e=>{
+    if(e.key==="Enter") document.getElementById("addFocusBtn").click();
+  });
+  function renderLastActivity(){
     const act = store.activity.week;
     const diff = act ? Math.round((new Date(iso(new Date())) - new Date(act)) / 86400000) : null;
     let label = "آخر نشاط — الآن";
@@ -837,10 +906,6 @@
     else if (diff && diff > 1) label = "آخر نشاط — منذ " + arabicNum(diff) + " أيام";
     document.getElementById("lastActivity").textContent = label;
   }
-  document.getElementById("habitName").addEventListener("input", e=>{
-    week.habitTracker.name = e.target.value;
-    recomputeStreak(); renderTracker(); persistSoon();
-  });
 
   /* ————— مراجعة نهاية الأسبوع (الجمعة) ————— */
   function initReview(){
@@ -851,6 +916,8 @@
     document.getElementById("reviewSection").hidden = false;
 
     const r = week.review;
+    r.focusConsistencyPct = overallFocusConsistency();
+    document.getElementById("revFocusPct").textContent = "٪" + arabicNum(r.focusConsistencyPct);
     document.getElementById("revWorked").value = r.worked;
     document.getElementById("revImprove").value = r.improve;
     document.getElementById("revLearned").value = r.learned;
@@ -892,8 +959,7 @@
   renderDetail();
   renderShopping();
   renderGoals();
-  recomputeStreak();
-  renderTracker();
+  renderFocus();
   initReview();
 </script>
 </body>

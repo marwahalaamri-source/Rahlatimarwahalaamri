@@ -63,7 +63,42 @@
   .wrap{max-width:1180px;margin:0 auto;padding:6.5rem clamp(1rem,4vw,2.5rem) 4rem}
 
   /* ————— رأس الدفتر ————— */
-  .day-head{text-align:center;padding:1.8rem 0 1.4rem}
+  .day-head{text-align:center;padding:1.8rem 0 1.4rem;position:relative}
+  .saved-flag{
+    position:absolute;top:1.9rem;left:0;display:flex;align-items:center;gap:.4rem;
+    font-size:.78rem;font-weight:300;color:var(--gold-soft);
+    opacity:0;transition:opacity .5s ease;
+  }
+  .saved-flag.show{opacity:1}
+  @media (max-width:900px){ .saved-flag{position:static;justify-content:center;margin-top:.6rem} }
+
+  .focus-ref{
+    max-width:1180px;margin:0 auto 1.4rem;padding:.9rem 1.5rem;border-radius:18px;
+    background:rgba(201,178,140,.08);border:1px solid rgba(201,178,140,.28);
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  }
+  .focus-ref .fr-text{font-size:.92rem;color:var(--gold-soft);font-weight:400}
+  .focus-ref .fr-text b{font-family:var(--font-display);color:var(--ivory);font-weight:700}
+  .focus-check{
+    display:flex;gap:.5rem;flex-wrap:wrap;
+  }
+  .focus-check button{
+    padding:.4rem 1rem;border-radius:99px;border:1px solid rgba(201,178,140,.35);
+    background:rgba(13,20,38,.3);color:rgba(248,244,236,.8);font-size:.82rem;font-weight:300;
+    cursor:pointer;transition:background .3s, border-color .3s, color .3s;
+  }
+  .focus-check button.on{background:linear-gradient(135deg,#e3cfa5,#b3986e);color:#221d12;border-color:transparent;font-weight:700}
+
+  .goal-ref{margin-top:.7rem}
+  .goal-ref .gr-label{font-size:.8rem;font-weight:300;color:var(--gold);margin-bottom:.5rem}
+  .goal-ref .gr-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+  .goal-ref .gr-chip{
+    padding:.4rem 1rem;border-radius:99px;border:1px solid rgba(201,178,140,.3);
+    background:rgba(13,20,38,.3);color:rgba(248,244,236,.75);font-size:.82rem;font-weight:300;
+    cursor:pointer;transition:background .3s, border-color .3s, color .3s;
+  }
+  .goal-ref .gr-chip.on{background:rgba(201,178,140,.2);border-color:var(--gold);color:var(--gold-soft)}
+  .goal-ref .gr-empty{font-size:.82rem;font-weight:300;color:rgba(248,244,236,.45)}
   .day-head .greet{
     font-weight:300;font-size:1rem;color:var(--gold-soft);
     display:flex;align-items:center;justify-content:center;gap:.9rem;
@@ -356,7 +391,14 @@
     <h1 id="dayTitle">دفتري اليومي</h1>
     <div class="sub" id="daySub">…</div>
     <div class="dquote" id="dayQuote"></div>
+    <span class="saved-flag" id="savedFlag">✓ محفوظ تلقائيًا</span>
   </header>
+
+  <!-- تركيز الأسبوع — مرجع ثابت لا يحتاج إعادة كتابة -->
+  <div class="focus-ref reveal in" id="focusRef" hidden>
+    <span class="fr-text" id="focusRefText"></span>
+    <div class="focus-check" id="focusCheck"></div>
+  </div>
 
   <!-- التقويم + البحث -->
   <div class="toolbar">
@@ -426,6 +468,10 @@
           نيّة اليوم
         </div>
         <input class="line-input" id="intent" placeholder="كيف تريدين أن يكون يومُكِ؟">
+        <div class="goal-ref">
+          <div class="gr-label">هذه التدوينة مرتبطة بـ (اختياري)</div>
+          <div class="gr-chips" id="goalRefChips"></div>
+        </div>
       </div>
 
       <div class="block">
@@ -533,37 +579,46 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="../assets/js/store.js"></script>
 <script src="../assets/js/quotes.js"></script>
 <script>
-  const arabicNum = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+  const arabicNum = window.RahlatiStore.arabicNum;
   const iso = d => d.toISOString().slice(0,10);
   const toast = msg => {
     const t = document.getElementById("toast");
     t.textContent = msg; t.classList.add("show");
     clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove("show"), 2600);
   };
+  function debounce(fn, ms){
+    let t;
+    return (...a) => { clearTimeout(t); t = setTimeout(()=>fn(...a), ms); };
+  }
 
-  /* ————— بيانات تجريبية لتجربة التصميم (الربط الفعلي بعد الاعتماد) ————— */
-  const daysAgo = n => iso(new Date(Date.now() - n*86400000));
-  const DEMO = {
-    [daysAgo(1)]: {mood:"هادئة", intent:"يوم هادئ ومنتج", prios:["إنهاء التقرير","المشي مساءً",""],
-      tasks:[{t:"قراءة ٣٠ صفحة",done:true},{t:"مراجعة الإنجليزية",done:true},{t:"ترتيب المكتب",done:false}],
-      plan:"صباحًا: قهوة وقراءة\nظهرًا: عمل مركّز\nمساءً: مشي عند الغروب",
-      diary:"يومٌ هادئ… مشيتُ عند الغروب، وقرأتُ فصلًا من كتابي المفضّل. شعرتُ بسلامٍ جميل وتعلمتُ أن البطء نعمة.",
-      grats:["فنجان قهوةٍ في الشرفة","مكالمة أمي","غروبٌ خلّاب"], proud:"التزمتُ بخطتي كاملة", rating:4, note:"يومٌ يستحق التكرار"},
-    [daysAgo(3)]: {mood:"مشرقة", intent:"طاقة وإنجاز", prios:["درس الإنجليزية","",""],
-      tasks:[{t:"درس إنجليزية",done:true}], plan:"", diary:"أنهيتُ درسًا كاملًا في الإنجليزية وشعرتُ بفخرٍ حقيقي. الاستمرار يصنع الفرق.",
-      grats:["صحتي","عائلتي",""], proud:"سلسلة ٥ أيام إنجليزية", rating:5, note:""},
-    [daysAgo(6)]: {mood:"ممتنة", intent:"", prios:["","",""],
-      tasks:[], plan:"", diary:"جمعةٌ مباركة… قرأتُ سورة الكهف ورتبتُ غرفتي وخططتُ لأسبوعي. الجمعةُ بيتُ الروح.",
-      grats:["يوم الجمعة","",""], proud:"روتين الجمعة كامل", rating:5, note:"جمعة جميلة"},
-    [daysAgo(9)]: {mood:"متعبة", intent:"الرفق بنفسي", prios:["راحة","",""],
-      tasks:[{t:"نوم مبكر",done:true}], plan:"", diary:"يومٌ متعب لكنه علّمني أن أستمع لجسدي. الراحةُ جزء من الطريق وليست خروجًا عنه.",
-      grats:["بيتي الدافئ","",""], proud:"سمحتُ لنفسي بالراحة", rating:3, note:""}
-  };
+  const store = window.RahlatiStore.load();
+
+  function blankEntry(date){
+    return {date, mood:"", intent:"", priorities:["","",""], tasks:[], plan:"",
+      diary:"", gratitude:["","",""], proud:"", photo:"", rating:0, note:"", linkedGoalId:null};
+  }
+  function findEntry(date){ return store.journal.find(e=>e.date===date); }
+  function commitEntry(){
+    if (!findEntry(state.date)) store.journal.push(state);
+    window.RahlatiStore.touch(store, "journal");
+    window.RahlatiStore.save(store);
+    flashSaved();
+  }
+  const commitSoon = debounce(commitEntry, 500);
+  let flashTimer;
+  function flashSaved(){
+    const el = document.getElementById("savedFlag");
+    if (!el) return;
+    el.classList.add("show");
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(()=> el.classList.remove("show"), 1600);
+  }
 
   let selected = iso(new Date());
-  let state = null; // بيانات اليوم المعروض (في الذاكرة فقط الآن)
+  let state = null; // تدوينة اليوم المعروض حاليًا (مرجع مباشر لعنصر داخل store.journal أو مسودة جديدة)
 
   /* ————— الرأس: تاريخ وتحية واقتباس ————— */
   const monthsAr = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
@@ -612,7 +667,7 @@
       const cls = ["cal-day"];
       if (dISO === todayISO) cls.push("today");
       if (dISO === selected) cls.push("sel");
-      if (DEMO[dISO]) cls.push("has");
+      if (store.journal.some(e=>e.date===dISO)) cls.push("has");
       html += `<span class="${cls.join(" ")}" data-d="${dISO}">${arabicNum(day)}</span>`;
     }
     grid.insertAdjacentHTML("beforeend", html);
@@ -628,8 +683,6 @@
   const prioInputs = () => document.querySelectorAll(".prio .line-input");
   const gratInputs = () => document.querySelectorAll(".grat .line-input");
 
-  function blank(){ return {mood:"", intent:"", prios:["","",""], tasks:[], plan:"", diary:"", grats:["","",""], proud:"", rating:0, note:"", photo:""}; }
-
   function renderTasks(){
     const box = $("tasks");
     box.innerHTML = "";
@@ -640,9 +693,9 @@
         <button class="tick" aria-label="إنجاز"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></button>
         <span class="t-text" contenteditable="true">${task.t}</span>
         <button class="del" aria-label="حذف">✕</button>`;
-      row.querySelector(".tick").addEventListener("click", ()=>{ task.done = !task.done; renderTasks(); });
-      row.querySelector(".del").addEventListener("click", ()=>{ state.tasks.splice(i,1); renderTasks(); });
-      row.querySelector(".t-text").addEventListener("blur", e=>{ task.t = e.target.textContent.trim() || task.t; });
+      row.querySelector(".tick").addEventListener("click", ()=>{ task.done = !task.done; renderTasks(); commitSoon(); });
+      row.querySelector(".del").addEventListener("click", ()=>{ state.tasks.splice(i,1); renderTasks(); commitSoon(); });
+      row.querySelector(".t-text").addEventListener("blur", e=>{ task.t = e.target.textContent.trim() || task.t; commitSoon(); });
       box.appendChild(row);
     });
   }
@@ -654,6 +707,7 @@
     inp.value = "";
     renderTasks();
     inp.focus();
+    commitEntry();
   }
   $("addTaskBtn").addEventListener("click", addTask);
   $("newTask").addEventListener("keydown", e=>{ if(e.key==="Enter") addTask(); });
@@ -666,14 +720,14 @@
   document.querySelectorAll(".star-btn").forEach(b=>{
     b.addEventListener("click", ()=>{
       state.rating = (+b.dataset.v === state.rating) ? 0 : +b.dataset.v;
-      renderStars();
+      renderStars(); commitEntry();
     });
   });
 
   document.querySelectorAll(".mood").forEach(m=>{
     m.addEventListener("click", ()=>{
       state.mood = (state.mood === m.dataset.mood) ? "" : m.dataset.mood;
-      renderMood();
+      renderMood(); commitEntry();
     });
   });
   function renderMood(){
@@ -687,12 +741,12 @@
     const f = e.target.files[0];
     if(!f) return;
     const r = new FileReader();
-    r.onload = ev => { state.photo = ev.target.result; renderPhoto(); };
+    r.onload = ev => { state.photo = ev.target.result; renderPhoto(); commitEntry(); };
     r.readAsDataURL(f);
   });
   $("photoRemove").addEventListener("click", e=>{
     e.stopPropagation();
-    state.photo = ""; $("photoInput").value = ""; renderPhoto();
+    state.photo = ""; $("photoInput").value = ""; renderPhoto(); commitEntry();
   });
   function renderPhoto(){
     zone.querySelectorAll("img").forEach(i=>i.remove());
@@ -704,23 +758,79 @@
     } else zone.classList.remove("filled");
   }
 
+  /* مرجع الأهداف — ربط اختياري بتدوينة اليوم */
+  function renderGoalRef(){
+    const box = $("goalRefChips");
+    const active = (store.goals||[]).filter(g=>g.status==="جارٍ التنفيذ");
+    if (!active.length){
+      box.innerHTML = `<span class="gr-empty">لا توجد أهداف نشطة بعد</span>`;
+      return;
+    }
+    box.innerHTML = active.map(g=>
+      `<button class="gr-chip${state.linkedGoalId===g.id?" on":""}" data-id="${g.id}">${g.name}</button>`
+    ).join("");
+    box.querySelectorAll(".gr-chip").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        state.linkedGoalId = (state.linkedGoalId === b.dataset.id) ? null : b.dataset.id;
+        renderGoalRef(); commitEntry();
+      });
+    });
+  }
+
+  /* تركيز الأسبوع — مرجع ثابت + تأشير سريع لليوم */
+  function renderFocusRef(){
+    const wrap = $("focusRef");
+    const items = (store.weeklyFocus && store.weeklyFocus.items) || [];
+    if (!items.length){ wrap.hidden = true; return; }
+    wrap.hidden = false;
+    $("focusRefText").innerHTML = "🎯 تركيز الأسبوع: <b>" + items.map(it=>it.text).join(" · ") + "</b>";
+    $("focusCheck").innerHTML = items.map((it,i)=>{
+      const on = (it.checkedDates||[]).includes(selected);
+      return `<button class="${on?"on":""}" data-i="${i}">${on?"التزمتُ ✓":"التزمتُ اليوم؟"}</button>`;
+    }).join("");
+    $("focusCheck").querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const it = items[+b.dataset.i];
+        it.checkedDates = it.checkedDates || [];
+        const idx = it.checkedDates.indexOf(selected);
+        if (idx > -1) it.checkedDates.splice(idx,1); else it.checkedDates.push(selected);
+        renderFocusRef();
+        window.RahlatiStore.touch(store, "week");
+        window.RahlatiStore.save(store);
+      });
+    });
+  }
+
   function fillForm(){
     $("intent").value = state.intent;
-    prioInputs().forEach((el,i)=> el.value = state.prios[i] || "");
+    prioInputs().forEach((el,i)=> el.value = state.priorities[i] || "");
     $("plan").value = state.plan;
     $("diary").value = state.diary;
-    gratInputs().forEach((el,i)=> el.value = state.grats[i] || "");
+    gratInputs().forEach((el,i)=> el.value = state.gratitude[i] || "");
     $("proud").value = state.proud;
     $("ratingNote").value = state.note;
-    renderMood(); renderTasks(); renderStars(); renderPhoto();
+    renderMood(); renderTasks(); renderStars(); renderPhoto(); renderGoalRef();
   }
+
+  ["intent","plan","diary","proud","ratingNote"].forEach(id=>{
+    $(id).addEventListener("input", e=>{
+      const map = {intent:"intent", plan:"plan", diary:"diary", proud:"proud", ratingNote:"note"};
+      state[map[id]] = e.target.value;
+      commitSoon();
+    });
+  });
+  prioInputs().forEach((el,i)=>{
+    el.addEventListener("input", e=>{ state.priorities[i] = e.target.value; commitSoon(); });
+  });
+  gratInputs().forEach((el,i)=>{
+    el.addEventListener("input", e=>{ state.gratitude[i] = e.target.value; commitSoon(); });
+  });
 
   function selectDay(d){
     selected = d;
-    const saved = DEMO[d];
-    state = saved ? JSON.parse(JSON.stringify(saved)) : blank();
-    state.photo = state.photo || "";
-    renderHead(); renderCal(); fillForm();
+    const saved = findEntry(d);
+    state = saved || blankEntry(d);
+    renderHead(); renderCal(); fillForm(); renderFocusRef();
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
@@ -730,11 +840,12 @@
     const box = $("searchResults");
     box.innerHTML = "";
     if(q.length < 2) return;
-    const hits = Object.entries(DEMO)
-      .filter(([,v]) => (v.diary + " " + v.proud + " " + v.intent).includes(q))
-      .sort((a,b)=> b[0].localeCompare(a[0]));
+    const hits = store.journal
+      .filter(v => (v.diary + " " + v.proud + " " + v.intent).includes(q))
+      .sort((a,b)=> b.date.localeCompare(a.date));
     if(!hits.length){ box.innerHTML = `<div class="no-results">لا نتائج… جرّبي كلمةً أخرى</div>`; return; }
-    hits.forEach(([d,v])=>{
+    hits.forEach(v=>{
+      const d = v.date;
       const text = v.diary || v.proud;
       const idx = text.indexOf(q);
       const from = Math.max(0, idx - 25);
@@ -753,9 +864,10 @@
     });
   });
 
-  /* ————— الحفظ (واجهة فقط الآن) ————— */
+  /* ————— الحفظ ————— */
   $("saveBtn").addEventListener("click", ()=>{
-    toast("جميل ✦ سيُفعَّل الحفظ الحقيقي بعد اعتماد التصميم");
+    commitEntry();
+    toast("تم حفظ يومكِ ✦");
   });
 
   /* انطلاق */

@@ -513,7 +513,8 @@
 <script>
   const arabicNum = window.RahlatiStore.arabicNum;
   const iso = d => d.toISOString().slice(0,10);
-  const CATS = ["شخصية","عملية","صحية","دينية","مالية","تعلم","اجتماعية","أحلام"];
+  // «أحلام» لم تعد تصنيفًا هنا — صارت مستوًى مستقلًا (docs/STRUCTURE.md §٢)، بانتظار تبويب ✨ أحلام
+  const CATS = ["شخصية","عملية","صحية","دينية","مالية","تعلم","اجتماعية"];
   const STATUSES = ["لم يبدأ","جارٍ التنفيذ","متوقف","مكتمل"];
   const RING_C = 2 * Math.PI * 52;
 
