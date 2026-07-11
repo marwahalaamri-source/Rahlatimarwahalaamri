@@ -62,18 +62,45 @@
         reflection:""
       },
       goals: [
-        {name:"ختم القرآن الكريم", category:"روحانية", progress:35, targetDate:"2026-12-31", notes:"", status:"نشط",
-         milestones:[{name:"١٠ أجزاء",done:true},{name:"٢٠ جزءًا",done:false},{name:"ختمة كاملة",done:false}]},
-        {name:"المشي ٨٠ كم شهريًا", category:"صحة", progress:65, targetDate:"2026-08-31", notes:"", status:"نشط",
-         milestones:[{name:"٢٠ كم",done:true},{name:"٥٠ كم",done:true},{name:"٨٠ كم",done:false}]},
-        {name:"إتقان ٥٠٠ كلمة إنجليزية", category:"تعلم", progress:28, targetDate:"2026-11-30", notes:"", status:"نشط",
-         milestones:[{name:"١٠٠ كلمة",done:true},{name:"٣٠٠ كلمة",done:false},{name:"٥٠٠ كلمة",done:false}]},
-        {name:"صندوق الادخار الشهري", category:"مالية", progress:50, targetDate:"2026-12-31", notes:"", status:"نشط",
-         milestones:[{name:"الشهر الأول",done:true},{name:"ستة أشهر",done:false}]},
-        {name:"زيارة اليابان", category:"أحلام", progress:10, targetDate:"2027-04-01", notes:"ادخار + تخطيط الرحلة", status:"نشط",
-         milestones:[{name:"جواز السفر",done:true},{name:"خطة الرحلة",done:false},{name:"الحجز",done:false}]},
-        {name:"تعلّم أساسيات التصوير", category:"شخصية", progress:100, targetDate:"2026-05-01", notes:"", status:"مكتمل",
-         milestones:[{name:"دورة أساسيات",done:true},{name:"١٠٠ صورة",done:true}]}
+        {name:"ختم القرآن الكريم", category:"دينية", status:"جارٍ التنفيذ", progress:35,
+         startDate:"2026-01-01", targetDate:"2026-12-31",
+         why:"لأشعر بقربٍ دائم من ربي، وسكينةٍ تملأ قلبي في كل حين.", notes:"",
+         milestones:[{name:"١٠ أجزاء",done:true},{name:"٢٠ جزءًا",done:false},{name:"ختمة كاملة",done:false}],
+         tasks:[{t:"ورد يومي بعد الفجر",done:true},{t:"مراجعة أسبوعية",done:false}], photos:[]},
+        {name:"المشي ٨٠ كم شهريًا", category:"صحية", status:"جارٍ التنفيذ", progress:65,
+         startDate:"2026-06-01", targetDate:"2026-08-31",
+         why:"لأمنح جسدي طاقةً وصحةً تدوم، وأرى نفسي أخفّ وأقوى.", notes:"",
+         milestones:[{name:"٢٠ كم",done:true},{name:"٥٠ كم",done:true},{name:"٨٠ كم",done:false}],
+         tasks:[{t:"جدولة المشي في التقويم",done:true},{t:"حذاء رياضي جديد",done:false}], photos:[]},
+        {name:"إتقان ٥٠٠ كلمة إنجليزية", category:"تعلم", status:"جارٍ التنفيذ", progress:28,
+         startDate:"2026-03-01", targetDate:"2026-11-30",
+         why:"لأفتح لنفسي أبوابًا جديدة في العمل والسفر والمعرفة.", notes:"",
+         milestones:[{name:"١٠٠ كلمة",done:true},{name:"٣٠٠ كلمة",done:false},{name:"٥٠٠ كلمة",done:false}],
+         tasks:[{t:"درس يومي ١٥ دقيقة",done:true}], photos:[]},
+        {name:"صندوق الادخار الشهري", category:"مالية", status:"جارٍ التنفيذ", progress:50,
+         startDate:"2026-01-01", targetDate:"2026-12-31",
+         why:"لأشعر بالأمان المالي، وأقدر على تحقيق أحلامي دون قلق.", notes:"",
+         milestones:[{name:"الشهر الأول",done:true},{name:"ستة أشهر",done:false}],
+         tasks:[{t:"تحويل تلقائي أول كل شهر",done:true}], photos:[]},
+        {name:"زيارة اليابان", category:"أحلام", status:"جارٍ التنفيذ", progress:10,
+         startDate:"2026-01-01", targetDate:"2027-04-01",
+         why:"حلمٌ قديم برؤية جمال ثقافةٍ مختلفة، وعيش لحظةٍ استثنائية.", notes:"ادخار + تخطيط الرحلة",
+         milestones:[{name:"جواز السفر",done:true},{name:"خطة الرحلة",done:false},{name:"الحجز",done:false}],
+         tasks:[{t:"فتح حساب ادخار السفر",done:true}], photos:[]},
+        {name:"تعلّم أساسيات التصوير", category:"شخصية", status:"مكتمل", progress:100,
+         startDate:"2025-11-01", targetDate:"2026-05-01",
+         why:"لأوثّق اللحظات الجميلة بعيني الخاصة، لا بعين أحد.", notes:"",
+         milestones:[{name:"دورة أساسيات",done:true},{name:"١٠٠ صورة",done:true}],
+         tasks:[], photos:[]},
+        {name:"الحصول على شهادة مهنية", category:"عملية", status:"لم يبدأ", progress:0,
+         startDate:"", targetDate:"2026-12-31",
+         why:"لأتطور في مساري المهني، وأفتح لنفسي فرصًا جديدة.", notes:"",
+         milestones:[], tasks:[], photos:[]},
+        {name:"توطيد علاقتي بصديقاتي", category:"اجتماعية", status:"متوقف", progress:45,
+         startDate:"2026-02-01", targetDate:"",
+         why:"لأن الصداقات الحقيقية كنزٌ يستحق الرعاية والوقت.", notes:"سأعاود الاهتمام به بعد انتهاء المشروع الحالي",
+         milestones:[{name:"لقاء شهري",done:true}],
+         tasks:[{t:"اتصال أسبوعي",done:true},{t:"تخطيط لقاء",done:false}], photos:[]}
       ],
       thursday: {
         book: {title:"كتاب الأسبوع", image:""},
@@ -129,6 +156,23 @@
     if (typeof w.review !== "object" || w.review === null){
       w.review = {worked:"", improve:"", learned:"", goalAchieved:null, rating:0};
     }
+    // ترقية تصنيفات وحالات «أهدافي» إلى النسخة الحالية (٨ تصنيفات، ٤ حالات)
+    const catMap = {"روحانية":"دينية", "صحة":"صحية"};
+    const statusMap = {"نشط":"جارٍ التنفيذ"};
+    store.goals = (store.goals || []).map(g => ({
+      name: g.name,
+      category: catMap[g.category] || g.category,
+      status: statusMap[g.status] || g.status || "لم يبدأ",
+      progress: g.progress || 0,
+      startDate: g.startDate || "",
+      targetDate: g.targetDate || "",
+      why: g.why || "",
+      notes: g.notes || "",
+      milestones: g.milestones || [],
+      tasks: g.tasks || [],
+      photos: g.photos || []
+    }));
+
     store.activity = store.activity || {};
     return store;
   }

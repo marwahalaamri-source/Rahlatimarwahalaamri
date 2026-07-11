@@ -586,7 +586,7 @@
     <li><a href="sections/journal.html">يومياتي</a></li>
     <li><a href="sections/week.html">أسبوعي</a></li>
     <li><a href="#friday">الجمعة</a></li>
-    <li><a href="#goals">أهدافي</a></li>
+    <li><a href="sections/goals.html">أهدافي</a></li>
     <li><a href="#english">الإنجليزية</a></li>
     <li><a href="#achievements">إنجازاتي</a></li>
     <li><a href="#memories">ذكرياتي</a></li>
@@ -603,7 +603,7 @@
   <a href="sections/journal.html" style="transition-delay:.1s">يومياتي</a>
   <a href="sections/week.html" style="transition-delay:.15s">أسبوعي</a>
   <a href="#friday" style="transition-delay:.2s">روتين الجمعة</a>
-  <a href="#goals" style="transition-delay:.25s">أهدافي</a>
+  <a href="sections/goals.html" style="transition-delay:.25s">أهدافي</a>
   <a href="#english" style="transition-delay:.3s">الإنجليزية</a>
   <a href="#achievements" style="transition-delay:.35s">إنجازاتي</a>
   <a href="#memories" style="transition-delay:.4s">ذكرياتي</a>
@@ -746,7 +746,7 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="goals" href="#goals" style="transition-delay:.16s">
+        <a class="chapter reveal span2" id="goals" href="sections/goals.html" style="transition-delay:.16s">
           <div class="chapter-top">
             <span class="chapter-num">٠٤</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>
@@ -982,8 +982,8 @@
     document.getElementById("fridayMeta").textContent =
       s.friday.checklist.map(c=>c.name).slice(0,3).join(" · ") + "…";
 
-    // ٠٤ — أهدافي (روحانية · صحة · تعلم · شخصية · مالية · اجتماعية · أحلام)
-    const active = s.goals.filter(g=>g.status === "نشط");
+    // ٠٤ — أهدافي (شخصية · عملية · صحية · دينية · مالية · تعلم · اجتماعية · أحلام)
+    const active = s.goals.filter(g=>g.status === "جارٍ التنفيذ");
     const completed = s.goals.filter(g=>g.status === "مكتمل");
     document.getElementById("goalsActive").innerHTML = arabicNum(active.length) + "<small>نشطة</small>";
     document.getElementById("goalsDone").innerHTML = arabicNum(completed.length) + "<small>مكتملة</small>";
