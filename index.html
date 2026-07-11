@@ -273,6 +273,25 @@
     width:min(280px,60%);height:1px;
     background:linear-gradient(90deg,transparent,rgba(201,178,140,.4),transparent);
   }
+  .ov-quote-text{display:block;transition:opacity .3s ease}
+  .quote-by{
+    display:block;margin-top:.45rem;font-family:var(--font-body);
+    font-weight:300;font-size:.82rem;color:rgba(248,244,236,.55);
+    transition:opacity .3s ease;
+  }
+  .quote-by:empty{display:none}
+  .ov-quote.fading .ov-quote-text,.ov-quote.fading .quote-by{opacity:0}
+  .quote-refresh{
+    position:absolute;left:0;top:1.4rem;
+    width:36px;height:36px;border-radius:50%;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;
+    border:1px solid rgba(201,178,140,.35);color:var(--gold);
+    background:rgba(201,178,140,.07);
+    transition:transform .5s ease, border-color .35s, background .35s;
+  }
+  .quote-refresh svg{width:16px;height:16px}
+  .quote-refresh:hover{transform:rotate(180deg);border-color:var(--gold);background:rgba(201,178,140,.16)}
+  .quote-refresh:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
   /* ————— قسم اليوم الخاص: الخميس والجمعة ————— */
   .day-special{padding-top:0;margin-top:clamp(-2.5rem,-3vw,-3.5rem)}
@@ -527,6 +546,7 @@
       background:linear-gradient(90deg,transparent,rgba(201,178,140,.25),transparent);
     }
     .ov-quote{margin-top:1.9rem;padding-top:1.7rem}
+    .quote-refresh{position:static;margin:1.1rem auto 0}
 
     .day-special{margin-top:-1rem}
     .special-panel{border-radius:28px;padding:2rem 1.5rem}
@@ -635,7 +655,13 @@
           <div class="bar"><span style="--p:65%"></span></div>
         </div>
       </div>
-      <div class="ov-quote" id="dailyQuote">«كلُّ يومٍ هو بدايةٌ جديدة»</div>
+      <div class="ov-quote" id="quoteWrap">
+        <span class="ov-quote-text" id="dailyQuote">…</span>
+        <span class="quote-by" id="dailyQuoteBy"></span>
+        <button class="quote-refresh" id="quoteRefresh" aria-label="اقتباس آخر" title="اقتباس آخر">
+          <svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 3.5V8h-4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -837,6 +863,7 @@
   <div class="copy">© ٢٠٢٦ رحلتي — صُنعت بحبّ ✦</div>
 </footer>
 
+<script src="assets/js/quotes.js"></script>
 <script>
   // تحية شخصية متغيّرة حسب الوقت
   (function(){
@@ -861,22 +888,37 @@
     }
   })();
 
-  // اقتباس اليوم — يتغيّر كل يوم
+  // اقتباس اليوم — من مكتبة assets/js/quotes.js (٤٠٠+ اقتباس)
+  // يدور على المكتبة كلها حسب التاريخ، مع زرّ لتغييره يدويًا (يُحفظ لبقية اليوم)
   const dayOfYear = (function(){
     const start = new Date(new Date().getFullYear(), 0, 0);
     return Math.floor((Date.now() - start) / 86400000);
   })();
-  (function(){
-    const quotes = [
-      "«كلُّ يومٍ هو بدايةٌ جديدة»",
-      "«الهدوءُ قوة»",
-      "«ما تفعلينه اليوم… يصنعُ غدَكِ»",
-      "«الجمالُ في التفاصيل الصغيرة»",
-      "«خطوةٌ واحدة تكفي لتغيير الاتجاه»",
-      "«كوني النسخةَ التي تحلمين بها»",
-      "«الرحلةُ أجملُ من الوصول»"
-    ];
-    document.getElementById("dailyQuote").textContent = quotes[dayOfYear % quotes.length];
+  (function dailyQuote(){
+    const Q = window.RAHLATI_QUOTES || [{t:"كلُّ يومٍ هو بدايةٌ جديدة"}];
+    const wrap = document.getElementById("quoteWrap");
+    const elT = document.getElementById("dailyQuote");
+    const elB = document.getElementById("dailyQuoteBy");
+    const todayISO = new Date().toISOString().slice(0,10);
+    let idx = null;
+    try{
+      const saved = JSON.parse(localStorage.getItem("rahlati:quote"));
+      if (saved && saved.date === todayISO && saved.idx < Q.length) idx = saved.idx;
+    }catch(e){}
+    if (idx === null) idx = Math.floor(Date.now() / 86400000) % Q.length;
+    const show = i => {
+      elT.textContent = "«" + Q[i].t + "»";
+      elB.textContent = Q[i].by ? "— " + Q[i].by : "";
+    };
+    show(idx);
+    document.getElementById("quoteRefresh").addEventListener("click", ()=>{
+      let n;
+      do { n = Math.floor(Math.random() * Q.length); } while (n === idx && Q.length > 1);
+      idx = n;
+      wrap.classList.add("fading");
+      setTimeout(()=>{ show(idx); wrap.classList.remove("fading"); }, 300);
+      try{ localStorage.setItem("rahlati:quote", JSON.stringify({date:todayISO, idx})); }catch(e){}
+    });
   })();
 
   /* ————————————————————————————————
