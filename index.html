@@ -584,7 +584,7 @@
   <ul class="nav-links">
     <li><a href="#home">الرئيسية</a></li>
     <li><a href="sections/journal.html">يومياتي</a></li>
-    <li><a href="#week">أسبوعي</a></li>
+    <li><a href="sections/week.html">أسبوعي</a></li>
     <li><a href="#friday">الجمعة</a></li>
     <li><a href="#goals">أهدافي</a></li>
     <li><a href="#english">الإنجليزية</a></li>
@@ -601,7 +601,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <a href="#home" style="transition-delay:.05s">الرئيسية</a>
   <a href="sections/journal.html" style="transition-delay:.1s">يومياتي</a>
-  <a href="#week" style="transition-delay:.15s">أسبوعي</a>
+  <a href="sections/week.html" style="transition-delay:.15s">أسبوعي</a>
   <a href="#friday" style="transition-delay:.2s">روتين الجمعة</a>
   <a href="#goals" style="transition-delay:.25s">أهدافي</a>
   <a href="#english" style="transition-delay:.3s">الإنجليزية</a>
@@ -710,7 +710,7 @@
           <span class="enter" id="journalCta">اكتبي الآن <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span3" id="week" href="#week" style="transition-delay:.08s">
+        <a class="chapter reveal span3" id="week" href="sections/week.html" style="transition-delay:.08s">
           <div class="chapter-top">
             <span class="chapter-num">٠٢</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9.5h18M8 2v4M16 2v4M7.5 14h3M13.5 14h3M7.5 17.5h3"/></svg>
@@ -863,6 +863,7 @@
   <div class="copy">© ٢٠٢٦ رحلتي — صُنعت بحبّ ✦</div>
 </footer>
 
+<script src="assets/js/store.js"></script>
 <script src="assets/js/quotes.js"></script>
 <script>
   // تحية شخصية متغيّرة حسب الوقت
@@ -921,94 +922,9 @@
     });
   })();
 
-  /* ————————————————————————————————
-     طبقة البيانات — تُقرأ من localStorage
-     وتُملأ ببيانات تجريبية أول مرة، وستتصل
-     بالفصول الحقيقية عند بنائها.
-  ———————————————————————————————— */
-  const arabicNum = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+  /* طبقة البيانات المشتركة — assets/js/store.js (rahlati:v2، موثّقة في docs/STRUCTURE.md) */
+  const arabicNum = window.RahlatiStore.arabicNum;
   const todayKey = new Date().toISOString().slice(0,10);
-
-  // مخطّط البيانات الكامل موثّق في docs/STRUCTURE.md
-  function loadStore(){
-    try{
-      const saved = JSON.parse(localStorage.getItem("rahlati:v2"));
-      if (saved && saved.journal && saved.friday && saved.activity) return saved;
-    }catch(e){}
-    const daysAgo = n => new Date(Date.now() - n*86400000).toISOString().slice(0,10);
-    const y = daysAgo(1);
-    const demo = {
-      journal: [
-        {date:y, text:"يومٌ هادئ… مشيتُ عند الغروب، وقرأتُ فصلًا من كتابي المفضّل.", mood:"هادئة", gratitude:"فنجان قهوةٍ في الشرفة"}
-      ],
-      week: {
-        goal:"أسبوعٌ متوازن… عبادة، وحركة، وتعلّم",
-        days:[
-          {name:"السبت",   tasks:[{t:"رياضة الصباح",done:true},{t:"قراءة ٣٠ صفحة",done:true},{t:"ترتيب المكتب",done:false}]},
-          {name:"الأحد",   tasks:[{t:"مراجعة الإنجليزية",done:true},{t:"مشي المساء",done:true}]},
-          {name:"الاثنين", tasks:[{t:"كتابة اليوميات",done:true},{t:"مكالمة العائلة",done:false}]},
-          {name:"الثلاثاء",tasks:[{t:"درس إنجليزية",done:true},{t:"تحضير وجبات صحية",done:true},{t:"قراءة",done:true}]},
-          {name:"الأربعاء",tasks:[{t:"رياضة",done:true},{t:"مراجعة الأهداف",done:false}]},
-          {name:"الخميس",  tasks:[{t:"تدوين الامتنان",done:true},{t:"تجهيز المقاضي",done:false}]},
-          {name:"الجمعة",  tasks:[{t:"روتين الجمعة",done:false},{t:"وقت العائلة",done:false}]}
-        ],
-        shopping:[{item:"فواكه وخضار",done:true},{item:"قهوة مختصة",done:false},{item:"دفتر جديد",done:false}],
-        priorities:["إنهاء الفصل الثالث من الكتاب","المواظبة على المشي","حفظ ٢٠ كلمة جديدة"],
-        review:""
-      },
-      friday: {
-        checklist:[
-          {name:"قراءة سورة الكهف", done:true},
-          {name:"التخطيط للأسبوع القادم", done:true},
-          {name:"تنظيف الغرفة", done:false},
-          {name:"مراجعة الأهداف", done:false},
-          {name:"تأمل وامتنان", done:false}
-        ],
-        reflection:""
-      },
-      goals: [
-        {name:"ختم القرآن الكريم", category:"روحانية", progress:35, targetDate:"2026-12-31", notes:"", status:"نشط",
-         milestones:[{name:"١٠ أجزاء",done:true},{name:"٢٠ جزءًا",done:false},{name:"ختمة كاملة",done:false}]},
-        {name:"المشي ٨٠ كم شهريًا", category:"صحة", progress:65, targetDate:"2026-08-31", notes:"", status:"نشط",
-         milestones:[{name:"٢٠ كم",done:true},{name:"٥٠ كم",done:true},{name:"٨٠ كم",done:false}]},
-        {name:"إتقان ٥٠٠ كلمة إنجليزية", category:"تعلم", progress:28, targetDate:"2026-11-30", notes:"", status:"نشط",
-         milestones:[{name:"١٠٠ كلمة",done:true},{name:"٣٠٠ كلمة",done:false},{name:"٥٠٠ كلمة",done:false}]},
-        {name:"صندوق الادخار الشهري", category:"مالية", progress:50, targetDate:"2026-12-31", notes:"", status:"نشط",
-         milestones:[{name:"الشهر الأول",done:true},{name:"ستة أشهر",done:false}]},
-        {name:"زيارة اليابان", category:"أحلام", progress:10, targetDate:"2027-04-01", notes:"ادخار + تخطيط الرحلة", status:"نشط",
-         milestones:[{name:"جواز السفر",done:true},{name:"خطة الرحلة",done:false},{name:"الحجز",done:false}]},
-        {name:"تعلّم أساسيات التصوير", category:"شخصية", progress:100, targetDate:"2026-05-01", notes:"", status:"مكتمل",
-         milestones:[{name:"دورة أساسيات",done:true},{name:"١٠٠ صورة",done:true}]}
-      ],
-      thursday: {
-        book: {title:"كتاب الأسبوع", image:""},
-        checklist:[
-          {name:"قراءة فصلٍ من كتابي", done:false},
-          {name:"تجهيز قائمة الجمعة", done:false},
-          {name:"تدوين خاطرة المساء", done:false}
-        ]
-      },
-      english: {streak:5, todayTask:"راجعي كلمات هذا الأسبوع"},
-      achievements: [
-        {name:"٧ أيامٍ من التدوين المتواصل", when:"منذ يومين"},
-        {name:"أول هدفٍ مكتمل", when:"الأسبوع الماضي"},
-        {name:"١٠٠ كلمة إنجليزية", when:"قبل شهر"},
-        {name:"أول ذكرى محفوظة", when:"قبل شهرين"}
-      ],
-      memories: [
-        {caption:"غروبُ يوم الجمعة", date:y, image:"assets/memory-sample.jpg"},
-        {caption:"قهوة الصباح مع كتاب", date:y, image:""},
-        {caption:"نزهة الجبل", date:y, image:""}
-      ],
-      settings: {name:"مروه العامري", theme:"ليليّ هادئ", reminder:"٩:٠٠ مساءً", lang:"العربية"},
-      activity: {
-        journal:daysAgo(1), week:daysAgo(0), friday:daysAgo(1), goals:daysAgo(2),
-        english:daysAgo(0), achievements:daysAgo(2), memories:daysAgo(1), settings:daysAgo(7)
-      }
-    };
-    localStorage.setItem("rahlati:v2", JSON.stringify(demo));
-    return demo;
-  }
 
   /* سجلّ الأقسام — إضافة قسم جديد مستقبلًا تبدأ من هنا (docs/STRUCTURE.md) */
   const SECTIONS = [
@@ -1016,7 +932,7 @@
     {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}
   ];
 
-  const store = loadStore();
+  const store = window.RahlatiStore.load();
 
   (function renderLive(){
     const s = store;
