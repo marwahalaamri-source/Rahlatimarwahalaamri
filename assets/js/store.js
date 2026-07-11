@@ -1,13 +1,16 @@
 /* ————————————————————————————————————————
-   طبقة البيانات المشتركة لموقع «رحلتي» — rahlati:v2
+   طبقة البيانات المشتركة لموقع «رحلتي» — rahlati:v3
    المخطط الكامل موثّق في docs/STRUCTURE.md
    تُستخدم من الرئيسية وكل صفحات sections/*.html
 
-   لا محتوى تجريبي أو أمثلة عامة: المخزن يبدأ فارغًا وينتظر
-   بيانات مروه الحقيقية — عاداتها وأهدافها وأحلامها ويومياتها.
+   البيانات الأولية هنا هي حياة مروه الحقيقية كما وصفتها بنفسها —
+   لا أمثلة عامة. الحقول التأمّلية (لماذا/رؤية) التي لم تكتبها مروه
+   بنفسها تُركت فارغة عمدًا لتملأها هي، لا لتُختلَق نيابةً عنها.
+   (رُقّي مفتاح التخزين من v2 إلى v3 لضمان تحميل هذه البيانات
+   نظيفةً في أي متصفح جرّب النسخة الفارغة سابقًا.)
 ———————————————————————————————————————— */
 (function(){
-  const KEY = "rahlati:v2";
+  const KEY = "rahlati:v3";
 
   const arabicNum = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
   const iso = d => d.toISOString().slice(0,10);
@@ -27,7 +30,28 @@
     return Array.from({length:7}, (_,i)=> iso(new Date(start.getTime() + i*86400000)));
   }
 
-  function buildEmptyStore(){
+  function habit(name, category, frequency){
+    return {id:uid(), name, category, frequency, active:true, streak:0, longestStreak:0, checkedDates:[], linkedDreamId:null};
+  }
+  function goal(name, category, status, extra){
+    return Object.assign({
+      id:uid(), name, category, status, progress:0,
+      startDate:"", targetDate:"", why:"", notes:"",
+      milestones:[], tasks:[], photos:[], linkedDreamId:null
+    }, extra||{});
+  }
+  function dream(name, category){
+    return {id:uid(), name, category, why:"", vision:"", timeframe:"", status:"حيّ", relatedGoalIds:[], photos:[]};
+  }
+  function project(name, status, extra){
+    return Object.assign({
+      id:uid(), name, status,               // حالي | مستقبلي | مكتمل
+      progress:0, startDate:"", targetDate:"",
+      why:"", notes:"", milestones:[], tasks:[], photos:[]
+    }, extra||{});
+  }
+
+  function buildInitialStore(){
     const weekStart = currentWeekStart();
     const dates = weekDates(weekStart);
 
@@ -81,10 +105,93 @@
         ]
       },
 
-      // ————— هرم الطموح الثلاثي —————
-      habits: [],   // { id, name, category, active, streak, longestStreak, checkedDates:[], linkedDreamId }
-      goals:  [],   // { id, name, category, status, progress, startDate, targetDate, why, notes, milestones:[], tasks:[], photos:[], linkedDreamId }
-      dreams: [],   // { id, name, category, why, vision, timeframe, status, relatedGoalIds:[], photos:[] }
+      /* ————— هرم الطموح الرباعي: عادات · أهداف · مشاريع · أحلام ————— */
+
+      habits: [
+        // 🌙 الإيمان — يومية
+        habit("الصلاة في وقتها","دينية","يومية"),
+        habit("أذكار الصباح","دينية","يومية"),
+        habit("أذكار المساء","دينية","يومية"),
+        habit("الدعاء اليومي","دينية","يومية"),
+        habit("صلاة الوتر","دينية","يومية"),
+        habit("صلاة الضحى","دينية","يومية"),
+        // 🌙 الإيمان — أسبوعية
+        habit("سورة الكهف كل جمعة","دينية","أسبوعية"),
+        habit("الصدقة الأسبوعية","دينية","أسبوعية"),
+        habit("التخطيط الأسبوعي (روتين الجمعة)","دينية","أسبوعية"),
+        habit("فيتامين د (تذكير أسبوعي)","دينية","أسبوعية"),
+        // ❤️ الصحة — يومية
+        habit("شرب ١٫٥–٢ لتر ماء","صحية","يومية"),
+        habit("تناول ٩٠–١٠٠غ بروتين","صحية","يومية"),
+        habit("النوم مبكرًا للاستيقاظ لصلاة الفجر","صحية","يومية"),
+        habit("أخذ المكمّلات الغذائية","صحية","يومية"),
+        habit("روتين العناية بالبشرة","صحية","يومية"),
+        habit("المشي","صحية","يومية"),
+        // ❤️ الصحة — تمارين منخفضة التأثير (بسبب حالة في الورك)
+        habit("بيلاتس","صحية","أسبوعية"),
+        habit("تمارين مرونة وإطالة الورك","صحية","أسبوعية"),
+        // 🌸 شخصية
+        habit("الحفاظ على غرفتي منظمة","شخصية","يومية"),
+        // 👨‍👩‍👧 علاقات — أسبوعية
+        habit("قضاء وقتٍ نوعي مع ابنتي","اجتماعية","أسبوعية"),
+        habit("قضاء وقتٍ نوعي مع عائلتي","اجتماعية","أسبوعية"),
+        habit("صلة الرحم","اجتماعية","أسبوعية"),
+        habit("التواصل مع صديقاتي","اجتماعية","أسبوعية")
+      ],
+
+      goals: [
+        // 🌙 الإيمان
+        goal("ختم القرآن الكريم","دينية","جارٍ التنفيذ"),
+        goal("أداء العمرة","دينية","لم يبدأ"),
+        // ❤️ الصحة
+        goal("أن أصبح أقوى وأصحّ نسخة من نفسي","صحية","جارٍ التنفيذ", {
+          notes:"بسبب حالة في الورك، التمارين يجب أن تكون منخفضة التأثير: بيلاتس، مشي، وتمارين مرونة الورك."
+        }),
+        goal("الوصول إلى وزني المستهدف (٥٢ كجم)","صحية","جارٍ التنفيذ", {
+          notes:"الوزن الحالي: ٦٥ كجم — الوزن المستهدف: ٥٢ كجم"
+        }),
+        // 📚 التعلّم
+        goal("إتقان الإنجليزية والتحدث بثقة","تعلم","جارٍ التنفيذ", {
+          notes:"الأولوية التعليمية الأولى حاليًا"
+        }),
+        // 💰 المال
+        goal("سداد جميع الديون","مالية","جارٍ التنفيذ"),
+        goal("بناء صندوق طوارئ","مالية","لم يبدأ"),
+        goal("الادخار بانتظام","مالية","جارٍ التنفيذ"),
+        goal("بدء الاستثمار","مالية","لم يبدأ"),
+        goal("بناء مصدر دخل إضافي","مالية","لم يبدأ"),
+        // 🌸 شخصية
+        goal("اكتشاف هوايات جديدة","شخصية","لم يبدأ"),
+        goal("تجربة تجارب جديدة","شخصية","لم يبدأ"),
+        goal("السفر داخل المملكة العربية السعودية","شخصية","لم يبدأ"),
+        goal("تطوير مهارتي في التصوير","شخصية","لم يبدأ")
+      ],
+
+      dreams: [
+        dream("السفر إلى اليابان","شخصية"),
+        dream("السفر إلى باريس","شخصية"),
+        dream("السفر إلى لندن","شخصية"),
+        dream("امتلاك منزل","شخصية"),
+        dream("امتلاك سيارة","شخصية"),
+        dream("بناء عمل تجاري ناجح","عملية")
+      ],
+
+      projects: [
+        // مشاريعي الخاصة — لا علاقة لها بالوظيفة اليومية
+        project("رحلتي","حالي", {
+          progress: 30,
+          notes: "موقعي الشخصي الذي نبنيه معًا الآن",
+          milestones: [
+            {name:"الهوية البصرية والصفحة الرئيسية", done:true},
+            {name:"دفتري اليومي", done:true},
+            {name:"التخطيط الأسبوعي", done:true},
+            {name:"عاداتي وأهدافي وأحلامي ومشاريعي", done:false},
+            {name:"روتين الجمعة والخميس", done:false},
+            {name:"باقي الأقسام (الإنجليزية، الإنجازات، الذكريات، الإعدادات)", done:false}
+          ]
+        }),
+        project("بناء عملي التجاري الخاص","مستقبلي")
+      ],
 
       english: {streak:0, todayTask:""},
       achievements: [],   // { name, when } — ستُولَّد تلقائيًا من عادات/أهداف حقيقية مكتملة
@@ -148,8 +255,24 @@
     delete w.habitTracker;
 
     // هرم الطموح: تعبئة المصفوفات الناقصة + فصل «أحلام» عن الأهداف
-    store.habits = store.habits || [];
-    store.dreams = store.dreams || [];
+    store.habits = (store.habits || []).map(h => ({
+      id: h.id || uid(), name: h.name, category: h.category,
+      frequency: h.frequency || "يومية",
+      active: h.active !== false, streak: h.streak || 0, longestStreak: h.longestStreak || 0,
+      checkedDates: h.checkedDates || [], linkedDreamId: h.linkedDreamId || null
+    }));
+    store.dreams = (store.dreams || []).map(d => ({
+      id: d.id || uid(), name: d.name, category: d.category,
+      why: d.why || "", vision: d.vision || "", timeframe: d.timeframe || "",
+      status: d.status || "حيّ", relatedGoalIds: d.relatedGoalIds || [], photos: d.photos || []
+    }));
+    store.projects = (store.projects || []).map(p => ({
+      id: p.id || uid(), name: p.name, status: p.status || "حالي",
+      progress: p.progress || 0, startDate: p.startDate || "", targetDate: p.targetDate || "",
+      why: p.why || "", notes: p.notes || "",
+      milestones: p.milestones || [], tasks: p.tasks || [], photos: p.photos || []
+    }));
+
     const catMap = {"روحانية":"دينية", "صحة":"صحية"};
     const statusMap = {"نشط":"جارٍ التنفيذ"};
     const rawGoals = store.goals || [];
@@ -190,9 +313,9 @@
       const saved = JSON.parse(localStorage.getItem(KEY));
       if (saved && saved.journal && saved.friday && saved.activity) return migrate(saved);
     }catch(e){}
-    const empty = buildEmptyStore();
-    saveStore(empty);
-    return empty;
+    const initial = buildInitialStore();
+    saveStore(initial);
+    return initial;
   }
 
   function saveStore(store){

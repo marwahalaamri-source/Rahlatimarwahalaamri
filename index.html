@@ -767,6 +767,7 @@
             </div>
             <div class="kv"><span class="k" id="goalNearName">…</span><span class="v" id="goalNearPct"></span></div>
             <div class="bar"><span id="goalNearBar" style="--p:0%"></span></div>
+            <span class="meta" id="ambitionSummary"></span>
           </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
@@ -1006,7 +1007,7 @@
     document.getElementById("fridayMeta").textContent =
       s.friday.checklist.map(c=>c.name).slice(0,3).join(" · ") + "…";
 
-    // ٠٤ — أهدافي (شخصية · عملية · صحية · دينية · مالية · تعلم · اجتماعية · أحلام)
+    // ٠٤ — أهدافي: هرم الطموح الثلاثي (عادات🌱 · أهداف🎯 · مشاريع🚀 · أحلام✨)
     const active = s.goals.filter(g=>g.status === "جارٍ التنفيذ");
     const completed = s.goals.filter(g=>g.status === "مكتمل");
     document.getElementById("goalsActive").innerHTML = arabicNum(active.length) + "<small>نشطة</small>";
@@ -1021,6 +1022,11 @@
       document.getElementById("goalNearPct").textContent = "";
       document.getElementById("goalNearBar").style.setProperty("--p", "0%");
     }
+    const activeHabits = (s.habits||[]).filter(h=>h.active).length;
+    const liveDreams = (s.dreams||[]).filter(d=>d.status==="حيّ").length;
+    const currentProjects = (s.projects||[]).filter(p=>p.status==="حالي").length;
+    document.getElementById("ambitionSummary").textContent =
+      `🌱 ${arabicNum(activeHabits)} عادة · 🚀 ${arabicNum(currentProjects)} مشروع · ✨ ${arabicNum(liveDreams)} حلم`;
 
     // ٠٥ — الإنجليزية: كلمة اليوم + السلسلة
     const words = [
