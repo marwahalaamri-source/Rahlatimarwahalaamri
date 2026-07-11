@@ -274,6 +274,52 @@
     background:linear-gradient(90deg,transparent,rgba(201,178,140,.4),transparent);
   }
 
+  /* ————— قسم اليوم الخاص: الخميس والجمعة ————— */
+  .day-special{padding-top:0;margin-top:clamp(-2.5rem,-3vw,-3.5rem)}
+  .special-panel{
+    max-width:1020px;margin:0 auto;position:relative;overflow:hidden;
+    background:linear-gradient(135deg, rgba(30,41,70,.55), rgba(16,26,48,.4));
+    border:1px solid rgba(201,178,140,.42);border-radius:34px;
+    box-shadow:0 26px 80px rgba(8,12,24,.35), inset 0 1px 0 rgba(255,255,255,.08);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    padding:clamp(2.2rem,4.5vw,3.2rem);
+  }
+  .special-panel::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(70% 90% at 85% 8%, rgba(201,178,140,.15), transparent 60%);
+  }
+  .sp-grid{display:grid;grid-template-columns:1fr auto;gap:2.6rem;align-items:center}
+  .sp-k{justify-content:flex-start;margin-bottom:.8rem}
+  .sp-title{
+    font-family:var(--font-display);font-weight:700;color:var(--ivory);
+    font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.7;margin-bottom:.5rem;
+  }
+  .sp-line{font-weight:300;font-size:1.02rem;color:var(--gold-soft);margin-bottom:1.6rem;line-height:2}
+  .sp-checks{display:flex;flex-wrap:wrap;gap:.6rem}
+  .sp-check{
+    padding:.45rem 1.15rem;border-radius:99px;font-size:.88rem;font-weight:300;
+    border:1px solid rgba(201,178,140,.32);color:rgba(248,244,236,.85);
+    background:rgba(16,26,48,.35);
+  }
+  .sp-check.done{
+    background:rgba(201,178,140,.18);color:var(--gold-soft);
+    border-color:rgba(201,178,140,.6);
+  }
+  .sp-check.done::before{content:"✓ "}
+  .book-slot{
+    width:min(190px,40vw);aspect-ratio:3/4;border-radius:18px;flex-shrink:0;
+    border:1px dashed rgba(201,178,140,.55);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:.7rem;padding:1rem;text-align:center;
+    color:rgba(248,244,236,.6);font-size:.8rem;font-weight:300;
+    background:rgba(16,26,48,.3);
+  }
+  .book-slot svg{width:36px;height:36px;stroke:var(--gold);fill:none;stroke-width:1.2;opacity:.9}
+  .book-slot .bk-title{font-family:var(--font-display);font-size:1.05rem;color:var(--gold-soft)}
+  .book-slot img{width:100%;height:100%;object-fit:cover;border-radius:16px}
+  .book-slot[hidden]{display:none}
+  .meta.act{color:rgba(201,178,140,.72)}
+
   /* ————— البيان / المقدمة ————— */
   .manifesto-panel{
     text-align:center;max-width:820px;margin:0 auto;
@@ -482,6 +528,14 @@
     }
     .ov-quote{margin-top:1.9rem;padding-top:1.7rem}
 
+    .day-special{margin-top:-1rem}
+    .special-panel{border-radius:28px;padding:2rem 1.5rem}
+    .sp-grid{grid-template-columns:1fr;gap:1.9rem}
+    .sp-k{justify-content:center}
+    .sp-content{text-align:center}
+    .sp-checks{justify-content:center}
+    .book-slot{margin:0 auto;width:min(170px,52vw)}
+
     .chapters-grid{grid-template-columns:1fr;gap:1.15rem;margin-top:3rem}
     .span3,.span2{grid-column:auto}
     .chapter{padding:1.7rem 1.55rem 1.6rem;border-radius:26px}
@@ -511,6 +565,7 @@
     <li><a href="#home">الرئيسية</a></li>
     <li><a href="#journal">يومياتي</a></li>
     <li><a href="#week">أسبوعي</a></li>
+    <li><a href="#friday">الجمعة</a></li>
     <li><a href="#goals">أهدافي</a></li>
     <li><a href="#english">الإنجليزية</a></li>
     <li><a href="#achievements">إنجازاتي</a></li>
@@ -527,11 +582,12 @@
   <a href="#home" style="transition-delay:.05s">الرئيسية</a>
   <a href="#journal" style="transition-delay:.1s">يومياتي</a>
   <a href="#week" style="transition-delay:.15s">أسبوعي</a>
-  <a href="#goals" style="transition-delay:.2s">أهدافي</a>
-  <a href="#english" style="transition-delay:.25s">الإنجليزية</a>
-  <a href="#achievements" style="transition-delay:.3s">إنجازاتي</a>
-  <a href="#memories" style="transition-delay:.35s">ذكرياتي</a>
-  <a href="#settings" style="transition-delay:.4s">الإعدادات</a>
+  <a href="#friday" style="transition-delay:.2s">روتين الجمعة</a>
+  <a href="#goals" style="transition-delay:.25s">أهدافي</a>
+  <a href="#english" style="transition-delay:.3s">الإنجليزية</a>
+  <a href="#achievements" style="transition-delay:.35s">إنجازاتي</a>
+  <a href="#memories" style="transition-delay:.4s">ذكرياتي</a>
+  <a href="#settings" style="transition-delay:.45s">الإعدادات</a>
   <span class="menu-star">✦</span>
 </div>
 
@@ -583,6 +639,21 @@
     </div>
   </section>
 
+  <!-- قسم اليوم الخاص — يظهر تلقائيًا الخميس (روتين القراءة) والجمعة (سورة الكهف) -->
+  <section class="section day-special" id="daySpecial" hidden>
+    <div class="special-panel reveal">
+      <div class="sp-grid">
+        <div class="sp-content">
+          <div class="kicker sp-k" id="spKicker"></div>
+          <h2 class="sp-title" id="spTitle"></h2>
+          <p class="sp-line" id="spLine"></p>
+          <div class="sp-checks" id="spChecks"></div>
+        </div>
+        <div class="book-slot" id="spSide" hidden></div>
+      </div>
+    </div>
+  </section>
+
   <!-- المقدمة -->
   <section class="section" id="intro">
     <div class="manifesto-panel reveal">
@@ -595,7 +666,7 @@
   <!-- فصول الرحلة -->
   <section class="section" id="chapters">
     <div class="container">
-      <div class="kicker reveal">سبعة فصول لحياةٍ أكثر صفاء</div>
+      <div class="kicker reveal">ثمانية فصول لحياةٍ أكثر صفاء</div>
       <h2 class="section-title reveal">فصولُ رحلتي</h2>
 
       <div class="chapters-grid">
@@ -631,9 +702,27 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="goals" href="#goals" style="transition-delay:.16s">
+        <a class="chapter reveal span2" id="friday" href="#friday" style="transition-delay:.12s">
           <div class="chapter-top">
             <span class="chapter-num">٠٣</span>
+            <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M15.2 3.2a9 9 0 1 0 5.6 10.4A7.2 7.2 0 0 1 15.2 3.2Z"/><path d="M17.6 3.4l.5 1.1 1.2.2-.9.85.2 1.2-1-.6-1.1.6.25-1.2-.9-.85 1.25-.2.5-1.1Z"/></svg>
+          </div>
+          <h3>روتين الجمعة</h3>
+          <div class="live">
+            <span class="chip" id="fridayChip">…</span>
+            <div class="statline">
+              <span class="lbl">قائمة الجمعة</span>
+              <span class="statnum" id="fridayCount">…</span>
+            </div>
+            <div class="bar"><span id="fridayBar" style="--p:0%"></span></div>
+            <span class="meta" id="fridayMeta"></span>
+          </div>
+          <span class="enter">ادخلي <span>←</span></span>
+        </a>
+
+        <a class="chapter reveal span2" id="goals" href="#goals" style="transition-delay:.16s">
+          <div class="chapter-top">
+            <span class="chapter-num">٠٤</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>
           </div>
           <h3>أهدافي</h3>
@@ -650,7 +739,7 @@
 
         <a class="chapter reveal span2" id="english" href="#english" style="transition-delay:.24s">
           <div class="chapter-top">
-            <span class="chapter-num">٠٤</span>
+            <span class="chapter-num">٠٥</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.6 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.6-3.9-9S9.4 5.5 12 3Z"/></svg>
           </div>
           <h3>رحلتي مع الإنجليزية</h3>
@@ -665,7 +754,7 @@
 
         <a class="chapter reveal span2" id="achievements" href="#achievements" style="transition-delay:.32s">
           <div class="chapter-top">
-            <span class="chapter-num">٠٥</span>
+            <span class="chapter-num">٠٦</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M12 6.2l.9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2L9.1 8.3l2-.3.9-1.8ZM8.5 14.5 7 21l5-2.5L17 21l-1.5-6.5"/></svg>
           </div>
           <h3>إنجازاتي</h3>
@@ -677,9 +766,9 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span3" id="memories" href="#memories" style="transition-delay:.4s">
+        <a class="chapter reveal span2" id="memories" href="#memories" style="transition-delay:.4s">
           <div class="chapter-top">
-            <span class="chapter-num">٠٦</span>
+            <span class="chapter-num">٠٧</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2.5"/><path d="M3 16l4.5-4.5a1.6 1.6 0 0 1 2.3 0L14 15.7M12.5 14.2l2.2-2.2a1.6 1.6 0 0 1 2.3 0L21 16"/><circle cx="9" cy="9.2" r="1.3"/></svg>
           </div>
           <h3>ذكرياتي</h3>
@@ -690,9 +779,9 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span3" id="settings" href="#settings" style="transition-delay:.48s">
+        <a class="chapter reveal span2" id="settings" href="#settings" style="transition-delay:.48s">
           <div class="chapter-top">
-            <span class="chapter-num">٠٧</span>
+            <span class="chapter-num">٠٨</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7"/></svg>
           </div>
           <h3>الإعدادات</h3>
@@ -798,39 +887,97 @@
   const arabicNum = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
   const todayKey = new Date().toISOString().slice(0,10);
 
+  // مخطّط البيانات الكامل موثّق في docs/STRUCTURE.md
   function loadStore(){
     try{
-      const saved = JSON.parse(localStorage.getItem("rahlati:v1"));
-      if (saved && saved.journal) return saved;
+      const saved = JSON.parse(localStorage.getItem("rahlati:v2"));
+      if (saved && saved.journal && saved.friday && saved.activity) return saved;
     }catch(e){}
-    const y = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    const daysAgo = n => new Date(Date.now() - n*86400000).toISOString().slice(0,10);
+    const y = daysAgo(1);
     const demo = {
       journal: [
-        {date:y, text:"يومٌ هادئ… مشيتُ عند الغروب، وقرأتُ فصلًا من كتابي المفضّل."}
+        {date:y, text:"يومٌ هادئ… مشيتُ عند الغروب، وقرأتُ فصلًا من كتابي المفضّل.", mood:"هادئة", gratitude:"فنجان قهوةٍ في الشرفة"}
       ],
-      week: {done:11, total:17, days:[true,true,false,true,true,false,false]},
-      todayTasks: {done:2, total:5},
+      week: {
+        goal:"أسبوعٌ متوازن… عبادة، وحركة، وتعلّم",
+        days:[
+          {name:"السبت",   tasks:[{t:"رياضة الصباح",done:true},{t:"قراءة ٣٠ صفحة",done:true},{t:"ترتيب المكتب",done:false}]},
+          {name:"الأحد",   tasks:[{t:"مراجعة الإنجليزية",done:true},{t:"مشي المساء",done:true}]},
+          {name:"الاثنين", tasks:[{t:"كتابة اليوميات",done:true},{t:"مكالمة العائلة",done:false}]},
+          {name:"الثلاثاء",tasks:[{t:"درس إنجليزية",done:true},{t:"تحضير وجبات صحية",done:true},{t:"قراءة",done:true}]},
+          {name:"الأربعاء",tasks:[{t:"رياضة",done:true},{t:"مراجعة الأهداف",done:false}]},
+          {name:"الخميس",  tasks:[{t:"تدوين الامتنان",done:true},{t:"تجهيز المقاضي",done:false}]},
+          {name:"الجمعة",  tasks:[{t:"روتين الجمعة",done:false},{t:"وقت العائلة",done:false}]}
+        ],
+        shopping:[{item:"فواكه وخضار",done:true},{item:"قهوة مختصة",done:false},{item:"دفتر جديد",done:false}],
+        priorities:["إنهاء الفصل الثالث من الكتاب","المواظبة على المشي","حفظ ٢٠ كلمة جديدة"],
+        review:""
+      },
+      friday: {
+        checklist:[
+          {name:"قراءة سورة الكهف", done:true},
+          {name:"التخطيط للأسبوع القادم", done:true},
+          {name:"تنظيف الغرفة", done:false},
+          {name:"مراجعة الأهداف", done:false},
+          {name:"تأمل وامتنان", done:false}
+        ],
+        reflection:""
+      },
       goals: [
-        {name:"قراءة ١٢ كتابًا هذا العام", progress:42, active:true},
-        {name:"المشي ٨٠ كم شهريًا", progress:65, active:true},
-        {name:"إتقان ٥٠٠ كلمة إنجليزية", progress:28, active:true},
-        {name:"تعلّم أساسيات التصوير", progress:100, active:false}
+        {name:"ختم القرآن الكريم", category:"روحانية", progress:35, targetDate:"2026-12-31", notes:"", status:"نشط",
+         milestones:[{name:"١٠ أجزاء",done:true},{name:"٢٠ جزءًا",done:false},{name:"ختمة كاملة",done:false}]},
+        {name:"المشي ٨٠ كم شهريًا", category:"صحة", progress:65, targetDate:"2026-08-31", notes:"", status:"نشط",
+         milestones:[{name:"٢٠ كم",done:true},{name:"٥٠ كم",done:true},{name:"٨٠ كم",done:false}]},
+        {name:"إتقان ٥٠٠ كلمة إنجليزية", category:"تعلم", progress:28, targetDate:"2026-11-30", notes:"", status:"نشط",
+         milestones:[{name:"١٠٠ كلمة",done:true},{name:"٣٠٠ كلمة",done:false},{name:"٥٠٠ كلمة",done:false}]},
+        {name:"صندوق الادخار الشهري", category:"مالية", progress:50, targetDate:"2026-12-31", notes:"", status:"نشط",
+         milestones:[{name:"الشهر الأول",done:true},{name:"ستة أشهر",done:false}]},
+        {name:"زيارة اليابان", category:"أحلام", progress:10, targetDate:"2027-04-01", notes:"ادخار + تخطيط الرحلة", status:"نشط",
+         milestones:[{name:"جواز السفر",done:true},{name:"خطة الرحلة",done:false},{name:"الحجز",done:false}]},
+        {name:"تعلّم أساسيات التصوير", category:"شخصية", progress:100, targetDate:"2026-05-01", notes:"", status:"مكتمل",
+         milestones:[{name:"دورة أساسيات",done:true},{name:"١٠٠ صورة",done:true}]}
       ],
-      english: {streak:5},
+      thursday: {
+        book: {title:"كتاب الأسبوع", image:""},
+        checklist:[
+          {name:"قراءة فصلٍ من كتابي", done:false},
+          {name:"تجهيز قائمة الجمعة", done:false},
+          {name:"تدوين خاطرة المساء", done:false}
+        ]
+      },
+      english: {streak:5, todayTask:"راجعي كلمات هذا الأسبوع"},
       achievements: [
         {name:"٧ أيامٍ من التدوين المتواصل", when:"منذ يومين"},
         {name:"أول هدفٍ مكتمل", when:"الأسبوع الماضي"},
         {name:"١٠٠ كلمة إنجليزية", when:"قبل شهر"},
         {name:"أول ذكرى محفوظة", when:"قبل شهرين"}
       ],
-      memories: {count:23, latestCaption:"غروبُ يوم الجمعة"}
+      memories: [
+        {caption:"غروبُ يوم الجمعة", date:y, image:"assets/memory-sample.jpg"},
+        {caption:"قهوة الصباح مع كتاب", date:y, image:""},
+        {caption:"نزهة الجبل", date:y, image:""}
+      ],
+      settings: {name:"مروه العامري", theme:"ليليّ هادئ", reminder:"٩:٠٠ مساءً", lang:"العربية"},
+      activity: {
+        journal:daysAgo(1), week:daysAgo(0), friday:daysAgo(1), goals:daysAgo(2),
+        english:daysAgo(0), achievements:daysAgo(2), memories:daysAgo(1), settings:daysAgo(7)
+      }
     };
-    localStorage.setItem("rahlati:v1", JSON.stringify(demo));
+    localStorage.setItem("rahlati:v2", JSON.stringify(demo));
     return demo;
   }
 
+  /* سجلّ الأقسام — إضافة قسم جديد مستقبلًا تبدأ من هنا (docs/STRUCTURE.md) */
+  const SECTIONS = [
+    {id:"journal"}, {id:"week"}, {id:"friday"}, {id:"goals"},
+    {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}
+  ];
+
+  const store = loadStore();
+
   (function renderLive(){
-    const s = loadStore();
+    const s = store;
 
     // ٠١ — دفتري اليومي
     const latest = s.journal[s.journal.length - 1];
@@ -850,22 +997,38 @@
       document.getElementById("journalSnippet").textContent = "«صفحتُكِ الأولى بانتظارك»";
     }
 
-    // ٠٢ — تخطيطي الأسبوعي
-    const pct = Math.round(100 * s.week.done / s.week.total);
+    // ٠٢ — تخطيطي الأسبوعي (الأيام من السبت إلى الجمعة)
+    const allTasks = s.week.days.flatMap(d=>d.tasks);
+    const weekDone = allTasks.filter(t=>t.done).length;
+    const pct = allTasks.length ? Math.round(100 * weekDone / allTasks.length) : 0;
     document.getElementById("weekPct").textContent = "٪" + arabicNum(pct);
     document.getElementById("weekBar").style.setProperty("--p", pct + "%");
     document.getElementById("weekMeta").textContent =
-      arabicNum(s.week.done) + " من " + arabicNum(s.week.total) + " مهمة هذا الأسبوع";
-    const names = ["ح","ن","ث","ر","خ","ج","س"];
-    const todayIdx = new Date().getDay(); // 0 = الأحد
-    document.getElementById("weekDots").innerHTML = names.map((n,i)=>
-      `<span class="dot${s.week.days[i] ? " done" : ""}${i === todayIdx ? " today" : ""}">${n}</span>`
-    ).join("");
+      arabicNum(weekDone) + " من " + arabicNum(allTasks.length) + " مهمة — " + s.week.goal;
+    const todayIdx = (new Date().getDay() + 1) % 7; // ترتيب الأسبوع: السبت = ٠
+    document.getElementById("weekDots").innerHTML = s.week.days.map((d,i)=>{
+      const dDone = d.tasks.length && d.tasks.every(t=>t.done);
+      return `<span class="dot${dDone ? " done" : ""}${i === todayIdx ? " today" : ""}">${d.name.replace("ال","")[0]}</span>`;
+    }).join("");
 
-    // ٠٣ — أهدافي
-    const active = s.goals.filter(g=>g.active);
+    // ٠٣ — روتين الجمعة
+    const dow = new Date().getDay();
+    const fChip = document.getElementById("fridayChip");
+    if (dow === 5){ fChip.textContent = "اليوم جمعة ✦"; fChip.classList.add("done"); }
+    else fChip.textContent = "بعد " + arabicNum((5 - dow + 7) % 7) + " أيام";
+    const fDone = s.friday.checklist.filter(c=>c.done).length;
+    const fPct = Math.round(100 * fDone / s.friday.checklist.length);
+    document.getElementById("fridayCount").textContent =
+      arabicNum(fDone) + " من " + arabicNum(s.friday.checklist.length);
+    document.getElementById("fridayBar").style.setProperty("--p", fPct + "%");
+    document.getElementById("fridayMeta").textContent =
+      s.friday.checklist.map(c=>c.name).slice(0,3).join(" · ") + "…";
+
+    // ٠٤ — أهدافي (روحانية · صحة · تعلم · شخصية · مالية · اجتماعية · أحلام)
+    const active = s.goals.filter(g=>g.status === "نشط");
+    const completed = s.goals.filter(g=>g.status === "مكتمل");
     document.getElementById("goalsActive").innerHTML = arabicNum(active.length) + "<small>نشطة</small>";
-    document.getElementById("goalsDone").innerHTML = arabicNum(s.goals.length - active.length) + "<small>مكتملة</small>";
+    document.getElementById("goalsDone").innerHTML = arabicNum(completed.length) + "<small>مكتملة</small>";
     const near = active.slice().sort((a,b)=>b.progress-a.progress)[0];
     if (near){
       document.getElementById("goalNearName").textContent = near.name;
@@ -873,7 +1036,7 @@
       document.getElementById("goalNearBar").style.setProperty("--p", near.progress + "%");
     }
 
-    // ٠٤ — الإنجليزية: كلمة اليوم + السلسلة
+    // ٠٥ — الإنجليزية: كلمة اليوم + السلسلة
     const words = [
       ["Serenity","صفاء، سكينة"],
       ["Journey","رحلة"],
@@ -895,25 +1058,84 @@
     document.getElementById("wordAr").textContent = w[1];
     document.getElementById("englishStreak").textContent = "✦ سلسلة " + arabicNum(s.english.streak) + " أيام";
 
-    // ٠٥ — إنجازاتي
+    // ٠٦ — إنجازاتي
     const ach = s.achievements[0];
     if (ach){
       document.getElementById("achLatest").textContent = ach.name;
       document.getElementById("achCount").textContent = "✦ " + arabicNum(s.achievements.length) + " أوسمة — " + ach.when;
     }
 
-    // ٠٦ — ذكرياتي
-    document.getElementById("memCaption").textContent = s.memories.latestCaption;
-    document.getElementById("memCount").textContent = arabicNum(s.memories.count) + " ذكرى";
+    // ٠٧ — ذكرياتي
+    const mem = s.memories[0];
+    if (mem){
+      document.getElementById("memCaption").textContent = mem.caption;
+      if (mem.image) document.getElementById("memThumb").src = mem.image;
+    }
+    document.getElementById("memCount").textContent = arabicNum(s.memories.length) + " ذكريات";
 
-    // لمحة اليوم في الأعلى
+    // لمحة اليوم في الأعلى — مهام اليوم من خطة الأسبوع
+    const todayPlan = s.week.days[todayIdx] || {tasks:[]};
+    const tDone = todayPlan.tasks.filter(t=>t.done).length;
     const ovItems = document.querySelectorAll(".ov-item");
     if (ovItems.length >= 4){
-      ovItems[2].querySelector(".ov-value").textContent =
-        arabicNum(s.todayTasks.done) + " من " + arabicNum(s.todayTasks.total);
-      ovItems[2].querySelector(".bar span").style.setProperty("--p", Math.round(100*s.todayTasks.done/s.todayTasks.total) + "%");
+      ovItems[2].querySelector(".ov-value").textContent = todayPlan.tasks.length
+        ? arabicNum(tDone) + " من " + arabicNum(todayPlan.tasks.length)
+        : "يومٌ حر";
+      ovItems[2].querySelector(".bar span").style.setProperty("--p",
+        todayPlan.tasks.length ? Math.round(100*tDone/todayPlan.tasks.length) + "%" : "0%");
       ovItems[3].querySelector(".ov-value").textContent = "٪" + arabicNum(pct);
       ovItems[3].querySelector(".bar span").style.setProperty("--p", pct + "%");
+    }
+  })();
+
+  // آخر نشاط في كل بطاقة — يتولّد من سجلّ الأقسام
+  (function lastActivity(){
+    const relDay = iso => {
+      const diff = Math.round((new Date(todayKey) - new Date(iso)) / 86400000);
+      if (diff <= 0) return "اليوم";
+      if (diff === 1) return "أمس";
+      if (diff === 2) return "منذ يومين";
+      return "منذ " + arabicNum(diff) + " أيام";
+    };
+    SECTIONS.forEach(sec => {
+      const iso = store.activity[sec.id];
+      const card = document.getElementById(sec.id);
+      const live = card && card.querySelector(".live");
+      if (!iso || !live) return;
+      const m = document.createElement("span");
+      m.className = "meta act";
+      m.textContent = "آخر نشاط — " + relDay(iso);
+      live.appendChild(m);
+    });
+  })();
+
+  // قسم اليوم الخاص: الخميس (روتين القراءة) والجمعة (سورة الكهف)
+  // للمعاينة في أي يوم: ?preview=thu أو ?preview=fri (أو #preview=…)
+  (function daySpecial(){
+    const pv = new URLSearchParams(location.search).get("preview")
+      || (location.hash.startsWith("#preview=") ? location.hash.slice(9) : null);
+    const dow = pv === "thu" ? 4 : pv === "fri" ? 5 : new Date().getDay();
+    if (dow !== 4 && dow !== 5) return;
+    document.getElementById("daySpecial").hidden = false;
+    const side = document.getElementById("spSide");
+    const checks = list => list.map(c =>
+      `<span class="sp-check${c.done ? " done" : ""}">${c.name}</span>`).join("");
+    if (dow === 4){
+      document.getElementById("spKicker").textContent = "مساءُ الخميس";
+      document.getElementById("spTitle").textContent = "روتين الخميس — ليلةُ القراءة";
+      document.getElementById("spLine").textContent = "كتابُ الأسبوع بانتظارك… صفحاتٌ قليلة تكفي لتغذية الروح.";
+      document.getElementById("spChecks").innerHTML = checks(store.thursday.checklist);
+      side.hidden = false;
+      side.innerHTML = store.thursday.book.image
+        ? `<img src="${store.thursday.book.image}" alt="${store.thursday.book.title}">`
+        : `<svg viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h13"/><path d="M8.5 7h6.5M8.5 10.5h4.5"/></svg>
+           <span class="bk-title">${store.thursday.book.title}</span>
+           <span>صورة كتابكِ ستُوضع هنا</span>`;
+    } else {
+      document.getElementById("spKicker").textContent = "جمعة مباركة";
+      document.getElementById("spTitle").textContent = "سورةُ الكهف وروتينُ الجمعة";
+      document.getElementById("spLine").textContent = "نورٌ ما بين الجمعتين ✦ يومُكِ الهادئ يبدأ من هنا.";
+      document.getElementById("spChecks").innerHTML = checks(store.friday.checklist);
     }
   })();
 
