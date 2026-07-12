@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("rahlati:theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>الإحصائيات — رحلتي</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preload" as="image" href="../assets/hero.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0d1426;
+    --navy-900:#101a30;
+    --navy-800:#16223d;
+    --gold:#c9b28c;
+    --gold-deep:#b3986e;
+    --gold-soft:#e8dcc6;
+    --ivory:#f8f4ec;
+    --glass:rgba(16,26,48,.42);
+    --hairline:rgba(201,178,140,.22);
+    --ink-rgb:13,20,38;
+    --paper-rgb:248,244,236;
+    --glass-rgb:16,26,48;
+    --shadow-rgb:8,12,24;
+    --accent-navy-rgb:30,41,70;
+    --font-display:"Amiri", serif;
+    --font-body:"Almarai", sans-serif;
+  }
+  :root[data-theme="light"]{
+    --navy-950:#f7f4ee;
+    --navy-900:#fffdf9;
+    --navy-800:#efe7d8;
+    --gold-soft:#93794c;
+    --ivory:#332c22;
+    --glass:rgba(255,255,255,.5);
+    --hairline:rgba(201,178,140,.35);
+    --ink-rgb:247,243,235;
+    --paper-rgb:51,44,34;
+    --glass-rgb:255,255,255;
+    --shadow-rgb:120,100,70;
+    --accent-navy-rgb:230,214,186;
+  }
+  *{
+    margin:0;padding:0;box-sizing:border-box;
+    transition:background-color .3s ease, background-image .3s ease, border-color .3s ease, box-shadow .3s ease, color .3s ease;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font-body);background:var(--navy-950);color:var(--ivory);
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:rgba(201,178,140,.35);color:var(--ivory)}
+  ::placeholder{color:rgba(var(--paper-rgb),.35);font-weight:300}
+
+  .bg{position:fixed;inset:0;z-index:-3;overflow:hidden}
+  .bg img{width:100%;height:100%;object-fit:cover;object-position:center 62%;transform:scale(1.06)}
+  .bg-tint{
+    position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:linear-gradient(180deg, rgba(var(--ink-rgb),.55) 0%, rgba(var(--ink-rgb),.42) 30%, rgba(var(--ink-rgb),.6) 70%, rgba(var(--ink-rgb),.85) 100%);
+  }
+
+  .nav{
+    position:fixed;top:0;right:0;left:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.8rem clamp(1.25rem,4vw,3.5rem);
+    background:rgba(var(--ink-rgb),.62);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(201,178,140,.14);
+  }
+  .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+  .brand img{width:38px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.25))}
+  .brand span{font-family:var(--font-display);font-weight:700;font-size:1.4rem;color:var(--ivory);padding-top:.2em}
+  .nav-back{
+    display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;
+    color:rgba(var(--paper-rgb),.85);font-weight:300;font-size:.92rem;
+    padding:.5rem 1.2rem;border:1px solid rgba(var(--paper-rgb),.22);border-radius:99px;
+    transition:border-color .3s, color .3s;
+  }
+  .nav-back:hover{border-color:var(--gold);color:var(--gold-soft)}
+  .nav-left{display:flex;align-items:center;gap:.9rem}
+  .theme-toggle{
+    width:38px;height:38px;border-radius:50%;flex-shrink:0;cursor:pointer;
+    border:1px solid rgba(201,178,140,.3);background:rgba(var(--glass-rgb),.25);
+    display:flex;align-items:center;justify-content:center;font-size:1.05rem;line-height:1;
+    transition:background-color .3s ease, border-color .3s ease, transform .3s ease;
+  }
+  .theme-toggle:hover{border-color:var(--gold);transform:translateY(-1px)}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:6.5rem clamp(1rem,4vw,2.5rem) 4rem}
+
+  .day-head{text-align:center;padding:1.8rem 0 1.4rem;position:relative}
+  .day-head .greet{
+    font-weight:300;font-size:1rem;color:var(--gold-soft);
+    display:flex;align-items:center;justify-content:center;gap:.9rem;
+  }
+  .day-head .greet::before,.day-head .greet::after{
+    content:"";width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));
+  }
+  .day-head .greet::after{background:linear-gradient(90deg,var(--gold),transparent)}
+  .day-head h1{
+    font-family:var(--font-display);font-weight:700;
+    font-size:clamp(2.3rem,6vw,3.6rem);line-height:1.6;margin:.5rem 0 .1rem;
+  }
+  .day-head .sub{font-weight:300;font-size:.95rem;color:rgba(var(--paper-rgb),.65)}
+
+  .panel{
+    background:var(--glass);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    border:1px solid var(--hairline);border-radius:26px;
+    box-shadow:0 18px 50px rgba(var(--shadow-rgb),.26), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .section-gap{margin-top:2rem}
+  .block-label{
+    display:flex;align-items:center;gap:.6rem;
+    font-size:.82rem;font-weight:300;color:var(--gold);margin-bottom:1rem;
+  }
+  .block-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(201,178,140,.35),transparent)}
+  .block-label .icon{width:17px;height:17px;stroke:var(--gold);fill:none;stroke-width:1.4}
+  .block-sub{font-size:.85rem;font-weight:300;color:rgba(var(--paper-rgb),.6);margin:-.4rem 0 1.1rem;line-height:1.9}
+
+  /* ————— شبكة إحصاءات ————— */
+  .stats-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:clamp(1.4rem,3vw,2rem);
+  }
+  .stat-tile{display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center}
+  .stat-tile .icon-cap{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.4}
+  .stat-tile .val{font-family:var(--font-display);font-weight:700;font-size:1.6rem;color:var(--ivory)}
+  .stat-tile .lbl{font-size:.72rem;font-weight:300;color:rgba(var(--paper-rgb),.6);line-height:1.5}
+  .mini-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:1rem 0}
+
+  /* ————— ملخّص بحلقة ————— */
+  .summary{padding:clamp(1.6rem,3vw,2.4rem);display:grid;grid-template-columns:auto 1fr;gap:2.2rem;align-items:center}
+  .ring-box{position:relative;width:120px;height:120px;flex-shrink:0}
+  .ring-box svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring-bg{fill:none;stroke:rgba(201,178,140,.16);stroke-width:9}
+  .ring-fg{
+    fill:none;stroke-width:9;stroke-linecap:round;
+    stroke-dasharray:301.6;stroke-dashoffset:301.6;
+    transition:stroke-dashoffset 1.1s cubic-bezier(.22,1,.36,1);
+  }
+  .ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring-label .pct{font-family:var(--font-display);font-weight:700;font-size:1.5rem;color:var(--ivory)}
+  .ring-label .cap{font-size:.66rem;font-weight:300;color:var(--gold-soft);text-align:center;padding:0 .4rem}
+  .ring-row{display:flex;flex-wrap:wrap;gap:2rem;justify-content:center;padding:clamp(1.4rem,3vw,2rem)}
+  .ring-item{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+  .ring-item .name{font-size:.82rem;font-weight:300;color:rgba(var(--paper-rgb),.7);text-align:center;max-width:110px}
+
+  /* ————— رسم الخط ————— */
+  .chart-box{padding:.5rem 0 .3rem}
+  .line-svg{width:100%;height:170px;overflow:visible}
+  .line-path{fill:none;stroke:var(--gold);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+  .line-dot{fill:var(--gold-soft)}
+  .target-line{stroke:rgba(201,178,140,.4);stroke-width:1;stroke-dasharray:5 5}
+  .chart-legend{display:flex;justify-content:flex-end;font-size:.78rem;color:rgba(var(--paper-rgb),.55);margin-top:.4rem}
+  .chart-empty{font-size:.9rem;font-weight:300;color:rgba(var(--paper-rgb),.5);padding:1.4rem 0;text-align:center}
+
+  /* ————— أشرطة تقدّم بسيطة ————— */
+  .bar-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;border-bottom:1px solid rgba(201,178,140,.12)}
+  .bar-row:last-child{border-bottom:none}
+  .bar-row .br-name{font-size:.9rem;color:var(--ivory);font-weight:400;flex-shrink:0;min-width:150px}
+  .bar-row .br-track{flex:1;height:6px;border-radius:99px;background:rgba(var(--paper-rgb),.14);overflow:hidden}
+  .bar-row .br-track span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-deep),var(--gold-soft));transition:width .6s ease}
+  .bar-row .br-pct{font-family:var(--font-display);font-weight:700;color:var(--gold-soft);min-width:3.6em;text-align:left;flex-shrink:0}
+
+  /* ————— بطاقات لمحات جميلة ————— */
+  .insights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.1rem;padding:0 1.3rem 1.3rem}
+  .insight-card{
+    background:rgba(var(--ink-rgb),.3);border:1px solid rgba(201,178,140,.22);border-radius:20px;
+    padding:1.3rem 1.4rem;display:flex;flex-direction:column;gap:.5rem;
+  }
+  .insight-card .ic-label{font-size:.78rem;font-weight:300;color:var(--gold);display:flex;align-items:center;gap:.5rem}
+  .insight-card .ic-label svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:1.5}
+  .insight-card .ic-val{font-family:var(--font-display);font-weight:700;font-size:1.25rem;color:var(--ivory);line-height:1.6}
+  .insight-card .ic-meta{font-size:.78rem;font-weight:300;color:rgba(var(--paper-rgb),.55)}
+
+  /* ————— مقارنة أسبوعية/شهرية ————— */
+  .compare-toggle{display:flex;gap:.5rem;justify-content:center;margin-bottom:1.4rem}
+  .compare-btn{
+    padding:.5rem 1.3rem;border-radius:99px;border:1px solid rgba(201,178,140,.3);
+    background:rgba(var(--ink-rgb),.3);color:rgba(var(--paper-rgb),.75);font-size:.86rem;font-weight:300;
+    cursor:pointer;transition:background .3s, border-color .3s, color .3s;
+  }
+  .compare-btn.on{background:linear-gradient(135deg,#e3cfa5,#b3986e);color:#221d12;border-color:transparent;font-weight:700}
+
+  /* ————— مسار زمني ————— */
+  .timeline{display:flex;flex-direction:column;gap:0}
+  .timeline-item{display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid rgba(201,178,140,.12)}
+  .timeline-item:last-child{border-bottom:none}
+  .timeline-dot{width:10px;height:10px;border-radius:50%;background:var(--gold-soft);flex-shrink:0;margin-top:.35rem}
+  .timeline-body .tl-title{font-size:.92rem;color:var(--ivory);font-weight:400}
+  .timeline-body .tl-meta{font-size:.78rem;color:rgba(var(--paper-rgb),.55);margin-top:.15rem}
+
+  .empty-state{
+    text-align:center;padding:2.4rem 1rem;color:rgba(var(--paper-rgb),.55);font-weight:300;font-size:.92rem;line-height:1.9;
+  }
+
+  footer{text-align:center;padding:3rem 1rem 2.2rem;font-weight:300;font-size:.8rem;color:rgba(var(--paper-rgb),.45)}
+  footer .fstar{color:var(--gold);display:block;margin-bottom:.5rem}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.22,1,.36,1), transform 1s cubic-bezier(.22,1,.36,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+
+  @media (max-width:900px){
+    .wrap{padding-top:5.5rem}
+    .day-head h1{font-size:2.2rem}
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .mini-stats-row{grid-template-columns:repeat(2,1fr)}
+    .summary{grid-template-columns:1fr;justify-items:center;text-align:center}
+    .bar-row{flex-wrap:wrap}
+    .bar-row .br-name{min-width:100%}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true"><img src="../assets/hero.jpg" alt=""></div>
+<div class="bg-tint" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-left">
+    <a href="../index.html" class="brand">
+      <img src="../assets/logo.png" alt="شعار رحلتي">
+      <span>رحلتي</span>
+    </a>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="تبديل المظهر">🌙</button>
+  </div>
+  <a href="../index.html" class="nav-back">✦ الرئيسية</a>
+</nav>
+
+<main class="wrap">
+
+  <header class="day-head reveal in">
+    <div class="greet" id="greet">أهلًا، مروه 🌿</div>
+    <h1>الإحصائيات</h1>
+    <div class="sub">كل رحلتي… في لمحة واحدة</div>
+  </header>
+
+  <!-- الملخص العام -->
+  <section class="panel stats-grid section-gap reveal in" aria-label="الملخص العام">
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg><span class="val" id="statTotalGoals">…</span><span class="lbl">إجمالي الأهداف</span></div>
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg><span class="val" id="statCompletedGoals">…</span><span class="lbl">أهداف مكتملة</span></div>
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><path d="M12 3c1 4 4 6 7 7-3 1-6 3-7 7-1-4-4-6-7-7 3-1 6-3 7-7Z"/></svg><span class="val" id="statActiveGoals">…</span><span class="lbl">أهداف نشطة</span></div>
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><path d="M12 20s-7-4.3-7-9.2C5 8 7 6.5 9 6.5c1.3 0 2.4.7 3 1.7.6-1 1.7-1.7 3-1.7 2 0 4 1.5 4 4.3C19 15.7 12 20 12 20Z"/></svg><span class="val" id="statHabitRate">…</span><span class="lbl">نسبة إنجاز العادات</span></div>
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><path d="M12 3c1 4 4 6 7 7-3 1-6 3-7 7-1-4-4-6-7-7 3-1 6-3 7-7Z"/></svg><span class="val" id="statFocusRate">…</span><span class="lbl">نجاح تركيز الأسبوع</span></div>
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17.5a2.5 2.5 0 0 1-2.5 2.5H6.5A2.5 2.5 0 0 1 4 19.5v-15Z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg><span class="val" id="statJournalEntries">…</span><span class="lbl">تدوينات اليوميات</span></div>
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><path d="M15.2 3.2a9 9 0 1 0 5.6 10.4A7.2 7.2 0 0 1 15.2 3.2Z"/></svg><span class="val" id="statFridayCount">…</span><span class="lbl">روتين جمعة مكتمل</span></div>
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14.5 7 21l5-2.5L17 21l-1.5-6.5"/></svg><span class="val" id="statAchievements">…</span><span class="lbl">أوسمة مُنجَزة</span></div>
+    <div class="stat-tile"><svg class="icon-cap" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg><span class="val" id="statActiveProjects">…</span><span class="lbl">مشاريع حالية</span></div>
+  </section>
+
+  <!-- صحتي -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="إحصاءات الصحة">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.3-7-9.2C5 8 7 6.5 9 6.5c1.3 0 2.4.7 3 1.7.6-1 1.7-1.7 3-1.7 2 0 4 1.5 4 4.3C19 15.7 12 20 12 20Z"/></svg>
+      صحتي
+    </div>
+    <div class="ring-row">
+      <div class="ring-item">
+        <div class="ring-box">
+          <svg viewBox="0 0 100 100">
+            <defs><linearGradient id="ringGradWeight" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e3cfa5"/><stop offset="100%" stop-color="#b3986e"/></linearGradient></defs>
+            <circle class="ring-bg" cx="50" cy="50" r="43"/>
+            <circle class="ring-fg" id="ringWeight" cx="50" cy="50" r="43" style="stroke:url(#ringGradWeight)"/>
+          </svg>
+          <div class="ring-label"><span class="pct" id="ringWeightVal">…</span></div>
+        </div>
+        <span class="name">تقدّم الوزن</span>
+      </div>
+      <div class="ring-item">
+        <div class="ring-box">
+          <svg viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="43"/>
+            <circle class="ring-fg" id="ringSupp" cx="50" cy="50" r="43" style="stroke:url(#ringGradWeight)"/>
+          </svg>
+          <div class="ring-label"><span class="pct" id="ringSuppVal">…</span></div>
+        </div>
+        <span class="name">الالتزام بالمكمّلات</span>
+      </div>
+    </div>
+    <div class="mini-stats-row">
+      <div class="stat-tile"><span class="val" id="statProteinAvg">…</span><span class="lbl">متوسط البروتين</span></div>
+      <div class="stat-tile"><span class="val" id="statWaterAvg">…</span><span class="lbl">متوسط الماء</span></div>
+      <div class="stat-tile"><span class="val" id="statExerciseFreq">…</span><span class="lbl">تكرار الرياضة أسبوعيًا</span></div>
+      <div class="stat-tile"><span class="val" id="statSleepAvg">…</span><span class="lbl">متوسط النوم</span></div>
+    </div>
+    <div class="mini-stats-row">
+      <div class="stat-tile"><span class="val" id="statPilatesCount">…</span><span class="lbl">جلسات بيلاتس (إجمالي)</span></div>
+      <div class="stat-tile"><span class="val" id="statWalkMinutes">…</span><span class="lbl">دقائق المشي (إجمالي)</span></div>
+    </div>
+    <div class="block-label section-gap" style="font-size:.78rem">مسار الوزن عبر الوقت</div>
+    <div class="chart-box" id="weightChart"></div>
+  </section>
+
+  <!-- الإيمان -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="إحصاءات الإيمان">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+      الإيمان
+    </div>
+    <div id="faithBars"></div>
+  </section>
+
+  <!-- التعلّم -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="إحصاءات التعلّم">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.6 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.6-3.9-9S9.4 5.5 12 3Z"/></svg>
+      التعلّم — رحلتي مع الإنجليزية
+    </div>
+    <div class="mini-stats-row" style="grid-template-columns:repeat(2,1fr)">
+      <div class="stat-tile"><span class="val" id="statEnglishStreak">…</span><span class="lbl">أيام دراسة متتالية</span></div>
+      <div class="stat-tile"><span class="val" id="statEnglishGoal">…</span><span class="lbl">تقدّم هدف إتقان الإنجليزية</span></div>
+    </div>
+    <div class="empty-state">المفردات وجلسات القراءة ووقت الدراسة التفصيلي بانتظار بناء صفحة «رحلتي مع الإنجليزية» — لا بيانات وهمية بديلًا عنها</div>
+  </section>
+
+  <!-- المالية -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="إحصاءات المالية">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.2-2.5 2.5-2.5s2.5 1 2.5 2c0 2-5 1.5-5 4 0 1 1.1 2 2.5 2s2.5-1 2.5-2.5"/></svg>
+      المالية
+    </div>
+    <div id="financeBars"></div>
+  </section>
+
+  <!-- المشاريع -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="إحصاءات المشاريع">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg>
+      المشاريع
+    </div>
+    <div class="mini-stats-row">
+      <div class="stat-tile"><span class="val" id="statProjActive">…</span><span class="lbl">مشاريع حالية</span></div>
+      <div class="stat-tile"><span class="val" id="statProjMilestones">…</span><span class="lbl">خطوات مُنجَزة</span></div>
+      <div class="stat-tile"><span class="val" id="statProjOverall">…</span><span class="lbl">نسبة الإنجاز العامة</span></div>
+      <div class="stat-tile"><span class="val" id="statProjDays">…</span><span class="lbl">متوسط أيام العمل</span></div>
+    </div>
+    <div class="block-sub" style="text-align:center;margin-top:.6rem">«متوسط أيام العمل» محسوبٌ من تاريخ البداية إلى اليوم — لا وقت عمل مسجَّل تفصيليًا بعد</div>
+  </section>
+
+  <!-- مقارنة أسبوعية/شهرية -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="مقارنة أسبوعية وشهرية">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9.5h18M8 2v4M16 2v4"/></svg>
+      مقارنة أسبوعية وشهرية
+    </div>
+    <div class="compare-toggle">
+      <button class="compare-btn on" data-range="week">هذا الأسبوع</button>
+      <button class="compare-btn" data-range="month">هذا الشهر</button>
+    </div>
+    <div class="mini-stats-row" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-tile"><span class="val" id="cmpJournal">…</span><span class="lbl">تدوينات</span></div>
+      <div class="stat-tile"><span class="val" id="cmpExercise">…</span><span class="lbl">جلسات رياضة</span></div>
+      <div class="stat-tile"><span class="val" id="cmpHabitRate">…</span><span class="lbl">نسبة إنجاز العادات</span></div>
+    </div>
+  </section>
+
+  <!-- رحلتي الشخصية -->
+  <section class="section-gap reveal in" aria-label="رحلتي الشخصية">
+    <div class="block-label" style="margin:0 0 1rem .2rem">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 3c1 4 4 6 7 7-3 1-6 3-7 7-1-4-4-6-7-7 3-1 6-3 7-7Z"/></svg>
+      رحلتي الشخصية
+    </div>
+    <div class="panel">
+      <div class="insights-grid" id="insightsGrid"></div>
+    </div>
+  </section>
+
+  <!-- مسار النمو -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="مسار النمو">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+      مسار أسابيعي
+    </div>
+    <div class="timeline" id="growthTimeline"></div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="fstar">✦</span>
+  رحلتي — الإحصائيات
+</footer>
+
+<script src="../assets/js/store.js"></script>
+<script src="../assets/js/theme.js"></script>
+<script>
+  const arabicNum = window.RahlatiStore.arabicNum;
+  const iso = d => d.toISOString().slice(0,10);
+  const todayISO = iso(new Date());
+
+  const store = window.RahlatiStore.load();
+  const week = store.week;
+  const weekDatesArr = week.days.map(d=>d.date);
+  const RING_C_SMALL = 2 * Math.PI * 43;
+
+  (function renderHead(){
+    const h = new Date().getHours();
+    let g = "أهلًا، مروه 🌿";
+    if (h >= 4 && h < 12) g = "صباحُ النور، مروه 🌿";
+    else if (h >= 12 && h < 17) g = "نهاركِ سعيد، مروه 🌿";
+    else if (h >= 17 && h < 22) g = "مساءُ الورد، مروه 🌿";
+    else g = "ليلتكِ هادئة، مروه 🌿";
+    document.getElementById("greet").textContent = g;
+  })();
+
+  function findHabit(name){ return store.habits.find(h=>h.name===name); }
+  function weekKeyOf(dateISO){
+    const d = new Date(dateISO + "T12:00:00");
+    const off = (d.getDay() + 1) % 7;
+    return iso(new Date(d.getTime() - off*86400000));
+  }
+  function habitWeeklyPct(h){
+    if (!h) return null;
+    if (h.frequency === "أسبوعية"){
+      return weekDatesArr.some(d=>h.checkedDates.includes(d)) ? 100 : 0;
+    }
+    const elapsed = weekDatesArr.filter(d=>d<=todayISO).length || 1;
+    const done = weekDatesArr.filter(d=>d<=todayISO && h.checkedDates.includes(d)).length;
+    return Math.round(100*done/elapsed);
+  }
+
+  /* ————— الملخص العام ————— */
+  function habitCompletionRate(){
+    const active = store.habits.filter(h=>h.active);
+    if (!active.length) return 0;
+    const rates = active.map(habitWeeklyPct);
+    return Math.round(rates.reduce((a,b)=>a+b,0)/rates.length);
+  }
+  function weeklyFocusSuccessRate(){
+    const items = store.weeklyFocus.items;
+    if (!items.length) return null;
+    const elapsed = weekDatesArr.filter(d=>d<=todayISO).length || 1;
+    const totalDone = items.reduce((sum,it)=>sum+(it.checkedDates||[]).length,0);
+    return Math.round(100*totalDone/(elapsed*items.length));
+  }
+  function renderOverallSummary(){
+    document.getElementById("statTotalGoals").textContent = arabicNum(store.goals.length);
+    document.getElementById("statCompletedGoals").textContent = arabicNum(store.goals.filter(g=>g.status==="مكتمل").length);
+    document.getElementById("statActiveGoals").textContent = arabicNum(store.goals.filter(g=>g.status==="جارٍ التنفيذ").length);
+    document.getElementById("statHabitRate").textContent = "٪" + arabicNum(habitCompletionRate());
+    const focusRate = weeklyFocusSuccessRate();
+    document.getElementById("statFocusRate").textContent = focusRate==null ? "—" : "٪" + arabicNum(focusRate);
+    document.getElementById("statJournalEntries").textContent = arabicNum(store.journal.length);
+    document.getElementById("statFridayCount").textContent = arabicNum(store.weekHistory.length);
+    document.getElementById("statAchievements").textContent = arabicNum(store.achievements.length);
+    document.getElementById("statActiveProjects").textContent = arabicNum(store.projects.filter(p=>p.status==="حالي").length);
+  }
+
+  /* ————— صحتي ————— */
+  function weekAvg(log, key){
+    const entries = (log||[]).filter(e=>weekDatesArr.includes(e.date));
+    if (!entries.length) return null;
+    return entries.reduce((s,e)=>s+(e[key]||0),0)/entries.length;
+  }
+  function supplementsAdherencePct(){
+    const supplements = store.health.supplements;
+    if (!supplements.length) return 0;
+    const total = supplements.reduce((sum,s)=>{
+      const expected = s.frequency==="أسبوعية" ? 1 : (weekDatesArr.filter(d=>d<=todayISO).length||1);
+      const taken = Math.min((s.takenDates||[]).filter(d=>weekDatesArr.includes(d)).length, expected);
+      return sum + (taken/expected);
+    },0);
+    return Math.round(100*total/supplements.length);
+  }
+  function renderHealthSection(){
+    const h = store.health;
+    const wLog = h.weight.log;
+    const wCurrent = wLog.length ? wLog[wLog.length-1].kg : h.weight.current;
+    const wPct = h.weight.startWeight === h.weight.target ? 100 :
+      Math.max(0, Math.min(100, Math.round(100*(h.weight.startWeight-wCurrent)/(h.weight.startWeight-h.weight.target))));
+    document.getElementById("ringWeightVal").textContent = "٪"+arabicNum(wPct);
+    document.getElementById("ringWeight").style.strokeDashoffset = RING_C_SMALL*(1-wPct/100);
+
+    const suppPct = supplementsAdherencePct();
+    document.getElementById("ringSuppVal").textContent = "٪"+arabicNum(suppPct);
+    document.getElementById("ringSupp").style.strokeDashoffset = RING_C_SMALL*(1-suppPct/100);
+
+    const protAvg = weekAvg(h.nutrition.log, "proteinG");
+    const waterAvg = weekAvg(h.nutrition.log, "waterL");
+    document.getElementById("statProteinAvg").textContent = protAvg==null ? "—" : arabicNum(Math.round(protAvg))+"غ";
+    document.getElementById("statWaterAvg").textContent = waterAvg==null ? "—" : arabicNum(Math.round(waterAvg*10)/10)+"ل";
+    document.getElementById("statExerciseFreq").textContent = arabicNum(h.exercise.log.filter(e=>weekDatesArr.includes(e.date)).length);
+    const sleepAvg = weekAvg(h.sleep.log, "hours");
+    document.getElementById("statSleepAvg").textContent = sleepAvg==null ? "—" : arabicNum(Math.round(sleepAvg*10)/10)+"س";
+    document.getElementById("statPilatesCount").textContent = arabicNum(h.exercise.log.filter(e=>e.type==="بيلاتس").length);
+    const walkMin = h.exercise.log.filter(e=>e.type==="مشي").reduce((s,e)=>s+(e.durationMin||0),0);
+    document.getElementById("statWalkMinutes").textContent = arabicNum(walkMin)+" د";
+
+    renderWeightChart(h);
+  }
+  function renderWeightChart(h){
+    const log = h.weight.log.slice().sort((a,b)=>a.date.localeCompare(b.date));
+    const box = document.getElementById("weightChart");
+    if (log.length < 2){
+      box.innerHTML = `<div class="chart-empty">سجّلي وزنًا آخر في صحتي لرؤية مسارك عبر الوقت</div>`;
+      return;
+    }
+    const W = 600, H = 170, PAD = 20;
+    const values = log.map(e=>e.kg).concat([h.weight.target]);
+    const min = Math.min(...values) - 1.5;
+    const max = Math.max(...values) + 1.5;
+    const xStep = (W - PAD*2) / (log.length - 1);
+    const yFor = v => H - PAD - ((v - min) / (max - min)) * (H - PAD*2);
+    const points = log.map((e,i)=> [PAD + i*xStep, yFor(e.kg)]);
+    const path = points.map((p,i)=> (i===0?"M":"L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+    const targetY = yFor(h.weight.target).toFixed(1);
+    box.innerHTML = `
+      <svg viewBox="0 0 ${W} ${H}" class="line-svg" preserveAspectRatio="none">
+        <line x1="${PAD}" y1="${targetY}" x2="${W-PAD}" y2="${targetY}" class="target-line"/>
+        <path d="${path}" class="line-path"/>
+        ${points.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" class="line-dot"/>`).join("")}
+      </svg>
+      <div class="chart-legend">خط الهدف — ${arabicNum(h.weight.target)} كجم</div>`;
+  }
+
+  /* ————— الإيمان ————— */
+  function renderFaithBars(){
+    const rows = [
+      ["الصلاة في وقتها", habitWeeklyPct(findHabit("الصلاة في وقتها"))],
+      ["أذكار الصباح والمساء", (()=>{
+        const m = habitWeeklyPct(findHabit("أذكار الصباح"));
+        const e = habitWeeklyPct(findHabit("أذكار المساء"));
+        if (m==null && e==null) return null;
+        return Math.round(((m||0)+(e||0))/2);
+      })()],
+      ["الصدقة الأسبوعية", habitWeeklyPct(findHabit("الصدقة الأسبوعية"))],
+      ["ختم القرآن الكريم", (()=>{
+        const g = store.goals.find(g=>g.name==="ختم القرآن الكريم");
+        return g ? g.progress : null;
+      })()],
+      ["إنجاز روتين الجمعة (هذا الأسبوع)", (()=>{
+        const c = store.friday.checklist;
+        if (!c.length) return null;
+        return Math.round(100*c.filter(x=>x.done).length/c.length);
+      })()]
+    ];
+    document.getElementById("faithBars").innerHTML = rows.map(([name,pct])=>`
+      <div class="bar-row">
+        <span class="br-name">${name}</span>
+        <span class="br-track"><span style="width:${pct||0}%"></span></span>
+        <span class="br-pct">${pct==null ? "—" : "٪"+arabicNum(pct)}</span>
+      </div>`).join("");
+  }
+
+  /* ————— المالية ————— */
+  function renderFinanceBars(){
+    const map = [
+      ["سداد جميع الديون", "سداد جميع الديون"],
+      ["الادخار بانتظام", "الادخار بانتظام"],
+      ["بناء صندوق طوارئ", "بناء صندوق طوارئ"],
+      ["بناء مصدر دخل إضافي", "بناء مصدر دخل إضافي"]
+    ];
+    document.getElementById("financeBars").innerHTML = map.map(([label,goalName])=>{
+      const g = store.goals.find(g=>g.name===goalName);
+      const pct = g ? g.progress : null;
+      return `<div class="bar-row">
+        <span class="br-name">${label}</span>
+        <span class="br-track"><span style="width:${pct||0}%"></span></span>
+        <span class="br-pct">${pct==null ? "—" : "٪"+arabicNum(pct)}</span>
+      </div>`;
+    }).join("");
+  }
+
+  /* ————— التعلّم ————— */
+  function renderLearning(){
+    document.getElementById("statEnglishStreak").textContent = arabicNum(store.english.streak||0);
+    const g = store.goals.find(g=>g.name==="إتقان الإنجليزية والتحدث بثقة");
+    document.getElementById("statEnglishGoal").textContent = g ? "٪"+arabicNum(g.progress) : "—";
+  }
+
+  /* ————— المشاريع ————— */
+  function renderProjectsSection(){
+    const projects = store.projects;
+    document.getElementById("statProjActive").textContent = arabicNum(projects.filter(p=>p.status==="حالي").length);
+    const milestonesDone = projects.reduce((s,p)=>s+p.milestones.filter(m=>m.done).length,0);
+    document.getElementById("statProjMilestones").textContent = arabicNum(milestonesDone);
+    const overall = projects.length ? Math.round(projects.reduce((s,p)=>s+p.progress,0)/projects.length) : 0;
+    document.getElementById("statProjOverall").textContent = "٪"+arabicNum(overall);
+    const withStart = projects.filter(p=>p.startDate);
+    const avgDays = withStart.length
+      ? Math.round(withStart.reduce((s,p)=> s + Math.max(0,Math.round((new Date(todayISO)-new Date(p.startDate))/86400000)), 0) / withStart.length)
+      : null;
+    document.getElementById("statProjDays").textContent = avgDays==null ? "—" : arabicNum(avgDays)+" يوم";
+  }
+
+  /* ————— مقارنة أسبوعية/شهرية ————— */
+  function isInMonth(dateISO){ return dateISO && dateISO.slice(0,7) === todayISO.slice(0,7); }
+  function renderComparison(range){
+    let journalCount, exerciseCount, habitRate;
+    if (range === "week"){
+      journalCount = store.journal.filter(e=>weekDatesArr.includes(e.date)).length;
+      exerciseCount = store.health.exercise.log.filter(e=>weekDatesArr.includes(e.date)).length;
+      habitRate = habitCompletionRate();
+    } else {
+      journalCount = store.journal.filter(e=>isInMonth(e.date)).length;
+      exerciseCount = store.health.exercise.log.filter(e=>isInMonth(e.date)).length;
+      const active = store.habits.filter(h=>h.active);
+      const monthDates = Array.from({length:30}, (_,i)=> iso(new Date(Date.now()-i*86400000)));
+      const rates = active.map(h=>{
+        const done = monthDates.filter(d=>h.checkedDates.includes(d)).length;
+        return Math.round(100*done/30);
+      });
+      habitRate = rates.length ? Math.round(rates.reduce((a,b)=>a+b,0)/rates.length) : 0;
+    }
+    document.getElementById("cmpJournal").textContent = arabicNum(journalCount);
+    document.getElementById("cmpExercise").textContent = arabicNum(exerciseCount);
+    document.getElementById("cmpHabitRate").textContent = "٪"+arabicNum(habitRate);
+  }
+  document.querySelectorAll(".compare-btn").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      document.querySelectorAll(".compare-btn").forEach(x=>x.classList.remove("on"));
+      b.classList.add("on");
+      renderComparison(b.dataset.range);
+    });
+  });
+
+  /* ————— رحلتي الشخصية ————— */
+  function bestWeek(){
+    const history = store.weekHistory;
+    if (!history.length) return null;
+    return history.slice().sort((a,b)=>{
+      const ra = (a.review&&a.review.rating)||0, rb = (b.review&&b.review.rating)||0;
+      return rb - ra;
+    })[0];
+  }
+  function mostActiveMonth(){
+    const counts = {};
+    store.journal.forEach(e=>{ const m = e.date.slice(0,7); counts[m]=(counts[m]||0)+1; });
+    const entries = Object.entries(counts);
+    if (!entries.length) return null;
+    entries.sort((a,b)=>b[1]-a[1]);
+    return entries[0];
+  }
+  function longestStreakHabit(){
+    if (!store.habits.length) return null;
+    return store.habits.slice().sort((a,b)=>(b.longestStreak||0)-(a.longestStreak||0))[0];
+  }
+  function mostConsistentHabitNow(){
+    if (!store.habits.length) return null;
+    return store.habits.slice().sort((a,b)=>(b.streak||0)-(a.streak||0))[0];
+  }
+  function topGoalCategory(){
+    const done = {};
+    store.goals.forEach(g=>{ if (g.status==="مكتمل") done[g.category]=(done[g.category]||0)+1; });
+    let entries = Object.entries(done);
+    if (entries.length){
+      entries.sort((a,b)=>b[1]-a[1]);
+      return {category: entries[0][0], count: entries[0][1], completed: true};
+    }
+    const totals = {};
+    store.goals.forEach(g=>{ totals[g.category]=(totals[g.category]||0)+1; });
+    entries = Object.entries(totals);
+    if (!entries.length) return null;
+    entries.sort((a,b)=>b[1]-a[1]);
+    return {category: entries[0][0], count: entries[0][1], completed: false};
+  }
+  const monthsAr = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  function renderInsights(){
+    const box = document.getElementById("insightsGrid");
+    const cards = [];
+
+    const bw = bestWeek();
+    cards.push(["أفضل أسبوع", bw ? `الأسبوع الذي بدأ ${bw.weekStart}` : "لا سجلّ أسابيع مكتملة بعد",
+      bw && bw.review && bw.review.rating ? "التقييم: " + "★".repeat(bw.review.rating) : ""]);
+
+    const mam = mostActiveMonth();
+    cards.push(["الشهر الأكثر تدوينًا", mam ? (()=>{
+      const [y,m] = mam[0].split("-");
+      return monthsAr[+m-1] + " " + arabicNum(y);
+    })() : "لا تدوينات كافية بعد", mam ? arabicNum(mam[1]) + " تدوينة" : ""]);
+
+    const lsh = longestStreakHabit();
+    cards.push(["أطول سلسلة عادة", lsh && lsh.longestStreak ? lsh.name : "لم تبدأ سلسلة بعد",
+      lsh && lsh.longestStreak ? arabicNum(lsh.longestStreak) + (lsh.frequency==="أسبوعية" ? " أسابيع متتالية" : " أيام متتالية") : ""]);
+
+    const mch = mostConsistentHabitNow();
+    cards.push(["الأكثر التزامًا الآن", mch && mch.streak ? mch.name : "ابدئي سلسلتكِ اليوم",
+      mch && mch.streak ? arabicNum(mch.streak) + (mch.frequency==="أسبوعية" ? " أسابيع" : " أيام") + " متتالية الآن" : ""]);
+
+    const tgc = topGoalCategory();
+    cards.push([tgc && tgc.completed ? "أكثر تصنيف أهداف اكتمالًا" : "أكثر تصنيف أهداف تركيزًا",
+      tgc ? tgc.category : "لا أهداف بعد",
+      tgc ? arabicNum(tgc.count) + (tgc.completed ? " هدف مكتمل" : " هدف (لا اكتمال بعد)") : ""]);
+
+    cards.push(["إجمالي تدويناتي", arabicNum(store.journal.length) + " تدوينة", store.journal.length ? "استمري في الكتابة ✦" : "ابدئي صفحتكِ الأولى"]);
+
+    box.innerHTML = cards.map(([label,val,meta])=>`
+      <div class="insight-card">
+        <div class="ic-label">✦ ${label}</div>
+        <div class="ic-val">${val}</div>
+        ${meta ? `<div class="ic-meta">${meta}</div>` : ""}
+      </div>`).join("");
+  }
+
+  /* ————— مسار النمو (أسابيع مكتملة) ————— */
+  function renderGrowthTimeline(){
+    const box = document.getElementById("growthTimeline");
+    const history = store.weekHistory.slice().sort((a,b)=>b.weekStart.localeCompare(a.weekStart));
+    if (!history.length){
+      box.innerHTML = `<div class="empty-state">سيبدأ مسار نموّكِ بالظهور هنا مع أول أسبوع تُكملينه عبر روتين الجمعة (زر «أنهيتُ الأسبوع»)</div>`;
+      return;
+    }
+    box.innerHTML = history.map(w=>{
+      const rating = w.review && w.review.rating ? "★".repeat(w.review.rating) : "";
+      const focusAvg = w.focusItems && w.focusItems.length
+        ? Math.round(w.focusItems.reduce((s,f)=>s+f.consistencyPct,0)/w.focusItems.length)
+        : null;
+      return `<div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-body">
+          <div class="tl-title">أسبوعٌ اكتمل — بدأ ${w.weekStart}</div>
+          <div class="tl-meta">${rating ? rating + " · " : ""}${focusAvg!=null ? "التزام تركيز الأسبوع ٪"+arabicNum(focusAvg) : ""}</div>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  /* انطلاق */
+  renderOverallSummary();
+  renderHealthSection();
+  renderFaithBars();
+  renderLearning();
+  renderFinanceBars();
+  renderProjectsSection();
+  renderComparison("week");
+  renderInsights();
+  renderGrowthTimeline();
+</script>
+</body>
+</html>

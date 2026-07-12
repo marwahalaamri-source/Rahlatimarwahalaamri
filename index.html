@@ -635,6 +635,7 @@
     <li><a href="sections/goals.html">أهدافي</a></li>
     <li><a href="sections/health.html">صحتي</a></li>
     <li><a href="sections/work.html">مشاريعي</a></li>
+    <li><a href="sections/stats.html">الإحصائيات</a></li>
     <li><a href="#english">الإنجليزية</a></li>
     <li><a href="#achievements">إنجازاتي</a></li>
     <li><a href="#memories">ذكرياتي</a></li>
@@ -654,10 +655,11 @@
   <a href="sections/goals.html" style="transition-delay:.25s">أهدافي</a>
   <a href="sections/health.html" style="transition-delay:.3s">صحتي</a>
   <a href="sections/work.html" style="transition-delay:.35s">مشاريعي</a>
-  <a href="#english" style="transition-delay:.4s">الإنجليزية</a>
-  <a href="#achievements" style="transition-delay:.45s">إنجازاتي</a>
-  <a href="#memories" style="transition-delay:.5s">ذكرياتي</a>
-  <a href="#settings" style="transition-delay:.55s">الإعدادات</a>
+  <a href="sections/stats.html" style="transition-delay:.4s">الإحصائيات</a>
+  <a href="#english" style="transition-delay:.45s">الإنجليزية</a>
+  <a href="#achievements" style="transition-delay:.5s">إنجازاتي</a>
+  <a href="#memories" style="transition-delay:.55s">ذكرياتي</a>
+  <a href="#settings" style="transition-delay:.6s">الإعدادات</a>
   <span class="menu-star">✦</span>
 </div>
 
@@ -909,6 +911,23 @@
           </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
+
+        <a class="chapter reveal span2" id="stats" href="sections/stats.html" style="transition-delay:.6s">
+          <div class="chapter-top">
+            <span class="chapter-num">١١</span>
+            <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+          </div>
+          <h3>الإحصائيات</h3>
+          <div class="live">
+            <div class="statline">
+              <span class="lbl">نسبة إنجاز العادات</span>
+              <span class="statnum" id="statsHabitPct">…</span>
+            </div>
+            <div class="bar"><span id="statsHabitBar" style="--p:0%"></span></div>
+            <span class="meta" id="statsMeta"></span>
+          </div>
+          <span class="enter">ادخلي <span>←</span></span>
+        </a>
       </div>
     </div>
   </section>
@@ -1021,7 +1040,7 @@
   /* سجلّ الأقسام — إضافة قسم جديد مستقبلًا تبدأ من هنا (docs/STRUCTURE.md) */
   const SECTIONS = [
     {id:"journal"}, {id:"week"}, {id:"friday"}, {id:"goals"},
-    {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}, {id:"health"}, {id:"work"}
+    {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}, {id:"health"}, {id:"work"}, {id:"stats"}
   ];
 
   const store = window.RahlatiStore.load();
@@ -1177,6 +1196,27 @@
       document.getElementById("workMeta").textContent = nearest
         ? nearest.name + " — ٪" + arabicNum(nearest.progress)
         : (s.projects.length ? "لا مشاريع حالية الآن" : "لا مشاريع بعد… أضيفي أول فكرة");
+    }
+
+    // ١١ — الإحصائيات
+    {
+      const weekDatesNow = s.week.days.map(d=>d.date);
+      const activeHabits = s.habits.filter(h=>h.active);
+      const habitRate = (function(){
+        if (!activeHabits.length) return 0;
+        const rates = activeHabits.map(h=>{
+          if (h.frequency === "أسبوعية") return weekDatesNow.some(d=>h.checkedDates.includes(d)) ? 100 : 0;
+          const elapsed = weekDatesNow.filter(d=>d<=todayKey).length || 1;
+          const done = weekDatesNow.filter(d=>d<=todayKey && h.checkedDates.includes(d)).length;
+          return Math.round(100*done/elapsed);
+        });
+        return Math.round(rates.reduce((a,b)=>a+b,0)/rates.length);
+      })();
+      document.getElementById("statsHabitPct").textContent = "٪" + arabicNum(habitRate);
+      document.getElementById("statsHabitBar").style.setProperty("--p", habitRate + "%");
+      const completedGoals = s.goals.filter(g=>g.status==="مكتمل").length;
+      document.getElementById("statsMeta").textContent =
+        arabicNum(completedGoals) + " من " + arabicNum(s.goals.length) + " هدف مكتمل";
     }
 
     // لمحة اليوم في الأعلى — مهام اليوم من خطة الأسبوع
