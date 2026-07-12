@@ -633,6 +633,7 @@
     <li><a href="sections/week.html">أسبوعي</a></li>
     <li><a href="sections/friday.html">الجمعة</a></li>
     <li><a href="sections/goals.html">أهدافي</a></li>
+    <li><a href="sections/health.html">صحتي</a></li>
     <li><a href="#english">الإنجليزية</a></li>
     <li><a href="#achievements">إنجازاتي</a></li>
     <li><a href="#memories">ذكرياتي</a></li>
@@ -650,10 +651,11 @@
   <a href="sections/week.html" style="transition-delay:.15s">أسبوعي</a>
   <a href="sections/friday.html" style="transition-delay:.2s">روتين الجمعة</a>
   <a href="sections/goals.html" style="transition-delay:.25s">أهدافي</a>
-  <a href="#english" style="transition-delay:.3s">الإنجليزية</a>
-  <a href="#achievements" style="transition-delay:.35s">إنجازاتي</a>
-  <a href="#memories" style="transition-delay:.4s">ذكرياتي</a>
-  <a href="#settings" style="transition-delay:.45s">الإعدادات</a>
+  <a href="sections/health.html" style="transition-delay:.3s">صحتي</a>
+  <a href="#english" style="transition-delay:.35s">الإنجليزية</a>
+  <a href="#achievements" style="transition-delay:.4s">إنجازاتي</a>
+  <a href="#memories" style="transition-delay:.45s">ذكرياتي</a>
+  <a href="#settings" style="transition-delay:.5s">الإعدادات</a>
   <span class="menu-star">✦</span>
 </div>
 
@@ -871,6 +873,23 @@
           </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
+
+        <a class="chapter reveal span2" id="health" href="sections/health.html" style="transition-delay:.52s">
+          <div class="chapter-top">
+            <span class="chapter-num">٠٩</span>
+            <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.3-7-9.2C5 8 7 6.5 9 6.5c1.3 0 2.4.7 3 1.7.6-1 1.7-1.7 3-1.7 2 0 4 1.5 4 4.3C19 15.7 12 20 12 20Z"/><path d="M4 12h3l1.5-3 2 5 1.5-3h3"/></svg>
+          </div>
+          <h3>صحتي</h3>
+          <div class="live">
+            <div class="statline">
+              <span class="lbl">تقدّم الوزن</span>
+              <span class="statnum" id="healthWeightPct">…</span>
+            </div>
+            <div class="bar"><span id="healthWeightBar" style="--p:0%"></span></div>
+            <span class="meta" id="healthMeta"></span>
+          </div>
+          <span class="enter">ادخلي <span>←</span></span>
+        </a>
       </div>
     </div>
   </section>
@@ -983,7 +1002,7 @@
   /* سجلّ الأقسام — إضافة قسم جديد مستقبلًا تبدأ من هنا (docs/STRUCTURE.md) */
   const SECTIONS = [
     {id:"journal"}, {id:"week"}, {id:"friday"}, {id:"goals"},
-    {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}
+    {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}, {id:"health"}
   ];
 
   const store = window.RahlatiStore.load();
@@ -1113,6 +1132,21 @@
       document.getElementById("memCaption").textContent = mem.caption;
     }
     document.getElementById("memCount").textContent = s.memories.length ? arabicNum(s.memories.length) + " ذكريات" : "";
+
+    // ٠٩ — صحتي
+    if (s.health){
+      const wLog = s.health.weight.log;
+      const wStart = s.health.weight.startWeight;
+      const wCurrent = wLog.length ? wLog[wLog.length-1].kg : s.health.weight.current;
+      const wTarget = s.health.weight.target;
+      const wPct = wStart === wTarget ? 100 : Math.max(0, Math.min(100, Math.round(100 * (wStart - wCurrent) / (wStart - wTarget))));
+      document.getElementById("healthWeightPct").textContent = "٪" + arabicNum(wPct);
+      document.getElementById("healthWeightBar").style.setProperty("--p", wPct + "%");
+      const weekDatesNow = s.week.days.map(d=>d.date);
+      const exCount = s.health.exercise.log.filter(e=>weekDatesNow.includes(e.date)).length;
+      document.getElementById("healthMeta").textContent =
+        arabicNum(wCurrent) + " كجم الآن · 🧘 " + arabicNum(exCount) + " تمارين هذا الأسبوع";
+    }
 
     // لمحة اليوم في الأعلى — مهام اليوم من خطة الأسبوع
     const todayPlan = s.week.days[todayIdx] || {tasks:[]};

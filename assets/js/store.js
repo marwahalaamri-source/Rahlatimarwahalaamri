@@ -200,6 +200,21 @@
         project("بناء عملي التجاري الخاص","مستقبلي")
       ],
 
+      /* ————— الصحة: الوزن + التغذية + الرياضة + النوم + المكمّلات + العناية ————— */
+      health: {
+        weight: { startWeight: 65, current: 65, target: 52, log: [{date: iso(new Date()), kg: 65}] },
+        nutrition: { proteinGoalMin: 90, proteinGoalMax: 100, waterGoalL: 1.75, log: [], meals: [] },
+        exercise: { log: [] },   // { date, type, durationMin, painBefore, painAfter }
+        sleep: { wakeGoal: "٥:٠٠ ص", log: [] },   // { date, sleepTime, wakeTime, hours }
+        supplements: [
+          {id: uid(), name:"Berberine", frequency:"يومية", takenDates: []},
+          {id: uid(), name:"Vitamin C", frequency:"يومية", takenDates: []},
+          {id: uid(), name:"Glutathione", frequency:"يومية", takenDates: []},
+          {id: uid(), name:"Vitamin D", frequency:"أسبوعية", takenDates: []}
+        ],
+        care: { notes: "", photos: [] }
+      },
+
       english: {streak:0, todayTask:""},
       achievements: [],   // { name, when } — ستُولَّد تلقائيًا من عادات/أهداف حقيقية مكتملة
       memories: [],       // { caption, date, image }
@@ -335,6 +350,36 @@
     f.nextWeekFocusItems = f.nextWeekFocusItems || [];
     f.scheduleNotes = f.scheduleNotes || "";
     f.lastCompleted = f.lastCompleted || "";
+
+    // الصحة — تعبئة آمنة لكل حقل، وزرع بيانات مروه الحقيقية عند غيابها فقط
+    const h = store.health = store.health || {};
+    h.weight = h.weight || {};
+    h.weight.current = h.weight.current ?? 65;
+    h.weight.target = h.weight.target ?? 52;
+    h.weight.startWeight = h.weight.startWeight ?? h.weight.current;
+    h.weight.log = (h.weight.log && h.weight.log.length) ? h.weight.log : [{date: iso(new Date()), kg: h.weight.current}];
+    h.nutrition = h.nutrition || {};
+    h.nutrition.proteinGoalMin = h.nutrition.proteinGoalMin ?? 90;
+    h.nutrition.proteinGoalMax = h.nutrition.proteinGoalMax ?? 100;
+    h.nutrition.waterGoalL = h.nutrition.waterGoalL ?? 1.75;
+    h.nutrition.log = h.nutrition.log || [];
+    h.nutrition.meals = h.nutrition.meals || [];
+    h.exercise = h.exercise || {};
+    h.exercise.log = h.exercise.log || [];
+    h.sleep = h.sleep || {};
+    h.sleep.wakeGoal = h.sleep.wakeGoal || "٥:٠٠ ص";
+    h.sleep.log = h.sleep.log || [];
+    h.supplements = (h.supplements && h.supplements.length) ? h.supplements.map(s => ({
+      id: s.id || uid(), name: s.name, frequency: s.frequency || "يومية", takenDates: s.takenDates || []
+    })) : [
+      {id: uid(), name:"Berberine", frequency:"يومية", takenDates: []},
+      {id: uid(), name:"Vitamin C", frequency:"يومية", takenDates: []},
+      {id: uid(), name:"Glutathione", frequency:"يومية", takenDates: []},
+      {id: uid(), name:"Vitamin D", frequency:"أسبوعية", takenDates: []}
+    ];
+    h.care = h.care || {};
+    h.care.notes = h.care.notes || "";
+    h.care.photos = h.care.photos || [];
 
     return store;
   }
