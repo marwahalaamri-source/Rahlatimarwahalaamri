@@ -634,6 +634,7 @@
     <li><a href="sections/friday.html">الجمعة</a></li>
     <li><a href="sections/goals.html">أهدافي</a></li>
     <li><a href="sections/health.html">صحتي</a></li>
+    <li><a href="sections/work.html">مشاريعي</a></li>
     <li><a href="#english">الإنجليزية</a></li>
     <li><a href="#achievements">إنجازاتي</a></li>
     <li><a href="#memories">ذكرياتي</a></li>
@@ -652,10 +653,11 @@
   <a href="sections/friday.html" style="transition-delay:.2s">روتين الجمعة</a>
   <a href="sections/goals.html" style="transition-delay:.25s">أهدافي</a>
   <a href="sections/health.html" style="transition-delay:.3s">صحتي</a>
-  <a href="#english" style="transition-delay:.35s">الإنجليزية</a>
-  <a href="#achievements" style="transition-delay:.4s">إنجازاتي</a>
-  <a href="#memories" style="transition-delay:.45s">ذكرياتي</a>
-  <a href="#settings" style="transition-delay:.5s">الإعدادات</a>
+  <a href="sections/work.html" style="transition-delay:.35s">مشاريعي</a>
+  <a href="#english" style="transition-delay:.4s">الإنجليزية</a>
+  <a href="#achievements" style="transition-delay:.45s">إنجازاتي</a>
+  <a href="#memories" style="transition-delay:.5s">ذكرياتي</a>
+  <a href="#settings" style="transition-delay:.55s">الإعدادات</a>
   <span class="menu-star">✦</span>
 </div>
 
@@ -890,6 +892,23 @@
           </div>
           <span class="enter">ادخلي <span>←</span></span>
         </a>
+
+        <a class="chapter reveal span2" id="work" href="sections/work.html" style="transition-delay:.56s">
+          <div class="chapter-top">
+            <span class="chapter-num">١٠</span>
+            <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg>
+          </div>
+          <h3>مشاريعي</h3>
+          <div class="live">
+            <div class="statline">
+              <span class="lbl">التقدّم العام</span>
+              <span class="statnum" id="workPct">…</span>
+            </div>
+            <div class="bar"><span id="workBar" style="--p:0%"></span></div>
+            <span class="meta" id="workMeta"></span>
+          </div>
+          <span class="enter">ادخلي <span>←</span></span>
+        </a>
       </div>
     </div>
   </section>
@@ -1002,7 +1021,7 @@
   /* سجلّ الأقسام — إضافة قسم جديد مستقبلًا تبدأ من هنا (docs/STRUCTURE.md) */
   const SECTIONS = [
     {id:"journal"}, {id:"week"}, {id:"friday"}, {id:"goals"},
-    {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}, {id:"health"}
+    {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}, {id:"health"}, {id:"work"}
   ];
 
   const store = window.RahlatiStore.load();
@@ -1145,7 +1164,19 @@
       const weekDatesNow = s.week.days.map(d=>d.date);
       const exCount = s.health.exercise.log.filter(e=>weekDatesNow.includes(e.date)).length;
       document.getElementById("healthMeta").textContent =
-        arabicNum(wCurrent) + " كجم الآن · 🧘 " + arabicNum(exCount) + " تمارين هذا الأسبوع";
+        arabicNum(wCurrent) + " كجم الآن · " + arabicNum(exCount) + " تمارين هذا الأسبوع";
+    }
+
+    // ١٠ — مشاريعي
+    if (s.projects){
+      const overall = s.projects.length ? Math.round(s.projects.reduce((sum,p)=>sum+p.progress,0)/s.projects.length) : 0;
+      const currentProj = s.projects.filter(p=>p.status==="حالي");
+      document.getElementById("workPct").textContent = "٪" + arabicNum(overall);
+      document.getElementById("workBar").style.setProperty("--p", overall + "%");
+      const nearest = currentProj.slice().sort((a,b)=>b.progress-a.progress)[0];
+      document.getElementById("workMeta").textContent = nearest
+        ? nearest.name + " — ٪" + arabicNum(nearest.progress)
+        : (s.projects.length ? "لا مشاريع حالية الآن" : "لا مشاريع بعد… أضيفي أول فكرة");
     }
 
     // لمحة اليوم في الأعلى — مهام اليوم من خطة الأسبوع

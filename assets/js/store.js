@@ -46,8 +46,9 @@
   function project(name, status, extra){
     return Object.assign({
       id:uid(), name, status,               // حالي | مستقبلي | مكتمل
-      progress:0, startDate:"", targetDate:"",
-      why:"", notes:"", milestones:[], tasks:[], photos:[]
+      description:"", progress:0, startDate:"", targetDate:"",
+      why:"", notes:"", milestones:[], tasks:[], photos:[],
+      links:[], expectedIncome:"", lastActivity:""
     }, extra||{});
   }
 
@@ -293,9 +294,11 @@
     }));
     store.projects = (store.projects || []).map(p => ({
       id: p.id || uid(), name: p.name, status: p.status || "حالي",
+      description: p.description || "",
       progress: p.progress || 0, startDate: p.startDate || "", targetDate: p.targetDate || "",
       why: p.why || "", notes: p.notes || "",
-      milestones: p.milestones || [], tasks: p.tasks || [], photos: p.photos || []
+      milestones: p.milestones || [], tasks: p.tasks || [], photos: p.photos || [],
+      links: p.links || [], expectedIncome: p.expectedIncome || "", lastActivity: p.lastActivity || ""
     }));
 
     const catMap = {"روحانية":"دينية", "صحة":"صحية"};

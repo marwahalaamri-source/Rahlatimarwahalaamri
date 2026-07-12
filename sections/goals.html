@@ -456,7 +456,6 @@
   <div class="tab-switch reveal in">
     <button class="tab-btn" data-tab="habits">🌱 عادات <span class="n" id="tabCountHabits">…</span></button>
     <button class="tab-btn" data-tab="goals">🎯 أهداف <span class="n" id="tabCountGoals">…</span></button>
-    <button class="tab-btn" data-tab="projects">🚀 مشاريعي <span class="n" id="tabCountProjects">…</span></button>
     <button class="tab-btn" data-tab="dreams">✨ أحلام <span class="n" id="tabCountDreams">…</span></button>
   </div>
 
@@ -614,104 +613,7 @@
     </section>
   </div>
 
-  <!-- ========================= تبويب: مشاريعي 🚀 ========================= -->
-  <div class="tab-pane" id="pane-projects">
-    <section class="panel summary reveal in section-gap" aria-label="ملخص المشاريع">
-      <div class="ring-box">
-        <svg viewBox="0 0 120 120">
-          <defs><linearGradient id="ringGradP" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#e3cfa5"/><stop offset="100%" stop-color="#b3986e"/>
-          </linearGradient></defs>
-          <circle class="ring-bg" cx="60" cy="60" r="52"/>
-          <circle class="ring-fg" id="pRing" cx="60" cy="60" r="52" style="stroke:url(#ringGradP)"/>
-        </svg>
-        <div class="ring-label"><span class="pct" id="pPct">…</span><span class="cap">التقدّم العام</span></div>
-      </div>
-      <div class="summary-grid">
-        <div class="sum-item"><span class="lbl">مشاريع حالية</span><span class="val" id="pCurrentCount">…</span></div>
-        <div class="sum-item"><span class="lbl">مشاريع مستقبلية</span><span class="val" id="pFutureCount">…</span></div>
-        <div class="sum-item full"><span class="lbl">هذا ليس متعلقًا بوظيفتي</span><span class="val" style="font-size:.95rem;color:rgba(var(--paper-rgb),.65);font-family:var(--font-body);font-weight:300">مساحتي لأفكاري ومشاريعي الخاصة</span></div>
-        <div class="sum-item full"><span class="meta-small" id="pLastActivity">آخر نشاط — الآن</span></div>
-      </div>
-    </section>
-
-    <section class="panel section-gap reveal in filter-row" style="justify-content:flex-end" aria-label="إضافة مشروع">
-      <button class="btn-add" id="addProjectBtn">+ مشروع جديد</button>
-    </section>
-
-    <section class="panel section-gap reveal in">
-      <div class="cards-grid" id="projectsGrid"></div>
-    </section>
-
-    <section class="panel detail section-gap reveal in" id="projectDetail">
-      <div class="dt-head">
-        <div class="dt-name-row">
-          <input id="pName" placeholder="اسم المشروع…">
-        </div>
-        <div class="dt-actions">
-          <button class="icon-btn" id="deleteProjectBtn" aria-label="حذف المشروع" title="حذف المشروع">
-            <svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-9 0 1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/></svg>
-          </button>
-        </div>
-      </div>
-      <div class="status-row" id="pStatusRow"></div>
-      <div class="progress-block">
-        <span class="stepper"><button id="pProgMinus">−</button></span>
-        <span class="bar"><span id="pProgBar" style="width:0%"></span></span>
-        <span class="pct" id="pProgPct">٪٠</span>
-        <span class="stepper"><button id="pProgPlus">+</button></span>
-      </div>
-      <div class="dates-row">
-        <div class="date-field"><span class="lbl">تاريخ البداية</span><input type="date" id="pStartDate"></div>
-        <div class="date-field"><span class="lbl">التاريخ المستهدف</span><input type="date" id="pTargetDate"></div>
-      </div>
-      <div class="why-box">
-        <div class="why-label">✦ لماذا هذا المشروع مهم؟</div>
-        <textarea id="pWhyText" placeholder="ما الذي يدفعكِ لهذا المشروع؟"></textarea>
-      </div>
-      <div class="block">
-        <div class="block-label">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
-          خطوات التنفيذ
-        </div>
-        <div class="steps-track" id="pMilestonesTrack"></div>
-        <div class="add-milestone">
-          <button class="plus-round" id="pAddMilestoneBtn" aria-label="إضافة خطوة">+</button>
-          <input id="pNewMilestone" placeholder="أضيفي خطوة جديدة…">
-        </div>
-      </div>
-      <div class="dt-grid">
-        <div class="block">
-          <div class="block-label">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>
-            المهام المرتبطة
-          </div>
-          <div class="tasks" id="pTasks"></div>
-          <div class="add-row">
-            <button class="plus-round" id="pAddTaskBtn" aria-label="إضافة مهمة">+</button>
-            <input id="pNewTask" placeholder="أضيفي مهمة مرتبطة بالمشروع…">
-          </div>
-        </div>
-        <div class="block">
-          <div class="block-label">
-            <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-            ملاحظات
-          </div>
-          <textarea class="ruled" id="pNotes" placeholder="أي تفاصيل أو أفكار عن هذا المشروع…"></textarea>
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-label">
-          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2.5"/><path d="M3 16l4.5-4.5a1.6 1.6 0 0 1 2.3 0L14 15.7M12.5 14.2l2.2-2.2a1.6 1.6 0 0 1 2.3 0L21 16"/><circle cx="9" cy="9.2" r="1.3"/></svg>
-          صور اختيارية
-        </div>
-        <div class="photo-grid" id="pPhotoGrid">
-          <div class="photo-add" id="pPhotoAdd">+</div>
-          <input type="file" id="pPhotoInput" accept="image/*" multiple hidden>
-        </div>
-      </div>
-    </section>
-  </div>
+  <!-- ملاحظة: تبويب «مشاريعي 🚀» أصبح صفحة مستقلة كاملة، انظر sections/work.html -->
 
   <!-- ========================= تبويب: أحلام ✨ ========================= -->
   <div class="tab-pane" id="pane-dreams">
@@ -782,7 +684,6 @@
   const todayISO = iso(new Date());
   const CATS = ["شخصية","عملية","صحية","دينية","مالية","تعلم","اجتماعية"];
   const STATUSES = ["لم يبدأ","جارٍ التنفيذ","متوقف","مكتمل"];
-  const PROJECT_STATUSES = ["مستقبلي","حالي","مكتمل"];
   const DREAM_STATUSES = ["حيّ","تحقّق","تغيّر"];
   const RING_C = 2 * Math.PI * 52;
 
@@ -834,7 +735,6 @@
   function updateTabCounts(){
     document.getElementById("tabCountHabits").textContent = arabicNum(store.habits.length);
     document.getElementById("tabCountGoals").textContent = arabicNum(store.goals.length);
-    document.getElementById("tabCountProjects").textContent = arabicNum(store.projects.length);
     document.getElementById("tabCountDreams").textContent = arabicNum(store.dreams.length);
   }
   function showTab(name){
@@ -1127,113 +1027,6 @@
     renderGrid(); renderDetail(); renderSummary(); persist();
   });
 
-  /* ═════════════════════════ مشاريعي 🚀 ═════════════════════════ */
-  const projects = store.projects;
-  let pSelIdx = projects.length ? 0 : -1;
-
-  function renderProjectsSummary(){
-    const current = projects.filter(p=>p.status==="حالي");
-    const future = projects.filter(p=>p.status==="مستقبلي");
-    const overall = projects.length ? Math.round(projects.reduce((s,p)=>s+p.progress,0)/projects.length) : 0;
-    document.getElementById("pPct").textContent = "٪"+arabicNum(overall);
-    document.getElementById("pRing").style.strokeDashoffset = RING_C*(1-overall/100);
-    document.getElementById("pCurrentCount").textContent = arabicNum(current.length);
-    document.getElementById("pFutureCount").textContent = arabicNum(future.length);
-    document.getElementById("pLastActivity").textContent = lastActivityLabel();
-  }
-  function renderProjectsGrid(){
-    const grid = document.getElementById("projectsGrid");
-    let html = projects.map((p,i)=>`
-      <div class="card${i===pSelIdx?" sel":""}" data-i="${i}">
-        <div class="gc-top"><span class="status-badge ${statusClass(p.status)}">${p.status}</span></div>
-        <div class="gc-name">${p.name || "مشروعٌ بلا اسم"}</div>
-        ${p.why ? `<div class="gc-why">«${p.why.length>60?p.why.slice(0,60)+"…":p.why}»</div>` : ""}
-        <div class="gc-bar"><span style="width:${p.progress}%"></span></div>
-        <div class="gc-bottom"><span>${p.notes ? p.notes.slice(0,30) : ""}</span><span class="gc-pct">٪${arabicNum(p.progress)}</span></div>
-      </div>`).join("");
-    html += `<div class="card add-card" id="addProjectCard"><span class="plus-icon">+</span><span>مشروع جديد</span></div>`;
-    grid.innerHTML = html;
-    grid.querySelectorAll(".card[data-i]").forEach(card=>{
-      card.addEventListener("click", ()=>{ pSelIdx=+card.dataset.i; renderProjectsGrid(); renderProjectDetail(); document.getElementById("projectDetail").scrollIntoView({behavior:"smooth",block:"start"}); });
-    });
-    document.getElementById("addProjectCard").addEventListener("click", addProject);
-    if (!projects.length) grid.insertAdjacentHTML("afterbegin", `<div class="empty-state" style="grid-column:1/-1">لا مشاريع بعد… أضيفي مشروعك الأول</div>`);
-  }
-  function addProject(){
-    const p = {id:window.RahlatiStore.uid(), name:"", status:"مستقبلي", progress:0, startDate:"", targetDate:"", why:"", notes:"", milestones:[], tasks:[], photos:[]};
-    projects.push(p); pSelIdx = projects.length-1;
-    renderProjectsGrid(); renderProjectDetail(); renderProjectsSummary(); persist();
-    document.getElementById("projectDetail").scrollIntoView({behavior:"smooth", block:"start"});
-    setTimeout(()=> document.getElementById("pName").focus(), 400);
-  }
-  function currentProject(){ return projects[pSelIdx]; }
-  function renderProjectDetail(){
-    const section = document.getElementById("projectDetail");
-    if (pSelIdx<0 || !projects[pSelIdx]){ section.style.display="none"; return; }
-    section.style.display = "";
-    const p = currentProject();
-    document.getElementById("pName").value = p.name;
-    document.getElementById("pStatusRow").innerHTML = PROJECT_STATUSES.map(s=>`<button class="status-pill${s===p.status?" on":""}" data-s="${s}">${s}</button>`).join("");
-    document.getElementById("pStatusRow").querySelectorAll(".status-pill").forEach(b=> b.addEventListener("click", ()=>{ p.status=b.dataset.s; if(p.status==="مكتمل") p.progress=100; renderProjectDetail(); renderProjectsGrid(); renderProjectsSummary(); persist(); }));
-    document.getElementById("pProgBar").style.width = p.progress+"%";
-    document.getElementById("pProgPct").textContent = "٪"+arabicNum(p.progress);
-    document.getElementById("pStartDate").value = p.startDate;
-    document.getElementById("pTargetDate").value = p.targetDate;
-    document.getElementById("pWhyText").value = p.why;
-    document.getElementById("pNotes").value = p.notes;
-    const track = document.getElementById("pMilestonesTrack");
-    track.innerHTML = p.milestones.map((m,i)=>`
-      <div class="step-item"><div class="step-col">
-        <button class="step-del" data-i="${i}">✕</button>
-        <button class="step-circle${m.done?" done":""}" data-i="${i}">${m.done?"✓":arabicNum(i+1)}</button>
-        <span class="step-label">${m.name}</span>
-      </div>${i<p.milestones.length-1?'<span class="step-line"></span>':''}</div>`).join("")
-      || `<div class="empty-state" style="padding:1rem">لا خطوات بعد</div>`;
-    track.querySelectorAll(".step-circle").forEach(b=> b.addEventListener("click", ()=>{ p.milestones[+b.dataset.i].done=!p.milestones[+b.dataset.i].done; renderProjectDetail(); persistSoon(); }));
-    track.querySelectorAll(".step-del").forEach(b=> b.addEventListener("click", ()=>{ p.milestones.splice(+b.dataset.i,1); renderProjectDetail(); persistSoon(); }));
-    const tbox = document.getElementById("pTasks");
-    tbox.innerHTML = p.tasks.map((t,i)=>`
-      <div class="task${t.done?" done":""}">
-        <button class="tick" data-i="${i}"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></button>
-        <span class="t-text" contenteditable="true" data-i="${i}">${t.t}</span>
-        <button class="del" data-i="${i}">✕</button>
-      </div>`).join("") || `<div class="empty-state" style="padding:.6rem 0;text-align:right">لا مهام مرتبطة بعد</div>`;
-    tbox.querySelectorAll(".tick").forEach(b=> b.addEventListener("click", ()=>{ p.tasks[+b.dataset.i].done=!p.tasks[+b.dataset.i].done; renderProjectDetail(); persistSoon(); }));
-    tbox.querySelectorAll(".del").forEach(b=> b.addEventListener("click", ()=>{ p.tasks.splice(+b.dataset.i,1); renderProjectDetail(); persistSoon(); }));
-    tbox.querySelectorAll(".t-text").forEach(el=> el.addEventListener("blur", e=>{ p.tasks[+e.target.dataset.i].t=e.target.textContent.trim()||p.tasks[+e.target.dataset.i].t; persistSoon(); }));
-    const pgrid = document.getElementById("pPhotoGrid");
-    pgrid.querySelectorAll(".photo-thumb").forEach(el=>el.remove());
-    p.photos.forEach((src,i)=>{
-      const div=document.createElement("div"); div.className="photo-thumb";
-      div.innerHTML = `<img src="${src}" alt="صورة المشروع"><button class="rm" data-i="${i}">✕</button>`;
-      div.querySelector(".rm").addEventListener("click", ()=>{ p.photos.splice(i,1); renderProjectDetail(); persistSoon(); });
-      pgrid.insertBefore(div, document.getElementById("pPhotoAdd"));
-    });
-  }
-  document.getElementById("pName").addEventListener("input", e=>{ currentProject().name=e.target.value; renderProjectsGrid(); persistSoon(); });
-  document.getElementById("pProgMinus").addEventListener("click", ()=>{ const p=currentProject(); p.progress=Math.max(0,p.progress-5); if(p.progress<100 && p.status==="مكتمل") p.status="حالي"; renderProjectDetail(); renderProjectsGrid(); renderProjectsSummary(); persistSoon(); });
-  document.getElementById("pProgPlus").addEventListener("click", ()=>{ const p=currentProject(); p.progress=Math.min(100,p.progress+5); if(p.progress===100) p.status="مكتمل"; renderProjectDetail(); renderProjectsGrid(); renderProjectsSummary(); persistSoon(); });
-  document.getElementById("pStartDate").addEventListener("input", e=>{ currentProject().startDate=e.target.value; persistSoon(); });
-  document.getElementById("pTargetDate").addEventListener("input", e=>{ currentProject().targetDate=e.target.value; persistSoon(); });
-  document.getElementById("pWhyText").addEventListener("input", e=>{ currentProject().why=e.target.value; persistSoon(); });
-  document.getElementById("pNotes").addEventListener("input", e=>{ currentProject().notes=e.target.value; persistSoon(); });
-  document.getElementById("pAddMilestoneBtn").addEventListener("click", ()=>{ const inp=document.getElementById("pNewMilestone"); const v=inp.value.trim(); if(!v) return; currentProject().milestones.push({name:v,done:false}); inp.value=""; inp.focus(); renderProjectDetail(); persist(); });
-  document.getElementById("pNewMilestone").addEventListener("keydown", e=>{ if(e.key==="Enter") document.getElementById("pAddMilestoneBtn").click(); });
-  document.getElementById("pAddTaskBtn").addEventListener("click", ()=>{ const inp=document.getElementById("pNewTask"); const v=inp.value.trim(); if(!v) return; currentProject().tasks.push({t:v,done:false}); inp.value=""; inp.focus(); renderProjectDetail(); persist(); });
-  document.getElementById("pNewTask").addEventListener("keydown", e=>{ if(e.key==="Enter") document.getElementById("pAddTaskBtn").click(); });
-  document.getElementById("pPhotoAdd").addEventListener("click", ()=> document.getElementById("pPhotoInput").click());
-  document.getElementById("pPhotoInput").addEventListener("change", e=>{
-    const files=Array.from(e.target.files||[]); let remaining=files.length; if(!remaining) return;
-    files.forEach(f=>{ const r=new FileReader(); r.onload=ev=>{ currentProject().photos.push(ev.target.result); remaining--; if(remaining===0){ renderProjectDetail(); persist(); } }; r.readAsDataURL(f); });
-    e.target.value = "";
-  });
-  document.getElementById("deleteProjectBtn").addEventListener("click", ()=>{
-    if(!currentProject()) return;
-    if(!confirm(`هل تريدين حذف مشروع «${currentProject().name||"هذا المشروع"}»؟`)) return;
-    projects.splice(pSelIdx,1); pSelIdx = projects.length? Math.min(pSelIdx,projects.length-1) : -1;
-    renderProjectsGrid(); renderProjectDetail(); renderProjectsSummary(); persist();
-  });
-
   /* ═════════════════════════ أحلام ✨ ═════════════════════════ */
   const dreams = store.dreams;
   let dFilter = "الكل";
@@ -1315,11 +1108,10 @@
   updateTabCounts();
   renderHabitsSummary(); renderHabitChips(); renderHabitsGrid(); renderHabitDetail();
   renderSummary(); renderChips(); renderGrid(); renderDetail();
-  renderProjectsSummary(); renderProjectsGrid(); renderProjectDetail();
   renderDreamChips(); renderDreamsGrid(); renderDreamDetail();
 
   const startTab = (location.hash||"").replace("#","");
-  showTab(["habits","goals","projects","dreams"].includes(startTab) ? startTab : "habits");
+  showTab(["habits","goals","dreams"].includes(startTab) ? startTab : "habits");
 </script>
 </body>
 </html>
