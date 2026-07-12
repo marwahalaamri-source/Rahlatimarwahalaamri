@@ -94,7 +94,14 @@
           {name:"مراجعة الأهداف", done:false},
           {name:"تأمل وامتنان", done:false}
         ],
-        reflection: ""
+        reflection: "",
+        gratitude: ["","",""],
+        spiritualPrep: "",
+        nextWeekGoal: "",
+        nextWeekPriorities: ["","",""],
+        nextWeekFocusItems: [],   // { text, linkedHabitId }
+        scheduleNotes: "",
+        lastCompleted: ""
       },
       thursday: {
         book: {title:"", image:""},
@@ -197,7 +204,10 @@
       achievements: [],   // { name, when } — ستُولَّد تلقائيًا من عادات/أهداف حقيقية مكتملة
       memories: [],       // { caption, date, image }
       settings: {name:"مروه العامري", theme:"ليليّ هادئ", reminder:"٩:٠٠ مساءً", lang:"العربية"},
-      activity: {}
+      activity: {},
+
+      // أرشيف الأسابيع المنتهية — تُبنى عند كل تدوير أسبوعي (روتين الجمعة)
+      weekHistory: []   // { weekStart, review, weeklyGoals, focusItems:[{text,consistencyPct}] }
     };
   }
 
@@ -305,13 +315,112 @@
     store.memories = store.memories || [];
     store.settings = store.settings || {name:"مروه العامري", theme:"ليليّ هادئ", reminder:"٩:٠٠ مساءً", lang:"العربية"};
     store.activity = store.activity || {};
+    store.weekHistory = store.weekHistory || [];
+
+    // روتين الجمعة — تعبئة حقول التجديد الأسبوعي التي أُضيفت لاحقًا
+    const f = store.friday = store.friday || {};
+    f.checklist = f.checklist && f.checklist.length ? f.checklist : [
+      {name:"قراءة سورة الكهف", done:false},
+      {name:"اختيار تركيز الأسبوع القادم", done:false},
+      {name:"التخطيط للأسبوع القادم", done:false},
+      {name:"تنظيف الغرفة", done:false},
+      {name:"مراجعة الأهداف", done:false},
+      {name:"تأمل وامتنان", done:false}
+    ];
+    f.reflection = f.reflection || "";
+    f.gratitude = (Array.isArray(f.gratitude) && f.gratitude.length) ? f.gratitude : ["","",""];
+    f.spiritualPrep = f.spiritualPrep || "";
+    f.nextWeekGoal = f.nextWeekGoal || "";
+    f.nextWeekPriorities = (Array.isArray(f.nextWeekPriorities) && f.nextWeekPriorities.length) ? f.nextWeekPriorities : ["","",""];
+    f.nextWeekFocusItems = f.nextWeekFocusItems || [];
+    f.scheduleNotes = f.scheduleNotes || "";
+    f.lastCompleted = f.lastCompleted || "";
+
+    return store;
+  }
+
+  /* تدوير الأسبوع — اللحظة التي يبدأ فيها أسبوعٌ جديد فعليًا
+     force=true: تُستدعى من زر «أنهيتُ الأسبوع» في روتين الجمعة (تدوير فوري، بصرف النظر عن التاريخ)
+     force=false: فحص أمان تلقائي عند التحميل، يُدوِّر فقط إن تجاوز التاريخ الحقيقي أسبوع المتجر */
+  function rolloverWeek(store, force){
+    const realWeekStart = currentWeekStart();
+    if (!force && store.week.days[0] && store.week.days[0].date >= realWeekStart) return store;
+
+    const endingWeekStart = store.week.days[0] ? store.week.days[0].date : realWeekStart;
+
+    // أرشفة تركيز الأسبوع المنتهي
+    const endedFocusItems = (store.weeklyFocus.items || []).map(it => {
+      const elapsed = store.week.days.filter(d => d.date <= iso(new Date())).length || 7;
+      const done = (it.checkedDates || []).length;
+      return {text: it.text, consistencyPct: Math.round(100 * done / elapsed)};
+    });
+    store.weeklyFocus.history = store.weeklyFocus.history || [];
+    store.weeklyFocus.history.push({weekStart: endingWeekStart, items: endedFocusItems});
+
+    // أرشفة الأسبوع المنتهي بالكامل
+    store.weekHistory = store.weekHistory || [];
+    store.weekHistory.push({
+      weekStart: endingWeekStart,
+      review: store.week.review,
+      weeklyGoals: store.week.weeklyGoals,
+      focusItems: endedFocusItems
+    });
+
+    // بناء الأسبوع الجديد — يبدأ دومًا اليوم التالي مباشرةً لنهاية الأسبوع المنتهي
+    const newWeekStart = force
+      ? iso(new Date(new Date(endingWeekStart+"T12:00:00").getTime() + 7*86400000))
+      : realWeekStart;
+    const newDates = weekDates(newWeekStart);
+    const f = store.friday;
+    store.week = {
+      goal: f.nextWeekGoal || "",
+      quote: "",
+      days: DAY_NAMES.map((name,i) => ({
+        name, date: newDates[i], tasks: [], appointments: [], habits: [], notes: ""
+      })),
+      shopping: [],
+      priorities: (f.nextWeekPriorities && f.nextWeekPriorities.some(p=>p)) ? f.nextWeekPriorities : ["","",""],
+      weeklyGoals: [
+        {category:"شخصية", name:"", progress:0},
+        {category:"عملية", name:"", progress:0},
+        {category:"صحية", name:"", progress:0},
+        {category:"دينية", name:"", progress:0},
+        {category:"تعلم", name:"", progress:0}
+      ],
+      review: {worked:"", improve:"", learned:"", goalAchieved:null, focusConsistencyPct:0, rating:0}
+    };
+
+    // ترقية تركيز الأسبوع القادم (المُختار في روتين الجمعة) إلى تركيز الأسبوع الحيّ
+    store.weeklyFocus = {
+      weekStart: newWeekStart,
+      items: (f.nextWeekFocusItems || []).map(it => ({
+        id: uid(), text: it.text, linkedHabitId: it.linkedHabitId || null, checkedDates: []
+      })),
+      history: store.weeklyFocus.history
+    };
+
+    // إعادة تهيئة الحقول المرحلية لروتين الجمعة القادم
+    f.nextWeekGoal = "";
+    f.nextWeekPriorities = ["","",""];
+    f.nextWeekFocusItems = [];
+    f.lastCompleted = iso(new Date());
+    f.checklist = f.checklist.map(c => ({name:c.name, done:false}));
+    f.reflection = "";
+    f.gratitude = ["","",""];
+    f.spiritualPrep = "";
+    f.scheduleNotes = "";
+
     return store;
   }
 
   function loadStore(){
     try{
       const saved = JSON.parse(localStorage.getItem(KEY));
-      if (saved && saved.journal && saved.friday && saved.activity) return migrate(saved);
+      if (saved && saved.journal && saved.friday && saved.activity){
+        const migrated = migrate(saved);
+        rolloverWeek(migrated, false);
+        return migrated;
+      }
     }catch(e){}
     const initial = buildInitialStore();
     saveStore(initial);
@@ -329,6 +438,6 @@
 
   window.RahlatiStore = {
     load: loadStore, save: saveStore, touch, arabicNum, KEY,
-    uid, currentWeekStart, weekDates
+    uid, currentWeekStart, weekDates, rolloverWeek
   };
 })();

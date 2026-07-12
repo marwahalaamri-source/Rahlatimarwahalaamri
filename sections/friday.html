@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>روتين الجمعة — رحلتي</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preload" as="image" href="../assets/hero.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0d1426;
+    --navy-900:#101a30;
+    --navy-800:#16223d;
+    --gold:#c9b28c;
+    --gold-deep:#b3986e;
+    --gold-soft:#e8dcc6;
+    --ivory:#f8f4ec;
+    --glass:rgba(16,26,48,.42);
+    --hairline:rgba(201,178,140,.22);
+    --font-display:"Amiri", serif;
+    --font-body:"Almarai", sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font-body);background:var(--navy-950);color:var(--ivory);
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:rgba(201,178,140,.35);color:var(--ivory)}
+  ::placeholder{color:rgba(248,244,236,.35);font-weight:300}
+
+  .bg{position:fixed;inset:0;z-index:-3;overflow:hidden}
+  .bg img{width:100%;height:100%;object-fit:cover;object-position:center 62%;transform:scale(1.06)}
+  .bg-tint{
+    position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:linear-gradient(180deg, rgba(13,20,38,.55) 0%, rgba(13,20,38,.42) 30%, rgba(13,20,38,.6) 70%, rgba(13,20,38,.85) 100%);
+  }
+
+  .nav{
+    position:fixed;top:0;right:0;left:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.8rem clamp(1.25rem,4vw,3.5rem);
+    background:rgba(13,20,38,.62);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(201,178,140,.14);
+  }
+  .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+  .brand img{width:38px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.25))}
+  .brand span{font-family:var(--font-display);font-weight:700;font-size:1.4rem;color:var(--ivory);padding-top:.2em}
+  .nav-back{
+    display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;
+    color:rgba(248,244,236,.85);font-weight:300;font-size:.92rem;
+    padding:.5rem 1.2rem;border:1px solid rgba(248,244,236,.22);border-radius:99px;
+    transition:border-color .3s, color .3s;
+  }
+  .nav-back:hover{border-color:var(--gold);color:var(--gold-soft)}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:6.5rem clamp(1rem,4vw,2.5rem) 4rem}
+
+  .day-head{text-align:center;padding:1.8rem 0 1.4rem;position:relative}
+  .day-head .greet{
+    font-weight:300;font-size:1rem;color:var(--gold-soft);
+    display:flex;align-items:center;justify-content:center;gap:.9rem;
+  }
+  .day-head .greet::before,.day-head .greet::after{
+    content:"";width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));
+  }
+  .day-head .greet::after{background:linear-gradient(90deg,var(--gold),transparent)}
+  .day-head h1{
+    font-family:var(--font-display);font-weight:700;
+    font-size:clamp(2.3rem,6vw,3.6rem);line-height:1.6;margin:.5rem 0 .1rem;
+  }
+  .day-head .sub{font-weight:300;font-size:.95rem;color:rgba(248,244,236,.65)}
+  .day-head .dquote{
+    margin-top:1.1rem;font-family:var(--font-display);font-size:1.15rem;color:var(--gold-soft);
+  }
+  .saved-flag{
+    position:absolute;top:1.9rem;left:0;display:flex;align-items:center;gap:.4rem;
+    font-size:.78rem;font-weight:300;color:var(--gold-soft);
+    opacity:0;transition:opacity .5s ease;
+  }
+  .saved-flag.show{opacity:1}
+
+  .panel{
+    background:var(--glass);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    border:1px solid var(--hairline);border-radius:26px;
+    box-shadow:0 18px 50px rgba(8,12,24,.26), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .section-gap{margin-top:2rem}
+  .block-label{
+    display:flex;align-items:center;gap:.6rem;
+    font-size:.82rem;font-weight:300;color:var(--gold);margin-bottom:1rem;
+  }
+  .block-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(201,178,140,.35),transparent)}
+  .block-label .icon{width:17px;height:17px;stroke:var(--gold);fill:none;stroke-width:1.4}
+  .block-sub{font-size:.85rem;font-weight:300;color:rgba(248,244,236,.6);margin:-.4rem 0 1.1rem;line-height:1.9}
+
+  .ruled{
+    width:100%;min-height:100px;resize:vertical;background:none;border:none;outline:none;
+    color:var(--ivory);font-family:var(--font-body);font-weight:300;font-size:.95rem;
+    line-height:2.2em;
+    background-image:repeating-linear-gradient(transparent, transparent calc(2.2em - 1px), rgba(201,178,140,.16) calc(2.2em - 1px), rgba(201,178,140,.16) 2.2em);
+    background-attachment:local;
+  }
+  .line-input{
+    width:100%;background:none;border:none;outline:none;color:var(--ivory);
+    font-family:var(--font-body);font-weight:300;font-size:1rem;
+    padding:.55rem .1rem;border-bottom:1px solid rgba(201,178,140,.25);
+    transition:border-color .3s;
+  }
+  .line-input:focus{border-bottom-color:var(--gold)}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+
+  /* ————— الامتنان ————— */
+  .grat-row{display:flex;align-items:baseline;gap:.9rem}
+  .grat-row + .grat-row{margin-top:.4rem}
+  .grat-row .n{font-family:var(--font-display);color:var(--gold);font-size:1rem;min-width:1.4em}
+
+  /* ————— مراجعة الأسبوع (مشتركة مع التخطيط الأسبوعي) ————— */
+  .review-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-bottom:1.6rem}
+  .review-q{font-size:.85rem;font-weight:300;color:var(--gold);margin-bottom:.5rem}
+  .achieved-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap}
+  .achieved-btns{display:flex;gap:.6rem}
+  .ach-btn{
+    padding:.5rem 1.3rem;border-radius:99px;border:1px solid rgba(201,178,140,.35);
+    background:rgba(13,20,38,.3);color:rgba(248,244,236,.8);font-size:.88rem;font-weight:300;
+    cursor:pointer;transition:background .3s, border-color .3s, color .3s;
+  }
+  .ach-btn.on{background:linear-gradient(135deg,#e3cfa5,#b3986e);color:#221d12;border-color:transparent;font-weight:700}
+  .stars{display:flex;gap:.5rem}
+  .star-btn{background:none;border:none;cursor:pointer;padding:.15rem;transition:transform .25s}
+  .star-btn:hover{transform:scale(1.15)}
+  .star-btn svg{width:26px;height:26px;fill:none;stroke:rgba(201,178,140,.55);stroke-width:1.3;transition:fill .25s, stroke .25s}
+  .star-btn.on svg{fill:var(--gold);stroke:var(--gold-deep);filter:drop-shadow(0 2px 8px rgba(201,178,140,.45))}
+  .focus-pct-line{font-size:.85rem;font-weight:300;color:rgba(248,244,236,.6)}
+  .focus-pct-line b{color:var(--gold-soft);font-family:var(--font-display);font-size:1.05rem}
+
+  /* ————— مراجعة الأهداف والعادات ————— */
+  .mini-stats{display:flex;flex-wrap:wrap;gap:1.2rem 2.4rem}
+  .mini-stat .lbl{font-size:.78rem;font-weight:300;color:rgba(248,244,236,.6)}
+  .mini-stat .val{font-family:var(--font-display);font-weight:700;font-size:1.5rem;color:var(--ivory)}
+  .mini-link{
+    display:inline-flex;align-items:center;gap:.5rem;margin-top:1.1rem;text-decoration:none;
+    color:var(--gold);font-size:.86rem;font-weight:400;opacity:.75;transition:opacity .35s, gap .35s;
+  }
+  .mini-link:hover{opacity:1;gap:.8rem}
+
+  /* ————— التحضير الروحي ————— */
+  .why-box{
+    border:1px solid rgba(201,178,140,.4);border-radius:20px;padding:1.4rem 1.6rem;
+    background:linear-gradient(135deg, rgba(201,178,140,.09), rgba(16,26,48,.2));
+    position:relative;
+  }
+  .why-box textarea{
+    width:100%;min-height:80px;resize:vertical;background:none;border:none;outline:none;
+    color:var(--gold-soft);font-family:var(--font-display);font-style:italic;font-size:1.1rem;line-height:2;
+  }
+
+  /* ————— تركيز الأسبوع القادم ————— */
+  .focus-item{
+    border:1px solid rgba(201,178,140,.25);border-radius:18px;padding:1.1rem 1.3rem;
+    margin-bottom:1rem;background:rgba(13,20,38,.28);
+  }
+  .focus-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.7rem}
+  .focus-text{
+    flex:1;background:none;border:none;outline:none;color:var(--ivory);
+    font-family:var(--font-display);font-weight:700;font-size:1.1rem;
+    border-bottom:1px solid rgba(201,178,140,.25);padding:.3rem 0;
+  }
+  .focus-del{background:none;border:none;cursor:pointer;color:rgba(248,244,236,.4);font-size:1rem;flex-shrink:0}
+  .focus-del:hover{color:#d99}
+  .focus-link{
+    width:100%;background:rgba(13,20,38,.35);border:1px solid rgba(201,178,140,.22);border-radius:10px;
+    color:rgba(248,244,236,.8);font-family:var(--font-body);font-weight:300;font-size:.85rem;
+    padding:.5rem .7rem;outline:none;
+  }
+  .focus-empty{font-size:.9rem;font-weight:300;color:rgba(248,244,236,.5);padding:.4rem 0 1rem}
+  .add-row{display:flex;align-items:center;gap:.7rem;margin-top:.5rem}
+  .add-row .plus{
+    width:20px;height:20px;border-radius:50%;border:1px dashed rgba(201,178,140,.5);
+    color:var(--gold);display:flex;align-items:center;justify-content:center;
+    font-size:.9rem;flex-shrink:0;background:none;cursor:pointer;transition:background .3s;
+  }
+  .add-row .plus:hover{background:rgba(201,178,140,.15)}
+  .add-row input{
+    flex:1;background:none;border:none;outline:none;color:var(--ivory);
+    font-family:var(--font-body);font-weight:300;font-size:.92rem;padding:.35rem 0;
+  }
+  .add-row[hidden]{display:none}
+
+  /* ————— طقوس الجمعة (الخانات) ————— */
+  .tasks{display:flex;flex-direction:column;gap:.2rem}
+  .task{display:flex;align-items:center;gap:.8rem;padding:.5rem .4rem;border-radius:12px;transition:background .25s}
+  .task:hover{background:rgba(201,178,140,.06)}
+  .tick{
+    width:22px;height:22px;border-radius:50%;flex-shrink:0;cursor:pointer;
+    border:1px solid rgba(201,178,140,.45);background:none;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .25s, border-color .25s;
+  }
+  .tick svg{width:11px;height:11px;stroke:#221d12;stroke-width:2.4;fill:none;opacity:0;transition:opacity .2s}
+  .task.done .tick{background:linear-gradient(135deg,#e3cfa5,#b3986e);border-color:transparent}
+  .task.done .tick svg{opacity:1}
+  .task .t-text{flex:1;font-weight:300;font-size:.96rem;color:var(--ivory)}
+  .task.done .t-text{color:rgba(248,244,236,.45);text-decoration:line-through;text-decoration-color:rgba(201,178,140,.5)}
+
+  /* ————— لحظة التدوير ————— */
+  .cta-panel{
+    border:1px solid rgba(201,178,140,.45);
+    background:linear-gradient(135deg, rgba(30,41,70,.55), rgba(16,26,48,.4));
+    box-shadow:0 26px 70px rgba(8,12,24,.32), inset 0 1px 0 rgba(255,255,255,.08);
+    padding:clamp(1.8rem,4vw,2.6rem);text-align:center;position:relative;overflow:hidden;
+  }
+  .cta-panel::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(70% 90% at 50% 0%, rgba(201,178,140,.16), transparent 60%);
+  }
+  .cta-title{font-family:var(--font-display);font-weight:700;font-size:1.5rem;margin-bottom:.5rem}
+  .cta-sub{font-size:.9rem;font-weight:300;color:rgba(248,244,236,.65);margin-bottom:1.6rem;line-height:1.9;max-width:520px;margin-inline:auto}
+  .btn-rollover{
+    display:inline-flex;align-items:center;gap:.7rem;cursor:pointer;border:none;
+    padding:.9rem 2.2rem;border-radius:99px;font-family:var(--font-body);font-weight:700;font-size:1rem;
+    color:#221d12;background:linear-gradient(135deg,#e3cfa5 0%,#c9b28c 45%,#ab8f63 100%);
+    box-shadow:0 14px 34px rgba(179,152,110,.4);transition:transform .3s, box-shadow .3s;
+  }
+  .btn-rollover:hover{transform:translateY(-2px);box-shadow:0 18px 42px rgba(179,152,110,.5)}
+  .last-done{margin-top:1.1rem;font-size:.8rem;font-weight:300;color:rgba(248,244,236,.5)}
+
+  footer{text-align:center;padding:3rem 1rem 2.2rem;font-weight:300;font-size:.8rem;color:rgba(248,244,236,.45)}
+  footer .fstar{color:var(--gold);display:block;margin-bottom:.5rem}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.22,1,.36,1), transform 1s cubic-bezier(.22,1,.36,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+
+  @media (max-width:900px){
+    .wrap{padding-top:5.5rem}
+    .day-head h1{font-size:2.2rem}
+    .saved-flag{position:static;justify-content:center;margin-top:.6rem}
+    .two-col{grid-template-columns:1fr}
+    .review-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true"><img src="../assets/hero.jpg" alt=""></div>
+<div class="bg-tint" aria-hidden="true"></div>
+
+<nav class="nav">
+  <a href="../index.html" class="brand">
+    <img src="../assets/logo.png" alt="شعار رحلتي">
+    <span>رحلتي</span>
+  </a>
+  <a href="../index.html" class="nav-back">✦ الرئيسية</a>
+</nav>
+
+<main class="wrap">
+
+  <header class="day-head reveal in">
+    <div class="greet" id="greet">جمعة مباركة، مروه 🌿</div>
+    <h1>روتين الجمعة</h1>
+    <div class="sub" id="weekRange">…</div>
+    <div class="dquote" id="dQuote"></div>
+    <span class="saved-flag" id="savedFlag">✓ محفوظ تلقائيًا</span>
+  </header>
+
+  <p class="block-sub reveal in" style="text-align:center;max-width:640px;margin-inline:auto">
+    هذه ليست قائمة مهام… إنها لحظة إعادة ضبط. توقّفي، تأمّلي، اشكري، ثم استقبلي أسبوعًا جديدًا وأنتِ مستعدّة له.
+  </p>
+
+  <!-- ١ · التأمل والامتنان -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="التأمل والامتنان">
+    <div class="two-col">
+      <div>
+        <div class="block-label">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 13c1 1.5 2.5 2 4 2s3-.5 4-2M9 9h.01M15 9h.01"/></svg>
+          تأمّل في الأسبوع الذي مضى
+        </div>
+        <textarea class="ruled" id="reflection" placeholder="كيف كان أسبوعي؟ ماذا شعرتُ؟ ما الذي أستحضره الآن؟"></textarea>
+      </div>
+      <div>
+        <div class="block-label">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.3-7-9.2C5 8 7 6.5 9 6.5c1.3 0 2.4.7 3 1.7.6-1 1.7-1.7 3-1.7 2 0 4 1.5 4 4.3C19 15.7 12 20 12 20Z"/></svg>
+          الامتنان
+        </div>
+        <div class="grat-row"><span class="n">٠١</span><input class="line-input" id="grat0" placeholder="شيء أشعر بالامتنان له…"></div>
+        <div class="grat-row"><span class="n">٠٢</span><input class="line-input" id="grat1" placeholder="شيء آخر…"></div>
+        <div class="grat-row"><span class="n">٠٣</span><input class="line-input" id="grat2" placeholder="وشيء ثالث…"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ٢ · مراجعة الأسبوع -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="مراجعة الأسبوع">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+      مراجعة الأسبوع
+    </div>
+    <div class="review-grid">
+      <div>
+        <div class="review-q">ما الذي نجح هذا الأسبوع؟</div>
+        <textarea class="ruled" id="revWorked" style="min-height:80px"></textarea>
+      </div>
+      <div>
+        <div class="review-q">ما الذي أحتاج تحسينه؟</div>
+        <textarea class="ruled" id="revImprove" style="min-height:80px"></textarea>
+      </div>
+      <div>
+        <div class="review-q">ماذا تعلمتِ هذا الأسبوع؟</div>
+        <textarea class="ruled" id="revLearned" style="min-height:80px"></textarea>
+      </div>
+      <div>
+        <div class="review-q">تقييم الأسبوع</div>
+        <div class="stars" id="revStars">
+          <button class="star-btn" data-v="1"><svg viewBox="0 0 24 24"><path d="M12 1.5c1.1 6 5.4 10.3 10.5 10.5-5.1.2-9.4 4.5-10.5 10.5C10.9 16.5 6.6 12.2 1.5 12 6.6 11.8 10.9 7.5 12 1.5Z"/></svg></button>
+          <button class="star-btn" data-v="2"><svg viewBox="0 0 24 24"><path d="M12 1.5c1.1 6 5.4 10.3 10.5 10.5-5.1.2-9.4 4.5-10.5 10.5C10.9 16.5 6.6 12.2 1.5 12 6.6 11.8 10.9 7.5 12 1.5Z"/></svg></button>
+          <button class="star-btn" data-v="3"><svg viewBox="0 0 24 24"><path d="M12 1.5c1.1 6 5.4 10.3 10.5 10.5-5.1.2-9.4 4.5-10.5 10.5C10.9 16.5 6.6 12.2 1.5 12 6.6 11.8 10.9 7.5 12 1.5Z"/></svg></button>
+          <button class="star-btn" data-v="4"><svg viewBox="0 0 24 24"><path d="M12 1.5c1.1 6 5.4 10.3 10.5 10.5-5.1.2-9.4 4.5-10.5 10.5C10.9 16.5 6.6 12.2 1.5 12 6.6 11.8 10.9 7.5 12 1.5Z"/></svg></button>
+          <button class="star-btn" data-v="5"><svg viewBox="0 0 24 24"><path d="M12 1.5c1.1 6 5.4 10.3 10.5 10.5-5.1.2-9.4 4.5-10.5 10.5C10.9 16.5 6.6 12.2 1.5 12 6.6 11.8 10.9 7.5 12 1.5Z"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="achieved-row">
+      <div class="review-q" style="margin:0">هل حقّقتِ هدف الأسبوع؟</div>
+      <div class="achieved-btns">
+        <button class="ach-btn" id="achYes">نعم ✓</button>
+        <button class="ach-btn" id="achNo">ليس بعد</button>
+      </div>
+    </div>
+    <div class="focus-pct-line">نسبة الالتزام بتركيز الأسبوع: <b id="revFocusPct">٪٠</b></div>
+  </section>
+
+  <!-- ٣ · مراجعة الأهداف والعادات -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="مراجعة الأهداف والعادات">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>
+      مراجعة الأهداف والعادات
+    </div>
+    <div class="mini-stats">
+      <div class="mini-stat"><div class="lbl">أهداف نشطة</div><div class="val" id="miniGoals">…</div></div>
+      <div class="mini-stat"><div class="lbl">عادات فعّالة</div><div class="val" id="miniHabits">…</div></div>
+      <div class="mini-stat"><div class="lbl">أطول سلسلة</div><div class="val" id="miniStreak">…</div></div>
+      <div class="mini-stat"><div class="lbl">أقرب هدف لتحقّقه</div><div class="val" id="miniNear" style="font-size:1.1rem">…</div></div>
+    </div>
+    <a href="goals.html" class="mini-link">مراجعة كاملة لعاداتي وأهدافي ←</a>
+  </section>
+
+  <!-- ٤ · التحضير الروحي والذهني -->
+  <section class="panel why-box section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="التحضير الروحي والذهني">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 3c1 4 4 6 7 7-3 1-6 3-7 7-1-4-4-6-7-7 3-1 6-3 7-7Z"/></svg>
+      تحضيرٌ روحيّ وذهنيّ للأسبوع القادم
+    </div>
+    <textarea id="spiritualPrep" placeholder="كيف أريد أن أستقبل أسبوعي القادم؟ بأي نيّة، وبأي طمأنينة؟"></textarea>
+  </section>
+
+  <!-- ٥ · اختيار تركيز الأسبوع القادم -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="تركيز الأسبوع القادم">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 3c1 4 4 6 7 7-3 1-6 3-7 7-1-4-4-6-7-7 3-1 6-3 7-7Z"/></svg>
+      🎯 تركيز الأسبوع القادم
+    </div>
+    <div class="block-sub">بؤرة أو بؤرتان كحد أقصى — ستُتابَعان طوال الأسبوع القادم فور بدايته، ويمكن ربطهما بعادة موجودة</div>
+    <div id="nextFocusList"></div>
+    <div class="add-row" id="addFocusRow">
+      <button class="plus" id="addFocusBtn" aria-label="إضافة تركيز">+</button>
+      <input id="newFocus" placeholder="بؤرة الأسبوع القادم…">
+    </div>
+  </section>
+
+  <!-- ٦ · أولويات الأسبوع القادم -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="أولويات الأسبوع القادم">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+      أولويات الأسبوع القادم
+    </div>
+    <div class="grat-row"><span class="n">٠١</span><input class="line-input" id="nprio0" placeholder="الأولوية الأولى"></div>
+    <div class="grat-row"><span class="n">٠٢</span><input class="line-input" id="nprio1" placeholder="الأولوية الثانية"></div>
+    <div class="grat-row"><span class="n">٠٣</span><input class="line-input" id="nprio2" placeholder="الأولوية الثالثة"></div>
+  </section>
+
+  <!-- ٧ · التخطيط للأسبوع القادم -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="التخطيط للأسبوع القادم">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9.5h18M8 2v4M16 2v4"/></svg>
+      التخطيط للأسبوع القادم
+    </div>
+    <input class="line-input" id="nextGoal" placeholder="الهدف الرئيسي للأسبوع القادم…" style="margin-bottom:1.2rem">
+    <textarea class="ruled" id="scheduleNotes" placeholder="ملاحظات عن جدول الأسبوع القادم — مواعيد مهمة، أشياء يجب تجهيزها…"></textarea>
+  </section>
+
+  <!-- ٨ · طقوس الجمعة -->
+  <section class="panel section-gap reveal in" style="padding:clamp(1.6rem,3vw,2.4rem)" aria-label="طقوس الجمعة">
+    <div class="block-label">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M15.2 3.2a9 9 0 1 0 5.6 10.4A7.2 7.2 0 0 1 15.2 3.2Z"/></svg>
+      طقوس الجمعة
+    </div>
+    <div class="tasks" id="checklistBox"></div>
+  </section>
+
+  <!-- لحظة التدوير -->
+  <section class="cta-panel section-gap reveal in" aria-label="بدء أسبوع جديد">
+    <div class="cta-title">✦ أنهيتُ الأسبوع</div>
+    <div class="cta-sub">حين تكونين مستعدّة، اضغطي هنا لتُقفلي هذا الأسبوع رسميًا وتبدأ صفحة جديدة — تركيزكِ وأولوياتكِ القادمة ستنتقل تلقائيًا إلى الأسبوع الجديد.</div>
+    <button class="btn-rollover" id="rolloverBtn">أنهيتُ الأسبوع… ابدئي القادم ✦</button>
+    <div class="last-done" id="lastDone"></div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="fstar">✦</span>
+  رحلتي — روتين الجمعة
+</footer>
+
+<script src="../assets/js/store.js"></script>
+<script src="../assets/js/quotes.js"></script>
+<script>
+  const arabicNum = window.RahlatiStore.arabicNum;
+  const iso = d => d.toISOString().slice(0,10);
+  const monthsAr = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+
+  const store = window.RahlatiStore.load();
+  const week = store.week;
+  const f = store.friday;
+
+  function persist(){
+    window.RahlatiStore.touch(store, "friday");
+    window.RahlatiStore.save(store);
+    flashSaved();
+  }
+  let flashTimer;
+  function flashSaved(){
+    const el = document.getElementById("savedFlag");
+    el.classList.add("show");
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(()=> el.classList.remove("show"), 1600);
+  }
+  function debounce(fn, ms){
+    let t;
+    return (...a) => { clearTimeout(t); t = setTimeout(()=>fn(...a), ms); };
+  }
+  const persistSoon = debounce(persist, 500);
+
+  /* ————— رأس الصفحة ————— */
+  (function renderHead(){
+    const h = new Date().getHours();
+    let g = "جمعة مباركة، مروه 🌿";
+    if (h >= 17) g = "مساءُ الجمعة، مروه 🌿";
+    document.getElementById("greet").textContent = g;
+
+    const first = new Date(week.days[0].date + "T12:00:00");
+    const last = new Date(week.days[6].date + "T12:00:00");
+    const sameMonth = first.getMonth() === last.getMonth();
+    const range = sameMonth
+      ? `الأسبوع من ${arabicNum(first.getDate())} إلى ${arabicNum(last.getDate())} ${monthsAr[last.getMonth()]} ${arabicNum(last.getFullYear())}`
+      : `الأسبوع من ${arabicNum(first.getDate())} ${monthsAr[first.getMonth()]} إلى ${arabicNum(last.getDate())} ${monthsAr[last.getMonth()]} ${arabicNum(last.getFullYear())}`;
+    document.getElementById("weekRange").textContent = range;
+
+    const Q = window.RAHLATI_QUOTES || [{t:"جمعةٌ مباركة، وأسبوعٌ جديد ينتظر نيّتكِ"}];
+    const dayIdx = Math.floor(Date.now() / 86400000);
+    document.getElementById("dQuote").textContent = "«" + Q[dayIdx % Q.length].t + "»";
+  })();
+
+  /* ————— ١ · التأمل والامتنان ————— */
+  document.getElementById("reflection").value = f.reflection;
+  document.getElementById("reflection").addEventListener("input", e=>{ f.reflection = e.target.value; persistSoon(); });
+  [0,1,2].forEach(i=>{
+    const el = document.getElementById("grat"+i);
+    el.value = f.gratitude[i] || "";
+    el.addEventListener("input", e=>{ f.gratitude[i] = e.target.value; persistSoon(); });
+  });
+
+  /* ————— ٢ · مراجعة الأسبوع (مشتركة مع week.review) ————— */
+  const weekDatesArr = week.days.map(d=>d.date);
+  function focusConsistency(item){
+    const todayISO = iso(new Date());
+    const elapsed = weekDatesArr.filter(d => d <= todayISO).length || 1;
+    const done = (item.checkedDates||[]).length;
+    return Math.round(100 * done / elapsed);
+  }
+  function overallFocusConsistency(){
+    const items = store.weeklyFocus.items;
+    if (!items.length) return 0;
+    const avg = items.reduce((s,it)=> s + focusConsistency(it), 0) / items.length;
+    return Math.round(avg);
+  }
+  (function initReview(){
+    const r = week.review;
+    r.focusConsistencyPct = overallFocusConsistency();
+    document.getElementById("revFocusPct").textContent = "٪" + arabicNum(r.focusConsistencyPct);
+    document.getElementById("revWorked").value = r.worked;
+    document.getElementById("revImprove").value = r.improve;
+    document.getElementById("revLearned").value = r.learned;
+    document.getElementById("revWorked").addEventListener("input", e=>{ r.worked = e.target.value; persistSoon(); });
+    document.getElementById("revImprove").addEventListener("input", e=>{ r.improve = e.target.value; persistSoon(); });
+    document.getElementById("revLearned").addEventListener("input", e=>{ r.learned = e.target.value; persistSoon(); });
+
+    function renderAchieved(){
+      document.getElementById("achYes").classList.toggle("on", r.goalAchieved === true);
+      document.getElementById("achNo").classList.toggle("on", r.goalAchieved === false);
+    }
+    document.getElementById("achYes").addEventListener("click", ()=>{
+      r.goalAchieved = (r.goalAchieved === true) ? null : true; renderAchieved(); persist();
+    });
+    document.getElementById("achNo").addEventListener("click", ()=>{
+      r.goalAchieved = (r.goalAchieved === false) ? null : false; renderAchieved(); persist();
+    });
+    renderAchieved();
+
+    function renderStars(){
+      document.querySelectorAll("#revStars .star-btn").forEach(b=>{
+        b.classList.toggle("on", +b.dataset.v <= r.rating);
+      });
+    }
+    document.querySelectorAll("#revStars .star-btn").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        r.rating = (+b.dataset.v === r.rating) ? 0 : +b.dataset.v;
+        renderStars(); persist();
+      });
+    });
+    renderStars();
+  })();
+
+  /* ————— ٣ · مراجعة الأهداف والعادات (للقراءة فقط، من مصدر واحد) ————— */
+  (function renderGoalsHabits(){
+    const active = store.goals.filter(g=>g.status==="جارٍ التنفيذ");
+    const activeHabits = store.habits.filter(h=>h.active);
+    const bestStreak = activeHabits.reduce((m,h)=> Math.max(m, h.longestStreak||0), 0);
+    document.getElementById("miniGoals").textContent = arabicNum(active.length);
+    document.getElementById("miniHabits").textContent = arabicNum(activeHabits.length);
+    document.getElementById("miniStreak").textContent = arabicNum(bestStreak);
+    const near = active.slice().sort((a,b)=>b.progress-a.progress)[0];
+    document.getElementById("miniNear").textContent = near
+      ? `${near.name} — ٪${arabicNum(near.progress)}`
+      : "لا أهداف نشطة بعد";
+  })();
+
+  /* ————— ٤ · التحضير الروحي ————— */
+  document.getElementById("spiritualPrep").value = f.spiritualPrep;
+  document.getElementById("spiritualPrep").addEventListener("input", e=>{ f.spiritualPrep = e.target.value; persistSoon(); });
+
+  /* ————— ٥ · تركيز الأسبوع القادم ————— */
+  const MAX_FOCUS_ITEMS = 2;
+  function renderNextFocus(){
+    const box = document.getElementById("nextFocusList");
+    const items = f.nextWeekFocusItems;
+    const habitOptions = store.habits.filter(h=>h.active);
+    box.innerHTML = items.map((it,i)=>{
+      const opts = `<option value="">بدون ربط بعادة</option>` + habitOptions.map(h=>
+        `<option value="${h.id}"${it.linkedHabitId===h.id?" selected":""}>${h.name}</option>`).join("");
+      return `<div class="focus-item">
+        <div class="focus-top">
+          <input class="focus-text" data-i="${i}" value="${it.text.replace(/"/g,'&quot;')}" placeholder="بؤرة الأسبوع القادم…">
+          <button class="focus-del" data-i="${i}" aria-label="حذف">✕</button>
+        </div>
+        <select class="focus-link" data-i="${i}">${opts}</select>
+      </div>`;
+    }).join("") || `<div class="focus-empty">لم تختاري تركيز الأسبوع القادم بعد — أضيفي بؤرة أو بؤرتين توجّهان أسبوعكِ الجديد</div>`;
+
+    box.querySelectorAll(".focus-text").forEach(el=>{
+      el.addEventListener("input", e=>{ items[+e.target.dataset.i].text = e.target.value; persistSoon(); });
+    });
+    box.querySelectorAll(".focus-link").forEach(el=>{
+      el.addEventListener("change", e=>{ items[+e.target.dataset.i].linkedHabitId = e.target.value || null; persist(); });
+    });
+    box.querySelectorAll(".focus-del").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        items.splice(+b.dataset.i,1); renderNextFocus();
+        document.getElementById("addFocusRow").hidden = items.length >= MAX_FOCUS_ITEMS;
+        persist();
+      });
+    });
+    document.getElementById("addFocusRow").hidden = items.length >= MAX_FOCUS_ITEMS;
+  }
+  document.getElementById("addFocusBtn").addEventListener("click", ()=>{
+    const inp = document.getElementById("newFocus");
+    const v = inp.value.trim();
+    if(!v || f.nextWeekFocusItems.length >= MAX_FOCUS_ITEMS) return;
+    f.nextWeekFocusItems.push({text:v, linkedHabitId:null});
+    inp.value = "";
+    renderNextFocus(); persist();
+  });
+  document.getElementById("newFocus").addEventListener("keydown", e=>{
+    if(e.key==="Enter") document.getElementById("addFocusBtn").click();
+  });
+  renderNextFocus();
+
+  /* ————— ٦ · أولويات الأسبوع القادم ————— */
+  [0,1,2].forEach(i=>{
+    const el = document.getElementById("nprio"+i);
+    el.value = f.nextWeekPriorities[i] || "";
+    el.addEventListener("input", e=>{ f.nextWeekPriorities[i] = e.target.value; persistSoon(); });
+  });
+
+  /* ————— ٧ · التخطيط للأسبوع القادم ————— */
+  document.getElementById("nextGoal").value = f.nextWeekGoal;
+  document.getElementById("nextGoal").addEventListener("input", e=>{ f.nextWeekGoal = e.target.value; persistSoon(); });
+  document.getElementById("scheduleNotes").value = f.scheduleNotes;
+  document.getElementById("scheduleNotes").addEventListener("input", e=>{ f.scheduleNotes = e.target.value; persistSoon(); });
+
+  /* ————— ٨ · طقوس الجمعة ————— */
+  function renderChecklist(){
+    const box = document.getElementById("checklistBox");
+    box.innerHTML = f.checklist.map((c,i)=>`
+      <div class="task${c.done?" done":""}">
+        <button class="tick" data-i="${i}" aria-label="إنجاز"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></button>
+        <span class="t-text">${c.name}</span>
+      </div>`).join("");
+    box.querySelectorAll(".tick").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        f.checklist[+b.dataset.i].done = !f.checklist[+b.dataset.i].done;
+        renderChecklist(); persist();
+      });
+    });
+  }
+  renderChecklist();
+
+  /* ————— لحظة التدوير ————— */
+  function renderLastDone(){
+    document.getElementById("lastDone").textContent = f.lastCompleted
+      ? "آخر أسبوعٍ أُنهي: " + new Intl.DateTimeFormat("ar-u-nu-arab", {day:"numeric", month:"long", year:"numeric"}).format(new Date(f.lastCompleted+"T12:00:00"))
+      : "";
+  }
+  renderLastDone();
+  document.getElementById("rolloverBtn").addEventListener("click", ()=>{
+    window.RahlatiStore.rolloverWeek(store, true);
+    window.RahlatiStore.save(store);
+    document.getElementById("rolloverBtn").textContent = "بدأ أسبوعٌ جديد ✦";
+    document.getElementById("rolloverBtn").disabled = true;
+    setTimeout(()=>{ location.href = "week.html"; }, 1200);
+  });
+
+</script>
+</body>
+</html>

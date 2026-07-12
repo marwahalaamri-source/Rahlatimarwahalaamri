@@ -325,6 +325,11 @@
     border-color:rgba(201,178,140,.6);
   }
   .sp-check.done::before{content:"✓ "}
+  .sp-cta{
+    display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;text-decoration:none;
+    color:var(--gold);font-size:.9rem;font-weight:400;opacity:.75;transition:opacity .35s, gap .35s;
+  }
+  .sp-cta:hover{opacity:1;gap:.9rem}
   .book-slot{
     width:min(190px,40vw);aspect-ratio:3/4;border-radius:18px;flex-shrink:0;
     border:1px dashed rgba(201,178,140,.55);
@@ -592,7 +597,7 @@
     <li><a href="#home">الرئيسية</a></li>
     <li><a href="sections/journal.html">يومياتي</a></li>
     <li><a href="sections/week.html">أسبوعي</a></li>
-    <li><a href="#friday">الجمعة</a></li>
+    <li><a href="sections/friday.html">الجمعة</a></li>
     <li><a href="sections/goals.html">أهدافي</a></li>
     <li><a href="#english">الإنجليزية</a></li>
     <li><a href="#achievements">إنجازاتي</a></li>
@@ -609,7 +614,7 @@
   <a href="#home" style="transition-delay:.05s">الرئيسية</a>
   <a href="sections/journal.html" style="transition-delay:.1s">يومياتي</a>
   <a href="sections/week.html" style="transition-delay:.15s">أسبوعي</a>
-  <a href="#friday" style="transition-delay:.2s">روتين الجمعة</a>
+  <a href="sections/friday.html" style="transition-delay:.2s">روتين الجمعة</a>
   <a href="sections/goals.html" style="transition-delay:.25s">أهدافي</a>
   <a href="#english" style="transition-delay:.3s">الإنجليزية</a>
   <a href="#achievements" style="transition-delay:.35s">إنجازاتي</a>
@@ -681,6 +686,7 @@
           <h2 class="sp-title" id="spTitle"></h2>
           <p class="sp-line" id="spLine"></p>
           <div class="sp-checks" id="spChecks"></div>
+          <a class="sp-cta" id="spCta" href="sections/friday.html" hidden>ادخلي إلى روتين الجمعة الكامل <span>←</span></a>
         </div>
         <div class="book-slot" id="spSide" hidden></div>
       </div>
@@ -736,7 +742,7 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="friday" href="#friday" style="transition-delay:.12s">
+        <a class="chapter reveal span2" id="friday" href="sections/friday.html" style="transition-delay:.12s">
           <div class="chapter-top">
             <span class="chapter-num">٠٣</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M15.2 3.2a9 9 0 1 0 5.6 10.4A7.2 7.2 0 0 1 15.2 3.2Z"/><path d="M17.6 3.4l.5 1.1 1.2.2-.9.85.2 1.2-1-.6-1.1.6.25-1.2-.9-.85 1.25-.2.5-1.1Z"/></svg>
@@ -1136,6 +1142,7 @@
       document.getElementById("spTitle").textContent = "سورةُ الكهف وروتينُ الجمعة";
       document.getElementById("spLine").textContent = "نورٌ ما بين الجمعتين ✦ يومُكِ الهادئ يبدأ من هنا.";
       document.getElementById("spChecks").innerHTML = checks(store.friday.checklist);
+      document.getElementById("spCta").hidden = false;
     }
   })();
 

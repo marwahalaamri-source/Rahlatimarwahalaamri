@@ -196,6 +196,7 @@
     flex:1;background:none;border:none;outline:none;color:var(--ivory);
     font-family:var(--font-body);font-weight:300;font-size:.92rem;padding:.35rem 0;
   }
+  .add-row[hidden]{display:none}
 
   .appt{display:flex;align-items:center;gap:.7rem;padding:.4rem;border-radius:10px;transition:background .25s}
   .appt:hover{background:rgba(201,178,140,.06)}
@@ -536,7 +537,9 @@
   <!-- مراجعة نهاية الأسبوع — الجمعة فقط -->
   <section class="panel review-panel section-gap reveal in" id="reviewSection" hidden aria-label="مراجعة نهاية الأسبوع">
     <div class="review-title">✦ مراجعة نهاية الأسبوع</div>
-    <div class="review-sub">جمعةٌ مباركة… وقتُ التأمل فيما مضى قبل استقبال أسبوعٍ جديد</div>
+    <div class="review-sub">جمعةٌ مباركة… وقتُ التأمل فيما مضى قبل استقبال أسبوعٍ جديد
+      — <a href="friday.html" style="color:var(--gold);text-decoration:none;border-bottom:1px dashed var(--gold)">روتين الجمعة الكامل ←</a>
+    </div>
     <div class="review-grid">
       <div>
         <div class="review-q">ما الذي نجح هذا الأسبوع؟</div>
