@@ -207,10 +207,10 @@
         exercise: { log: [] },   // { date, type, durationMin, painBefore, painAfter }
         sleep: { wakeGoal: "٥:٠٠ ص", log: [] },   // { date, sleepTime, wakeTime, hours }
         supplements: [
-          {id: uid(), name:"Berberine", frequency:"يومية", takenDates: []},
-          {id: uid(), name:"Vitamin C", frequency:"يومية", takenDates: []},
-          {id: uid(), name:"Glutathione", frequency:"يومية", takenDates: []},
-          {id: uid(), name:"Vitamin D", frequency:"أسبوعية", takenDates: []}
+          {id: uid(), name:"Berberine", frequency:"يومية", doseTime:"", takenDates: []},
+          {id: uid(), name:"Vitamin C", frequency:"يومية", doseTime:"", takenDates: []},
+          {id: uid(), name:"Glutathione", frequency:"يومية", doseTime:"", takenDates: []},
+          {id: uid(), name:"Vitamin D", frequency:"أسبوعية", doseTime:"", takenDates: []}
         ],
         care: { notes: "", photos: [] }
       },
@@ -370,12 +370,13 @@
     h.sleep.wakeGoal = h.sleep.wakeGoal || "٥:٠٠ ص";
     h.sleep.log = h.sleep.log || [];
     h.supplements = (h.supplements && h.supplements.length) ? h.supplements.map(s => ({
-      id: s.id || uid(), name: s.name, frequency: s.frequency || "يومية", takenDates: s.takenDates || []
+      id: s.id || uid(), name: s.name, frequency: s.frequency || "يومية",
+      doseTime: s.doseTime || "", takenDates: s.takenDates || []
     })) : [
-      {id: uid(), name:"Berberine", frequency:"يومية", takenDates: []},
-      {id: uid(), name:"Vitamin C", frequency:"يومية", takenDates: []},
-      {id: uid(), name:"Glutathione", frequency:"يومية", takenDates: []},
-      {id: uid(), name:"Vitamin D", frequency:"أسبوعية", takenDates: []}
+      {id: uid(), name:"Berberine", frequency:"يومية", doseTime:"", takenDates: []},
+      {id: uid(), name:"Vitamin C", frequency:"يومية", doseTime:"", takenDates: []},
+      {id: uid(), name:"Glutathione", frequency:"يومية", doseTime:"", takenDates: []},
+      {id: uid(), name:"Vitamin D", frequency:"أسبوعية", doseTime:"", takenDates: []}
     ];
     h.care = h.care || {};
     h.care.notes = h.care.notes || "";
