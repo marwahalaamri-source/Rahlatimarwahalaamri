@@ -302,9 +302,10 @@
   .stepper button{
     width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,178,140,.35);
     background:rgba(201,178,140,.06);color:var(--gold);font-size:.85rem;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;transition:background .25s;
+    display:flex;align-items:center;justify-content:center;transition:background .25s, transform .2s;
   }
   .stepper button:hover{background:rgba(201,178,140,.2)}
+  .stepper button:active{transform:scale(.88)}
 
   /* ————— تركيز الأسبوع ————— */
   .focus-sub{font-size:.85rem;font-weight:300;color:rgba(var(--paper-rgb),.6);margin-bottom:1.3rem;line-height:1.9}
@@ -385,7 +386,12 @@
     .saved-flag{position:static;justify-content:center;margin-top:.6rem}
     .summary{grid-template-columns:1fr;justify-items:center;text-align:center}
     .summary-grid{grid-template-columns:1fr 1fr;width:100%}
-    .day-strip{grid-template-columns:repeat(4,1fr)}
+    .day-strip{
+      display:flex;grid-template-columns:none;overflow-x:auto;scroll-snap-type:x proximity;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    }
+    .day-strip::-webkit-scrollbar{display:none}
+    .day-pill{flex:0 0 76px;scroll-snap-align:center}
     .dd-grid{grid-template-columns:1fr}
     .two-col{grid-template-columns:1fr}
     .track-meta{text-align:center}
@@ -709,6 +715,8 @@
     strip.querySelectorAll(".day-pill").forEach(b=>{
       b.addEventListener("click", ()=>{ selectedIdx = +b.dataset.i; renderStrip(); renderDetail(); });
     });
+    const sel = strip.querySelector(".day-pill.sel");
+    if (sel) sel.scrollIntoView({behavior:"instant", inline:"center", block:"nearest"});
   }
 
   /* ————— تفاصيل اليوم ————— */

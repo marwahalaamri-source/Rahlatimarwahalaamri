@@ -122,7 +122,7 @@
     padding:.7rem 1.6rem;border-radius:99px;border:1px solid rgba(201,178,140,.28);
     background:rgba(var(--ink-rgb),.35);color:rgba(var(--paper-rgb),.75);
     font-family:var(--font-body);font-weight:400;font-size:.95rem;
-    transition:background .3s, border-color .3s, color .3s, transform .3s;
+    transition:background .3s, border-color .3s, color .3s, transform .2s;
   }
   .tab-btn .n{
     display:inline-flex;align-items:center;justify-content:center;min-width:1.5em;height:1.5em;
@@ -130,6 +130,7 @@
     font-family:var(--font-display);
   }
   .tab-btn:hover{transform:translateY(-2px);border-color:rgba(201,178,140,.5)}
+  .tab-btn:active{transform:translateY(0) scale(.96)}
   .tab-btn.on{
     background:linear-gradient(135deg,#e3cfa5,#b3986e);color:#221d12;border-color:transparent;font-weight:700;
   }
@@ -181,8 +182,10 @@
   .cat-chip{
     padding:.5rem 1.2rem;border-radius:99px;border:1px solid rgba(201,178,140,.3);
     background:rgba(var(--ink-rgb),.32);color:rgba(var(--paper-rgb),.78);font-size:.86rem;font-weight:300;
-    cursor:pointer;transition:background .3s, border-color .3s, color .3s;
+    cursor:pointer;transition:background .3s, border-color .3s, color .3s, transform .2s;
   }
+  .cat-chip:hover{border-color:rgba(201,178,140,.55)}
+  .cat-chip:active{transform:scale(.95)}
   .cat-chip.on{background:linear-gradient(135deg,#e3cfa5,#b3986e);color:#221d12;border-color:transparent;font-weight:700}
   .btn-add{
     display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;border:none;
@@ -192,6 +195,7 @@
     flex-shrink:0;
   }
   .btn-add:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(179,152,110,.45)}
+  .btn-add:active{transform:translateY(0) scale(.97);box-shadow:0 6px 18px rgba(179,152,110,.4)}
 
   /* ————— شبكة البطاقات (أهداف/مشاريع/عادات/أحلام) ————— */
   .cards-grid{
@@ -265,8 +269,10 @@
   .status-pill{
     padding:.5rem 1.2rem;border-radius:99px;border:1px solid rgba(201,178,140,.3);
     background:rgba(var(--ink-rgb),.3);color:rgba(var(--paper-rgb),.8);font-size:.86rem;font-weight:300;
-    cursor:pointer;transition:background .3s, border-color .3s, color .3s;
+    cursor:pointer;transition:background .3s, border-color .3s, color .3s, transform .2s;
   }
+  .status-pill:hover{border-color:rgba(201,178,140,.55)}
+  .status-pill:active{transform:scale(.95)}
   .status-pill.on{background:linear-gradient(135deg,#e3cfa5,#b3986e);color:#221d12;border-color:transparent;font-weight:700}
 
   .dt-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
@@ -281,9 +287,10 @@
   .stepper button{
     width:26px;height:26px;border-radius:50%;border:1px solid rgba(201,178,140,.35);
     background:rgba(201,178,140,.06);color:var(--gold);font-size:.95rem;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;transition:background .25s;
+    display:flex;align-items:center;justify-content:center;transition:background .25s, transform .2s;
   }
   .stepper button:hover{background:rgba(201,178,140,.2)}
+  .stepper button:active{transform:scale(.88)}
 
   .dates-row{display:flex;gap:1.6rem;flex-wrap:wrap;margin-bottom:1.8rem}
   .date-field{display:flex;flex-direction:column;gap:.4rem}
@@ -345,9 +352,10 @@
   .plus-round{
     width:26px;height:26px;border-radius:50%;border:1px dashed rgba(201,178,140,.5);
     color:var(--gold);display:flex;align-items:center;justify-content:center;
-    font-size:1rem;flex-shrink:0;background:none;cursor:pointer;transition:background .3s;
+    font-size:1rem;flex-shrink:0;background:none;cursor:pointer;transition:background .3s, transform .2s;
   }
   .plus-round:hover{background:rgba(201,178,140,.15)}
+  .plus-round:active{transform:scale(.85)}
 
   /* المهام المرتبطة */
   .tasks{display:flex;flex-direction:column;gap:.2rem}
@@ -412,8 +420,16 @@
   .checkin-day.today{border-color:var(--gold)}
 
   .empty-state{
-    text-align:center;padding:3rem 1rem;color:rgba(var(--paper-rgb),.55);font-weight:300;font-size:.95rem;
+    text-align:center;padding:2.6rem 1rem;color:rgba(var(--paper-rgb),.55);font-weight:300;font-size:.92rem;
+    display:flex;flex-direction:column;align-items:center;gap:.8rem;line-height:1.8;
   }
+  .empty-state .es-icon{
+    width:44px;height:44px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    border:1px dashed rgba(201,178,140,.32);font-size:1.3rem;
+  }
+  .empty-state .es-icon svg{width:19px;height:19px;stroke:var(--gold);fill:none;stroke-width:1.3;opacity:.85}
+  .empty-state .es-text{max-width:24em}
 
   footer{text-align:center;padding:3rem 1rem 2.2rem;font-weight:300;font-size:.8rem;color:rgba(var(--paper-rgb),.45)}
   footer .fstar{color:var(--gold);display:block;margin-bottom:.5rem}
@@ -440,6 +456,11 @@
     .dt-actions{align-self:flex-end}
     .tab-switch{gap:.4rem}
     .tab-btn{padding:.6rem 1.1rem;font-size:.85rem}
+  }
+  @media (max-width:420px){
+    .tab-switch{gap:.35rem;flex-wrap:nowrap}
+    .tab-btn{padding:.55rem .7rem;font-size:.78rem;gap:.35rem}
+    .tab-btn .n{min-width:1.3em;height:1.3em;font-size:.7rem}
   }
 </style>
 </head>
@@ -869,7 +890,7 @@
       });
     });
     document.getElementById("addHabitCard").addEventListener("click", addHabit);
-    if (!idxs.length) grid.insertAdjacentHTML("afterbegin", `<div class="empty-state" style="grid-column:1/-1">لا عادات في هذا التصنيف بعد</div>`);
+    if (!idxs.length) grid.insertAdjacentHTML("afterbegin", `<div class="empty-state" style="grid-column:1/-1"><span class="es-icon">🌱</span><span class="es-text">لا عادات في هذا التصنيف بعد… كل عادة صغيرة اليوم تبني نسختكِ القادمة</span></div>`);
   }
   function addHabit(){
     const h = {id:window.RahlatiStore.uid(), name:"", category: hFilter!=="الكل"?hFilter:"شخصية", frequency:"يومية", active:true, streak:0, longestStreak:0, checkedDates:[], linkedDreamId:null};
@@ -980,7 +1001,7 @@
       });
     });
     document.getElementById("addCard").addEventListener("click", addGoal);
-    if (!idxs.length) grid.insertAdjacentHTML("afterbegin", `<div class="empty-state" style="grid-column:1/-1">لا توجد أهدافٌ في هذا التصنيف بعد</div>`);
+    if (!idxs.length) grid.insertAdjacentHTML("afterbegin", `<div class="empty-state" style="grid-column:1/-1"><span class="es-icon">🎯</span><span class="es-text">لا توجد أهدافٌ في هذا التصنيف بعد</span></div>`);
   }
   function addGoal(){
     const g = {id:window.RahlatiStore.uid(), name:"", category: activeFilter!=="الكل"?activeFilter:"شخصية", status:"لم يبدأ", progress:0, startDate:"", targetDate:"", why:"", notes:"", milestones:[], tasks:[], photos:[], linkedDreamId:null};
@@ -1074,7 +1095,7 @@
         <button class="step-circle${m.done?" done":""}" data-i="${i}">${m.done?"✓":arabicNum(i+1)}</button>
         <span class="step-label">${m.name}</span>
       </div>${i<g.milestones.length-1?'<span class="step-line"></span>':''}</div>`).join("")
-      || `<div class="empty-state" style="padding:1rem">لا خطوات بعد… أضيفي أولى الخطوات نحو هذا الهدف</div>`;
+      || `<div class="empty-state" style="padding:1.2rem"><span class="es-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></svg></span><span class="es-text">لا خطوات بعد… أضيفي أولى الخطوات نحو هذا الهدف</span></div>`;
     track.querySelectorAll(".step-circle").forEach(b=> b.addEventListener("click", ()=>{ g.milestones[+b.dataset.i].done = !g.milestones[+b.dataset.i].done; renderDetail(); persistSoon(); }));
     track.querySelectorAll(".step-del").forEach(b=> b.addEventListener("click", ()=>{ g.milestones.splice(+b.dataset.i,1); renderDetail(); persistSoon(); }));
     const tbox = document.getElementById("dtTasks");
@@ -1083,7 +1104,7 @@
         <button class="tick" data-i="${i}"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></button>
         <span class="t-text" contenteditable="true" data-i="${i}">${t.t}</span>
         <button class="del" data-i="${i}">✕</button>
-      </div>`).join("") || `<div class="empty-state" style="padding:.6rem 0;text-align:right">لا مهام مرتبطة بعد</div>`;
+      </div>`).join("") || `<div class="empty-state" style="padding:1rem 0"><span class="es-icon"><svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg></span><span class="es-text">لا مهام مرتبطة بعد</span></div>`;
     tbox.querySelectorAll(".tick").forEach(b=> b.addEventListener("click", ()=>{ g.tasks[+b.dataset.i].done=!g.tasks[+b.dataset.i].done; renderDetail(); persistSoon(); }));
     tbox.querySelectorAll(".del").forEach(b=> b.addEventListener("click", ()=>{ g.tasks.splice(+b.dataset.i,1); renderDetail(); persistSoon(); }));
     tbox.querySelectorAll(".t-text").forEach(el=> el.addEventListener("blur", e=>{ g.tasks[+e.target.dataset.i].t = e.target.textContent.trim()||g.tasks[+e.target.dataset.i].t; persistSoon(); }));
@@ -1147,7 +1168,7 @@
       card.addEventListener("click", ()=>{ dSelIdx=+card.dataset.i; renderDreamsGrid(); renderDreamDetail(); document.getElementById("dreamDetail").scrollIntoView({behavior:"smooth",block:"start"}); });
     });
     document.getElementById("addDreamCard").addEventListener("click", addDream);
-    if (!idxs.length) grid.insertAdjacentHTML("afterbegin", `<div class="empty-state" style="grid-column:1/-1">لا أحلامٌ في هذا التصنيف بعد</div>`);
+    if (!idxs.length) grid.insertAdjacentHTML("afterbegin", `<div class="empty-state" style="grid-column:1/-1"><span class="es-icon">✨</span><span class="es-text">لا أحلامٌ في هذا التصنيف بعد</span></div>`);
   }
   function addDream(){
     const d = {id:window.RahlatiStore.uid(), name:"", category: dFilter!=="الكل"?dFilter:"شخصية", why:"", vision:"", timeframe:"", status:"حيّ", relatedGoalIds:[], photos:[]};
