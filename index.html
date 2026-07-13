@@ -460,10 +460,6 @@
   }
   .dot.done{background:rgba(201,178,140,.22);border-color:rgba(201,178,140,.5);color:var(--gold-soft)}
   .dot.today{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,178,140,.14);color:var(--ivory)}
-  .word-en{
-    font-family:var(--font-display);font-style:italic;font-weight:400;
-    font-size:1.75rem;color:var(--ivory);line-height:1.3;
-  }
   .thumb{
     width:100%;height:118px;object-fit:cover;border-radius:18px;display:block;
     border:1px solid rgba(201,178,140,.25);
@@ -636,7 +632,6 @@
     <li><a href="sections/health.html">صحتي</a></li>
     <li><a href="sections/work.html">مشاريعي</a></li>
     <li><a href="sections/stats.html">الإحصائيات</a></li>
-    <li><a href="#english">الإنجليزية</a></li>
     <li><a href="#achievements">إنجازاتي</a></li>
     <li><a href="#memories">ذكرياتي</a></li>
     <li><a href="#settings">الإعدادات</a></li>
@@ -656,10 +651,9 @@
   <a href="sections/health.html" style="transition-delay:.3s">صحتي</a>
   <a href="sections/work.html" style="transition-delay:.35s">مشاريعي</a>
   <a href="sections/stats.html" style="transition-delay:.4s">الإحصائيات</a>
-  <a href="#english" style="transition-delay:.45s">الإنجليزية</a>
-  <a href="#achievements" style="transition-delay:.5s">إنجازاتي</a>
-  <a href="#memories" style="transition-delay:.55s">ذكرياتي</a>
-  <a href="#settings" style="transition-delay:.6s">الإعدادات</a>
+  <a href="#achievements" style="transition-delay:.45s">إنجازاتي</a>
+  <a href="#memories" style="transition-delay:.5s">ذكرياتي</a>
+  <a href="#settings" style="transition-delay:.55s">الإعدادات</a>
   <span class="menu-star">✦</span>
 </div>
 
@@ -818,24 +812,9 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="english" href="#english" style="transition-delay:.24s">
+        <a class="chapter reveal span2" id="achievements" href="#achievements" style="transition-delay:.24s">
           <div class="chapter-top">
             <span class="chapter-num">٠٥</span>
-            <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.6 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.6-3.9-9S9.4 5.5 12 3Z"/></svg>
-          </div>
-          <h3>رحلتي مع الإنجليزية</h3>
-          <div class="live">
-            <span class="meta">كلمة اليوم</span>
-            <div class="word-en" id="wordEn">…</div>
-            <span class="snippet" id="wordAr"></span>
-            <span class="chip" id="englishStreak">✦</span>
-          </div>
-          <span class="enter">ادخلي <span>←</span></span>
-        </a>
-
-        <a class="chapter reveal span2" id="achievements" href="#achievements" style="transition-delay:.32s">
-          <div class="chapter-top">
-            <span class="chapter-num">٠٦</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M12 6.2l.9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2L9.1 8.3l2-.3.9-1.8ZM8.5 14.5 7 21l5-2.5L17 21l-1.5-6.5"/></svg>
           </div>
           <h3>إنجازاتي</h3>
@@ -847,9 +826,9 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="memories" href="#memories" style="transition-delay:.4s">
+        <a class="chapter reveal span2" id="memories" href="#memories" style="transition-delay:.32s">
           <div class="chapter-top">
-            <span class="chapter-num">٠٧</span>
+            <span class="chapter-num">٠٦</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2.5"/><path d="M3 16l4.5-4.5a1.6 1.6 0 0 1 2.3 0L14 15.7M12.5 14.2l2.2-2.2a1.6 1.6 0 0 1 2.3 0L21 16"/><circle cx="9" cy="9.2" r="1.3"/></svg>
           </div>
           <h3>ذكرياتي</h3>
@@ -864,9 +843,9 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="settings" href="#settings" style="transition-delay:.48s">
+        <a class="chapter reveal span2" id="settings" href="#settings" style="transition-delay:.4s">
           <div class="chapter-top">
-            <span class="chapter-num">٠٨</span>
+            <span class="chapter-num">٠٧</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7"/></svg>
           </div>
           <h3>الإعدادات</h3>
@@ -878,9 +857,9 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="health" href="sections/health.html" style="transition-delay:.52s">
+        <a class="chapter reveal span2" id="health" href="sections/health.html" style="transition-delay:.48s">
           <div class="chapter-top">
-            <span class="chapter-num">٠٩</span>
+            <span class="chapter-num">٠٨</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.3-7-9.2C5 8 7 6.5 9 6.5c1.3 0 2.4.7 3 1.7.6-1 1.7-1.7 3-1.7 2 0 4 1.5 4 4.3C19 15.7 12 20 12 20Z"/><path d="M4 12h3l1.5-3 2 5 1.5-3h3"/></svg>
           </div>
           <h3>صحتي</h3>
@@ -895,9 +874,9 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="work" href="sections/work.html" style="transition-delay:.56s">
+        <a class="chapter reveal span2" id="work" href="sections/work.html" style="transition-delay:.52s">
           <div class="chapter-top">
-            <span class="chapter-num">١٠</span>
+            <span class="chapter-num">٠٩</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg>
           </div>
           <h3>مشاريعي</h3>
@@ -912,9 +891,9 @@
           <span class="enter">ادخلي <span>←</span></span>
         </a>
 
-        <a class="chapter reveal span2" id="stats" href="sections/stats.html" style="transition-delay:.6s">
+        <a class="chapter reveal span2" id="stats" href="sections/stats.html" style="transition-delay:.56s">
           <div class="chapter-top">
-            <span class="chapter-num">١١</span>
+            <span class="chapter-num">١٠</span>
             <svg class="chapter-icon" viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
           </div>
           <h3>الإحصائيات</h3>
@@ -1002,10 +981,6 @@
 
   // اقتباس اليوم — من مكتبة assets/js/quotes.js (٤٠٠+ اقتباس)
   // يدور على المكتبة كلها حسب التاريخ، مع زرّ لتغييره يدويًا (يُحفظ لبقية اليوم)
-  const dayOfYear = (function(){
-    const start = new Date(new Date().getFullYear(), 0, 0);
-    return Math.floor((Date.now() - start) / 86400000);
-  })();
   (function dailyQuote(){
     const Q = window.RAHLATI_QUOTES || [{t:"كلُّ يومٍ هو بدايةٌ جديدة"}];
     const wrap = document.getElementById("quoteWrap");
@@ -1040,7 +1015,7 @@
   /* سجلّ الأقسام — إضافة قسم جديد مستقبلًا تبدأ من هنا (docs/STRUCTURE.md) */
   const SECTIONS = [
     {id:"journal"}, {id:"week"}, {id:"friday"}, {id:"goals"},
-    {id:"english"}, {id:"achievements"}, {id:"memories"}, {id:"settings"}, {id:"health"}, {id:"work"}, {id:"stats"}
+    {id:"achievements"}, {id:"memories"}, {id:"settings"}, {id:"health"}, {id:"work"}, {id:"stats"}
   ];
 
   const store = window.RahlatiStore.load();
@@ -1126,31 +1101,7 @@
     document.getElementById("ambitionSummary").textContent =
       `🌱 ${arabicNum(activeHabits)} عادة · 🚀 ${arabicNum(currentProjects)} مشروع · ✨ ${arabicNum(liveDreams)} حلم`;
 
-    // ٠٥ — الإنجليزية: كلمة اليوم + السلسلة
-    const words = [
-      ["Serenity","صفاء، سكينة"],
-      ["Journey","رحلة"],
-      ["Bloom","تفتُّح، ازدهار"],
-      ["Gratitude","امتنان"],
-      ["Dawn","فجر"],
-      ["Resilience","صلابة، قدرة على النهوض"],
-      ["Wander","تجوّل بلا وجهة"],
-      ["Glow","توهُّج"],
-      ["Cherish","اعتزاز ورعاية"],
-      ["Horizon","أفق"],
-      ["Solace","سلوى، مواساة"],
-      ["Flourish","ازدهار ونماء"],
-      ["Tranquil","هادئ"],
-      ["Radiant","مشرق، متلألئ"]
-    ];
-    const w = words[dayOfYear % words.length];
-    document.getElementById("wordEn").textContent = w[0];
-    document.getElementById("wordAr").textContent = w[1];
-    document.getElementById("englishStreak").textContent = s.english.streak > 0
-      ? "✦ سلسلة " + arabicNum(s.english.streak) + " أيام"
-      : "✦ ابدئي سلسلتكِ اليوم";
-
-    // ٠٦ — إنجازاتي
+    // ٠٥ — إنجازاتي
     const ach = s.achievements[0];
     if (ach){
       document.getElementById("achLatest").textContent = ach.name;

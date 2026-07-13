@@ -370,6 +370,21 @@
   .add-row{display:flex;align-items:center;gap:.7rem;margin-top:.5rem}
   .add-row input{flex:1;background:none;border:none;outline:none;color:var(--ivory);font-family:var(--font-body);font-weight:300;font-size:.92rem;padding:.35rem 0}
 
+  /* رحلتي مع الإنجليزية — لوحة غنية داخل هدف الإنجليزية فقط */
+  .mini-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.2rem}
+  .stat-tile{display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center;
+    background:rgba(var(--glass-rgb),.3);border:1px solid rgba(201,178,140,.16);border-radius:16px;padding:1rem .6rem}
+  .stat-tile .val{font-family:var(--font-display);font-weight:700;font-size:1.4rem;color:var(--ivory)}
+  .stat-tile .lbl{font-size:.72rem;font-weight:300;color:rgba(var(--paper-rgb),.6);line-height:1.5}
+  .eng-controls{display:flex;flex-wrap:wrap;align-items:center;gap:1.2rem}
+  .eng-row{display:flex;align-items:center;gap:.6rem;font-size:.85rem;font-weight:300;color:rgba(var(--paper-rgb),.75)}
+  .eng-row input[type="number"]{
+    width:5.5em;background:rgba(var(--ink-rgb),.32);border:1px solid rgba(201,178,140,.22);border-radius:10px;
+    padding:.4rem .6rem;color:var(--ivory);font-family:var(--font-body);font-weight:300;font-size:.88rem;outline:none;color-scheme:dark;
+  }
+  .eng-row input[type="number"]:focus{border-color:var(--gold)}
+  .eng-meta{margin-top:.8rem;font-size:.8rem;font-weight:300;color:rgba(var(--paper-rgb),.55)}
+
   /* صور اختيارية */
   .photo-grid{display:flex;flex-wrap:wrap;gap:.7rem}
   .photo-thumb{position:relative;width:92px;height:92px;border-radius:14px;overflow:hidden;border:1px solid rgba(201,178,140,.3)}
@@ -568,6 +583,25 @@
       <div class="why-box">
         <div class="why-label">✦ لماذا هذا الهدف مهم؟</div>
         <textarea id="whyText" placeholder="اكتبي السبب الحقيقي… ما الذي يجعل هذا الهدف يستحق وقتَك وطاقتَك؟"></textarea>
+      </div>
+      <div class="block" id="englishBlock" style="display:none">
+        <div class="block-label">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.6 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.6-3.9-9S9.4 5.5 12 3Z"/></svg>
+          رحلتي مع الإنجليزية
+        </div>
+        <div class="mini-stats-row">
+          <div class="stat-tile"><span class="val" id="engStudyDays">…</span><span class="lbl">أيام دراسة</span></div>
+          <div class="stat-tile"><span class="val" id="engStreak">…</span><span class="lbl">سلسلة متتالية</span></div>
+          <div class="stat-tile"><span class="val" id="engVocab">…</span><span class="lbl">كلمات مُتعلَّمة</span></div>
+          <div class="stat-tile"><span class="val" id="engReading">…</span><span class="lbl">جلسات قراءة</span></div>
+        </div>
+        <div class="eng-controls">
+          <button class="btn-add" id="engStudyTodayBtn">+ سجّلي دراسة اليوم</button>
+          <div class="eng-row">الكلمات <span class="stepper"><button id="engVocabMinus">−</button></span><span class="stepper"><button id="engVocabPlus">+</button></span></div>
+          <div class="eng-row">جلسات القراءة <span class="stepper"><button id="engReadingMinus">−</button></span><span class="stepper"><button id="engReadingPlus">+</button></span></div>
+          <div class="eng-row">دقائق دراسة اليوم <input type="number" id="engMinutesInput" min="0" placeholder="٠"><button class="btn-add" id="engMinutesAddBtn">+ إضافة</button></div>
+        </div>
+        <div class="eng-meta" id="engMeta"></div>
       </div>
       <div class="block">
         <div class="block-label">
@@ -956,6 +990,64 @@
     setTimeout(()=> document.getElementById("dtName").focus(), 400);
   }
   function currentGoal(){ return goals[selectedIdx]; }
+
+  /* ═════ رحلتي مع الإنجليزية — لوحة غنية داخل هدف الإنجليزية ═════ */
+  function englishStudyStreak(dates){
+    if (!dates.length) return 0;
+    const days = [...new Set(dates)].sort((a,b)=>b.localeCompare(a));
+    let streak = 0, cursor = todayISO;
+    for (const d of days){
+      if (d === cursor){ streak++; cursor = iso(new Date(new Date(cursor+"T12:00:00").getTime() - 86400000)); }
+      else if (d < cursor) break;
+    }
+    return streak;
+  }
+  function renderEnglishBlock(g){
+    const box = document.getElementById("englishBlock");
+    if (!g.english){ box.style.display = "none"; return; }
+    box.style.display = "";
+    const e = g.english;
+    document.getElementById("engStudyDays").textContent = arabicNum(e.studyDates.length);
+    document.getElementById("engStreak").textContent = arabicNum(englishStudyStreak(e.studyDates));
+    document.getElementById("engVocab").textContent = arabicNum(e.vocabCount);
+    document.getElementById("engReading").textContent = arabicNum(e.readingSessions);
+    document.getElementById("engStudyTodayBtn").textContent = e.studyDates.includes(todayISO) ? "✓ دُرِست اليوم" : "+ سجّلي دراسة اليوم";
+    const totalMinutes = e.studyMinutesLog.reduce((s,m)=>s+m.minutes,0);
+    document.getElementById("engMeta").textContent = totalMinutes
+      ? "إجمالي وقت الدراسة: " + arabicNum(totalMinutes) + " دقيقة"
+      : "لم يُسجَّل وقت دراسة بعد";
+  }
+  document.getElementById("engStudyTodayBtn").addEventListener("click", ()=>{
+    const e = currentGoal().english; if (!e) return;
+    if (!e.studyDates.includes(todayISO)) e.studyDates.push(todayISO);
+    renderEnglishBlock(currentGoal()); persist();
+  });
+  document.getElementById("engVocabPlus").addEventListener("click", ()=>{
+    const e = currentGoal().english; if (!e) return;
+    e.vocabCount++; renderEnglishBlock(currentGoal()); persistSoon();
+  });
+  document.getElementById("engVocabMinus").addEventListener("click", ()=>{
+    const e = currentGoal().english; if (!e) return;
+    e.vocabCount = Math.max(0, e.vocabCount-1); renderEnglishBlock(currentGoal()); persistSoon();
+  });
+  document.getElementById("engReadingPlus").addEventListener("click", ()=>{
+    const e = currentGoal().english; if (!e) return;
+    e.readingSessions++; renderEnglishBlock(currentGoal()); persistSoon();
+  });
+  document.getElementById("engReadingMinus").addEventListener("click", ()=>{
+    const e = currentGoal().english; if (!e) return;
+    e.readingSessions = Math.max(0, e.readingSessions-1); renderEnglishBlock(currentGoal()); persistSoon();
+  });
+  document.getElementById("engMinutesAddBtn").addEventListener("click", ()=>{
+    const e = currentGoal().english; if (!e) return;
+    const inp = document.getElementById("engMinutesInput");
+    const mins = parseInt(inp.value, 10);
+    if (!mins || mins <= 0) return;
+    e.studyMinutesLog.push({date: todayISO, minutes: mins});
+    inp.value = "";
+    renderEnglishBlock(currentGoal()); persist();
+  });
+
   function renderDetail(){
     const section = document.getElementById("detailSection");
     if (selectedIdx < 0 || !goals[selectedIdx]){ section.style.display = "none"; return; }
@@ -974,6 +1066,7 @@
     document.getElementById("targetDate").value = g.targetDate;
     document.getElementById("whyText").value = g.why;
     document.getElementById("dtNotes").value = g.notes;
+    renderEnglishBlock(g);
     const track = document.getElementById("milestonesTrack");
     track.innerHTML = g.milestones.map((m,i)=>`
       <div class="step-item"><div class="step-col">

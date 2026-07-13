@@ -313,11 +313,16 @@
       <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.6 3.9 9S14.6 18.5 12 21c-2.6-2.5-3.9-5.6-3.9-9S9.4 5.5 12 3Z"/></svg>
       التعلّم — رحلتي مع الإنجليزية
     </div>
+    <div class="mini-stats-row">
+      <div class="stat-tile"><span class="val" id="statEnglishDays">…</span><span class="lbl">أيام دراسة</span></div>
+      <div class="stat-tile"><span class="val" id="statEnglishStreak">…</span><span class="lbl">سلسلة متتالية</span></div>
+      <div class="stat-tile"><span class="val" id="statEnglishVocab">…</span><span class="lbl">كلمات مُتعلَّمة</span></div>
+      <div class="stat-tile"><span class="val" id="statEnglishReading">…</span><span class="lbl">جلسات قراءة</span></div>
+    </div>
     <div class="mini-stats-row" style="grid-template-columns:repeat(2,1fr)">
-      <div class="stat-tile"><span class="val" id="statEnglishStreak">…</span><span class="lbl">أيام دراسة متتالية</span></div>
+      <div class="stat-tile"><span class="val" id="statEnglishMinutes">…</span><span class="lbl">إجمالي وقت الدراسة (دقيقة)</span></div>
       <div class="stat-tile"><span class="val" id="statEnglishGoal">…</span><span class="lbl">تقدّم هدف إتقان الإنجليزية</span></div>
     </div>
-    <div class="empty-state">المفردات وجلسات القراءة ووقت الدراسة التفصيلي بانتظار بناء صفحة «رحلتي مع الإنجليزية» — لا بيانات وهمية بديلًا عنها</div>
   </section>
 
   <!-- المالية -->
@@ -568,10 +573,25 @@
     }).join("");
   }
 
-  /* ————— التعلّم ————— */
+  /* ————— التعلّم — رحلتي مع الإنجليزية، مأخوذة من هدف «إتقان الإنجليزية» نفسه ————— */
+  function englishStudyStreak(dates){
+    if (!dates.length) return 0;
+    const days = [...new Set(dates)].sort((a,b)=>b.localeCompare(a));
+    let streak = 0, cursor = todayISO;
+    for (const d of days){
+      if (d === cursor){ streak++; cursor = iso(new Date(new Date(cursor+"T12:00:00").getTime() - 86400000)); }
+      else if (d < cursor) break;
+    }
+    return streak;
+  }
   function renderLearning(){
-    document.getElementById("statEnglishStreak").textContent = arabicNum(store.english.streak||0);
     const g = store.goals.find(g=>g.name==="إتقان الإنجليزية والتحدث بثقة");
+    const e = g && g.english;
+    document.getElementById("statEnglishDays").textContent = arabicNum(e ? e.studyDates.length : 0);
+    document.getElementById("statEnglishStreak").textContent = arabicNum(e ? englishStudyStreak(e.studyDates) : 0);
+    document.getElementById("statEnglishVocab").textContent = arabicNum(e ? e.vocabCount : 0);
+    document.getElementById("statEnglishReading").textContent = arabicNum(e ? e.readingSessions : 0);
+    document.getElementById("statEnglishMinutes").textContent = arabicNum(e ? e.studyMinutesLog.reduce((s,m)=>s+m.minutes,0) : 0);
     document.getElementById("statEnglishGoal").textContent = g ? "٪"+arabicNum(g.progress) : "—";
   }
 

@@ -160,7 +160,8 @@
         }),
         // 📚 التعلّم
         goal("إتقان الإنجليزية والتحدث بثقة","تعلم","جارٍ التنفيذ", {
-          notes:"الأولوية التعليمية الأولى حاليًا"
+          notes:"الأولوية التعليمية الأولى حاليًا",
+          english: {studyDates:[], vocabCount:0, readingSessions:0, studyMinutesLog:[]}
         }),
         // 💰 المال
         goal("سداد جميع الديون","مالية","جارٍ التنفيذ"),
@@ -215,8 +216,6 @@
         ],
         care: { notes: "", photos: [] }
       },
-
-      english: {streak:0, todayTask:""},
       achievements: [],   // { name, when } — ستُولَّد تلقائيًا من عادات/أهداف حقيقية مكتملة
       memories: [],       // { caption, date, image }
       settings: {name:"مروه العامري", theme:"ليليّ هادئ", reminder:"٩:٠٠ مساءً", lang:"العربية"},
@@ -317,7 +316,7 @@
         });
         return;
       }
-      store.goals.push({
+      const newGoal = {
         id: g.id || uid(), name: g.name, category,
         status: statusMap[g.status] || g.status || "لم يبدأ",
         progress: g.progress || 0,
@@ -325,10 +324,18 @@
         why: g.why || "", notes: g.notes || "",
         milestones: g.milestones || [], tasks: g.tasks || [], photos: g.photos || [],
         linkedDreamId: g.linkedDreamId || null
-      });
+      };
+      if (g.english) newGoal.english = g.english;
+      store.goals.push(newGoal);
     });
 
-    store.english = store.english || {streak:0, todayTask:""};
+    // هدف الإنجليزية — بيانات تعلّم غنية داخل الهدف نفسه، لا صفحة/كائن منفصل
+    const ENGLISH_GOAL_NAME = "إتقان الإنجليزية والتحدث بثقة";
+    const engGoal = store.goals.find(g => g.name === ENGLISH_GOAL_NAME);
+    if (engGoal && !engGoal.english){
+      engGoal.english = {studyDates:[], vocabCount:0, readingSessions:0, studyMinutesLog:[]};
+    }
+
     store.achievements = store.achievements || [];
     store.memories = store.memories || [];
     store.settings = store.settings || {name:"مروه العامري", theme:"ليليّ هادئ", reminder:"٩:٠٠ مساءً", lang:"العربية"};
